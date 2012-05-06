@@ -1,15 +1,15 @@
 <html> 
 
 <head> 
-<title> favorites / bookmark title goes here </title>
+<title> Scala Puzzlers </title>
  <link rel="shortcut icon" href="/img/favicon.gif" type="image/x-icon" />
  <link href="/css/bootstrap.min.css" rel="stylesheet">
  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 </head>
 
 <body data-spy="scroll" data-target=".subnav" data-offset="50">
- <!-- Navbar
-    ================================================== -->
+  <!-- Navbar
+   ================================================== -->
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -30,7 +30,7 @@
                 <a id="navbar-contribute" href="/contribute.html">How to Contribute</a>
               </li>
               <li>
-                <a id="navbar-contact" href="/contact.html">Contact</a>
+                <a id="navbar-feedback" href="/feedback.html">Feedback</a>
               </li>
             </ul>
           </div>
@@ -38,45 +38,79 @@
       </div>
     </div>
 
- <script type="text/javascript">
-    String.prototype.endsWith = function(suffix) {
-      return this.indexOf(suffix, this.length - suffix.length) !== -1;
-    };
-
-    var pathToID = {
-      "/"                        : '#navbar-home',
-      "/index.html"              : '#navbar-home', 
-      "/contribute.html"	 : '#navbar-contribute',   
-      "/contact.html"         	 : '#navbar-contact'
-    };
-
-    $(document).ready(function() {
-      function mapPathToID(path) {
-        var key;
-        var id = null;
-        for (key in pathToID) {
-          if (path === key) {
-            id = pathToID[key];
-            break;
-          }
-        }
-
-        return id;
+    <script type="text/javascript">
+      String.prototype.endsWith = function(suffix) {
+        return this.indexOf(suffix, this.length - suffix.length) !== -1;
       };
 
-      var id = mapPathToID(window.location.pathname);
-      if (id != null) {
-        $(id).addClass("active");
-      }
-    });
+      var pathToID = {
+        "/"                        : '#navbar-home',
+        "/index.html"              : '#navbar-home', 
+        "/contribute.html"	 : '#navbar-contribute',   
+        "/feedback.html"         	 : '#navbar-feedback'
+      };
+
+      $(document).ready(function() {
+        function mapPathToID(path) {
+          var key;
+          var id = null;
+          for (key in pathToID) {
+            if (path === key) {
+              id = pathToID[key];
+              break;
+            }
+          }
+
+          return id;
+        };
+
+        var id = mapPathToID(window.location.pathname);
+        if (id != null) {
+          $(id).addClass("active");
+        }
+      });
     </script>
 
-<header class="page-header" id="overview">
-<h1> Hello world </h1>
-</header>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header">Puzzlers</li>
+              <li class="active"><a href="#">Link</a></li>
+              <li><a href="#">Link</a></li>
+              <li><a href="#">Link</a></li>
+              <li><a href="#">Link</a></li>             
+              <li class="divider"></li>
+            </ul>
+          </div><!--/.well -->
+        </div><!--/span-->	
 
-Hello world! 
+        <div class="span9">
+	  <div class="headline">
+            <h1>Yet another fun way to learn Scala</h1>
+            <p>Welcome to Scala Puzzlers, a central repository of <i>Traps, Pitfalls and Corner Cases</i> in Scala language.<br/>
+            All puzzlers are conveniently listed on the left side of the page. </p>
+	  </div>	
+	  <div class="row-fluid">
+ 	    <div class="span6 headline-unit">
+	      <h2>Your contributions are welcomed</h2>
+	      <p>Please follow <a href="/contribute.html">these instructions</a> in order to get your puzzlers included. </p>
+	    </div>	  
+ 	    <div class="span6 headline-unit">
+	      <h2>We would love to hear from you</h2>
+	      <p>If you would like to leave us any kind of feedback, please <a href="/feedback.html">contact us</a>.
+		</p>
+	    </div>
+          </div>
+          <footer class="footer">
 
+             Copyright 2012, Andrew Phillips and Nermin Serifovic
+
+          </div>          
+	</div>
+      </div>
+    </div>
 </body>
 
 </html>
