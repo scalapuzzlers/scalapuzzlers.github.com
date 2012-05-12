@@ -1,15 +1,171 @@
-<html> 
+<!DOCTYPE html>
+<html lang="en"> 
 
 <head> 
-<title> favorites / bookmark title goes here </title>
+<title> Scala Puzzlers </title>
+ <link rel="shortcut icon" href="/img/favicon.gif" type="image/x-icon" />
+ <link href="/css/bootstrap.min.css" rel="stylesheet">
+ <link href="/css/prettify.css" type="text/css" rel="stylesheet" />
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+ <script type="text/javascript" src="/js/prettify.js"></script>
+ <script type="text/javascript">
+
+   var _gaq = _gaq || [];
+   _gaq.push(['_setAccount', 'UA-31486114-1']);
+   _gaq.push(['_trackPageview']);
+
+   (function() {
+     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+   })();
+  
+
+ </script>
 </head>
 
-<body bgcolor="white" text="blue">
+<body data-spy="scroll" data-target=".subnav" data-offset="50"">
+  <!-- Navbar
+   ================================================== -->
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
 
-<h1> Hello world </h1>
+	  <a class="brand" href="/">Scala Puzzlers</a>
 
-Hello world! 
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li>
+                <a id="navbar-home" href="/index.html">Home</a>
+              </li>
+              <li>
+                <a id="navbar-contribute" href="/contribute.html">How to Contribute</a>
+              </li>
+              <li>
+                <a id="navbar-feedback" href="/feedback.html">Feedback</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <script type="text/javascript">
+      String.prototype.endsWith = function(suffix) {
+        return this.indexOf(suffix, this.length - suffix.length) !== -1;
+      };
+
+      var pathToID = {
+        "/"                        : '#navbar-home',
+        "/index.html"              : '#navbar-home', 
+        "/contribute.html"	 : '#navbar-contribute',   
+        "/feedback.html"         	 : '#navbar-feedback'
+      };
+
+      $(document).ready(function() {
+        function mapPathToID(path) {
+          var key;
+          var id = null;
+          for (key in pathToID) {
+            if (path === key) {
+              id = pathToID[key];
+              break;
+            }
+          }
+
+          return id;
+        };
+
+        var id = mapPathToID(window.location.pathname);
+        if (id != null) {
+          $(id).addClass("active");
+        }
+      });
+
+     
+    </script>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header">Puzzlers</li>
+              <li><a href="#" id="pzzlr-001">Hi there!</a></li>
+              <li><a href="#" id="pzzlr-002">Match me</a></li>
+              <li><a href="#" id="pzzlr-003">UPSTAIRS downstairs</a></li> 
+              <li><a href="#" id="pzzlr-004">The Trouble With Traits</a></li>
+	      <li><a href="#" id="pzzlr-005">The Trouble With Traits 2</a></li>
+	      <li><a href="#" id="pzzlr-006">The Missing List</a></li>  
+	      <li><a href="#" id="pzzlr-007">Seeing Double</a></li>                                                
+              <li class="divider"></li>
+            </ul>
+          </div><!--/.well -->
+        </div><!--/span-->	
+
+        <script type="text/javascript">     
+	var activeElem = null;
+
+        $('a[id|="pzzlr"]').each(function(index, elem) {          
+	  $(elem).click(function() {
+	    $('#prime-space').load('puzzlers/' + elem.id + '.html', function() {
+	      prettyPrint();
+ 	      $('#show-and-tell').click(function() {
+		$('#show-and-tell').addClass("disabled");
+		$('#correct-answer').addClass("correct-answer");
+		$('#explanation').show('slow');		
+	      });
+	    }); 
+	    
+	    if (activeElem != null) {
+	      $(activeElem).removeClass("active");           
+	    }
+
+	    activeElem = $(elem).parent();
+            $(activeElem).addClass("active");
+	  });          
+	});
+
+	
+        </script> 
+
+        <div id="prime-space" class="span9">
+	  <div class="headline">
+            <h1>Yet another fun way to learn
+	   <img src="img/scala-logo.png" alt="Scala" style="padding-bottom:15px;padding-left:10px"/></h1><br/>
+            <p>Welcome to Scala Puzzlers, a central repository of <i>Traps, Pitfalls and Corner Cases</i> in Scala language.<br/><br/>
+		Prepare to be surprised, entertained and...well, puzzled! What is presented here is a selection of seemingly simple examples which demonstrate 		that there's plenty of head-scratching left in Scala! 
+		Let your mind be challenged by unexpected and unintuitive behaviour and results and learn something in the process. 		
+<br/><br/>
+            All puzzlers are conveniently listed on the left side of the page. </p>
+	  </div>	
+	  <div class="row-fluid">
+ 	    <div class="span6 headline-unit">
+	      <h2>Your contributions are welcomed</h2>
+	      <p>Have a puzzler you would like to share with the rest of the community?
+		Please follow <a href="/contribute.html">these instructions</a> in order to get it included to the repository. 
+		And don't worry, you will get properly creditted for your contribtuion!</p>
+	    </div>	  
+ 	    <div class="span6 headline-unit">
+	      <h2>We would love to hear from you</h2>
+	      <p>Any kind of feedback is appreciated, including the ones about this website but also about the puzzlers themselves.
+		If there is something you would like to let us know, please <a href="/feedback.html">contact us</a>.
+		</p>
+	    </div>
+          </div>
+          <footer class="footer">
+
+             Copyright 2012, Andrew Phillips and Nermin Serifovic
+
+          </div>          
+	</div>
+      </div>
+    </div>
 </body>
 
 </html>

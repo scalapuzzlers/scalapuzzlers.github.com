@@ -1,0 +1,45 @@
+<h1>Match me</h1>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><strong>Contributed by</strong></td>
+'     <td>Andrew Phillips & Nermin Serifovic</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>http://stackoverflow.com/questions/2727612/scalas-tuple-unwrapping-nuance</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>  
+</table>
+<div class="code-snippet">
+  <h3>What does the following code do?</h3>
+  <pre class="prettyprint linenums lang-scala">
+val ij: (Int, Int) = ("3", "4")
+val (i, j): (Int, Int) = ("3", "4")
+  </pre>
+  <ol>  
+    <li id="correct-answer">The first one fails with a compilation exception and the second one fails with a runtime exception</li>
+    <li>Compiles and prints:
+      <pre class="prettyprint lang-scala">
+ij: (3, 4)
+i: 3
+j: 4
+      </pre>
+    </li>
+    <li>Both fail with compilation exceptions</li>
+    <li>Both fail with runtime exceptions</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    The former is an assignment of a tuple which is not type correct. The latter is a pattern for which type information is erased,
+    so it will compile but fail at runtime.
+  </p>
+</div>
+
