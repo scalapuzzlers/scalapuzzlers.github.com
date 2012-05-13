@@ -47,8 +47,11 @@
                 <a id="navbar-contribute" href="/contribute.html">How to Contribute</a>
               </li>
               <li>
-                <a id="navbar-feedback" href="/feedback.html">Feedback</a>
+                <a id="navbar-contact" href="/contact.html">Contact</a>
               </li>
+	      <li>
+		<a id="navbar-about" href="/about.html">About</a>
+	      </li>
             </ul>
           </div>
         </div>
@@ -64,7 +67,8 @@
         "/"                        : '#navbar-home',
         "/index.html"              : '#navbar-home', 
         "/contribute.html"	 : '#navbar-contribute',   
-        "/feedback.html"         	 : '#navbar-feedback'
+        "/contact.html"          : '#navbar-contact',
+	"/about.html"		 : '#navbar-about'
       };
 
       $(document).ready(function() {
@@ -116,6 +120,7 @@
 	    $('#prime-space').load('puzzlers/' + elem.id + '.html', function() {
 	      prettyPrint();
 	      document.location.hash = elem.id;
+	      window.scrollTo(0, 0);
  	      $('#show-and-tell').click(function() {
 		$('#show-and-tell').addClass("disabled");
 		$('#correct-answer').addClass("correct-answer");
@@ -129,6 +134,7 @@
 
 	    activeElem = $(elem).parent();
             $(activeElem).addClass("active");
+
 	  });          
 	});
 	
@@ -155,7 +161,7 @@
  	    <div class="span6 headline-unit">
 	      <h2>We would love to hear from you</h2>
 	      <p>Any kind of feedback is appreciated, including the ones about this website but also about the puzzlers themselves.
-		If there is something you would like to let us know, please <a href="/feedback.html">contact us</a>.
+		If there is something you would like to let us know, please <a href="/contact.html">contact us</a>.
 		</p>
 	    </div>
           </div>
@@ -173,6 +179,7 @@
 	var elem = $(document.location.hash)[0]
 	$('#prime-space').load('puzzlers/' + elem.id + '.html', function() {
 	  prettyPrint();
+          window.scrollTo(0, 0);
  	  $('#show-and-tell').click(function() {
 	    $('#show-and-tell').addClass("disabled");
 	    $('#correct-answer').addClass("correct-answer");
