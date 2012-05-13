@@ -96,43 +96,17 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Puzzlers</li>
-              <li><a href="#" id="pzzlr-001">Hi there!</a></li>
-              <li><a href="#" id="pzzlr-002">Match me</a></li>
-              <li><a href="#" id="pzzlr-003">UPSTAIRS downstairs</a></li> 
-              <li><a href="#" id="pzzlr-004">The Trouble With Traits</a></li>
-	      <li><a href="#" id="pzzlr-005">The Trouble With Traits 2</a></li>
-	      <li><a href="#" id="pzzlr-006">The Missing List</a></li>  
-	      <li><a href="#" id="pzzlr-007">Seeing Double</a></li>                                                
+              <li><a href="/#pzzlr-001" id="pzzlr-001">Hi there!</a></li>
+              <li><a href="/#pzzlr-002" id="pzzlr-002">Match me</a></li>
+              <li><a href="/#pzzlr-003" id="pzzlr-003">UPSTAIRS downstairs</a></li> 
+              <li><a href="/#pzzlr-004" id="pzzlr-004">The Trouble With Traits</a></li>
+	      <li><a href="/#pzzlr-005" id="pzzlr-005">The Trouble With Traits 2</a></li>
+	      <li><a href="/#pzzlr-006" id="pzzlr-006">The Missing List</a></li>  
+	      <li><a href="/#pzzlr-007" id="pzzlr-007">Seeing Double</a></li>                                                
               <li class="divider"></li>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->	
-
-        <script type="text/javascript"> 
-	var activeElem = null;
-
-        $('a[id|="pzzlr"]').each(function(index, elem) {          
-	  $(elem).click(function() {
-	    $('#prime-space').load('puzzlers/' + elem.id + '.html', function() {
-	      prettyPrint();
-	      document.location.hash = elem.id;
- 	      $('#show-and-tell').click(function() {
-		$('#show-and-tell').addClass("disabled");
-		$('#correct-answer').addClass("correct-answer");
-		$('#explanation').show('slow');		
-	      });
-	    }); 
-	    
-	    if (activeElem != null) {
-	      $(activeElem).removeClass("active");           
-	    }
-
-	    activeElem = $(elem).parent();
-            $(activeElem).addClass("active");
-	  });          
-	});
-	
-        </script> 
 
         <div id="prime-space" class="span9">
 	  <div class="headline-unit">
