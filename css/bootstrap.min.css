@@ -551,7 +551,7 @@ button.btn.btn-mini,input[type="submit"].btn.btn-mini{*padding-top:1px;*padding-
 .navbar{color:#ffffff;}.navbar .brand:hover{text-decoration:none;}
 .navbar .brand{float:left;display:block;padding:13px 20px 17px;margin-left:-20px;font-size:20px;font-weight:200;line-height:1;color:#ffffff;}
 .navbar .navbar-text{margin-bottom:0;line-height:50px;}
-.navbar .navbar-link{color:#ffffff;}.navbar .navbar-link:hover{color:#049cdb;}
+.navbar .navbar-link{color:#ffffff;}.navbar .navbar-link:hover{color:#000000;}
 .navbar .btn,.navbar .btn-group{margin-top:10px;}
 .navbar .btn-group .btn{margin:0;}
 .navbar-form{margin-bottom:0;*zoom:1;}.navbar-form:before,.navbar-form:after{display:table;content:"";}
@@ -574,8 +574,8 @@ button.btn.btn-mini,input[type="submit"].btn.btn-mini{*padding-top:1px;*padding-
 .navbar .nav>li>a{float:none;padding:14px 10px 16px;line-height:19px;color:#ffffff;text-decoration:none;text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);}
 .navbar .btn{display:inline-block;padding:4px 10px 4px;margin:10px 5px 11px;line-height:18px;}
 .navbar .btn-group{margin:0;padding:10px 5px 11px;}
-.navbar .nav>li>a:hover{background-color:transparent;color:#049cdb;text-decoration:none;}
-.navbar .nav .active>a,.navbar .nav .active>a:hover{color:#049cdb;text-decoration:none;background-color:#002b5c;}
+.navbar .nav>li>a:hover{background-color:transparent;color:#000000;text-decoration:none;}
+.navbar .nav .active>a,.navbar .nav .active>a:hover{color:#000000;text-decoration:none;background-color:#002b5c;}
 .navbar .divider-vertical{height:50px;width:1px;margin:0 9px;overflow:hidden;background-color:#002b5c;border-right:1px solid #049cdb;}
 .navbar .nav.pull-right{margin-left:10px;margin-right:0;}
 .navbar .btn-navbar{display:none;float:right;padding:7px 10px;margin-left:5px;margin-right:5px;background-color:#026fa8;background-image:-moz-linear-gradient(top, #049cdb, #002b5c);background-image:-ms-linear-gradient(top, #049cdb, #002b5c);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#049cdb), to(#002b5c));background-image:-webkit-linear-gradient(top, #049cdb, #002b5c);background-image:-o-linear-gradient(top, #049cdb, #002b5c);background-image:linear-gradient(top, #049cdb, #002b5c);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#049cdb', endColorstr='#002b5c', GradientType=0);border-color:#002b5c #002b5c #000710;border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);*background-color:#002b5c;filter:progid:DXImageTransform.Microsoft.gradient(enabled = false);-webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 1px 0 rgba(255,255,255,.075);-moz-box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 1px 0 rgba(255,255,255,.075);box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 1px 0 rgba(255,255,255,.075);}.navbar .btn-navbar:hover,.navbar .btn-navbar:active,.navbar .btn-navbar.active,.navbar .btn-navbar.disabled,.navbar .btn-navbar[disabled]{background-color:#002b5c;*background-color:#001f42;}
@@ -716,10 +716,10 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .show{display:block;}
 .invisible{visibility:hidden;}
 .correct-answer{border-style:solid;border-width:4px;border-color:#0064cd;padding-top:5px;padding-bottom:5px;padding-right:25px;padding-left:5px;}
-.code-snippet{padding-top:20px;padding-bottom:20px;padding-right:20px;}
+.code-snippet{padding-top:20px;padding-bottom:20px;padding-right:20px;}.code-snippet li{padding-top:5px;padding-bottom:5px;}
 .explanation{padding-top:20px;}
 .container-fluid{padding-top:80px;}
-.row-fluid{padding-bottom:80px;}
+.row-fluid{padding-bottom:20px;}
 .footer{font-size:12px;border-top:1px solid #eeeeee;clear:both;padding:10px 0 20px;}
 .headline{padding:60px;margin-bottom:30px;background-color:#fff9d1;font-family:'Oxygen',Arial,sans-serif;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;}.headline h1{margin-bottom:0;font-size:48px;line-height:1;color:#002b5c;padding-bottom:20px;letter-spacing:1px;}
 .headline p{font-size:24px;font-weight:200;font-family:'Oxygen',Arial,sans-serif;line-height:27px;color:#002b5c;}

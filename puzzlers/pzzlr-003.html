@@ -1,4 +1,4 @@
-<h1>Match me</h1>
+<h1>UPSTAIRS downstairs</h1>
 <table class="table table-condensed">
   <tbody>
     <tr>
@@ -18,29 +18,43 @@
 <div class="code-snippet">
   <h3>What does the following code do?</h3>
   <pre class="prettyprint lang-scala">
-val ij: (Int, Int) = ("3", "4")
-val (i, j): (Int, Int) = ("3", "4")
+var IJ: (Int, Int) = (3, 4)
+var (I, J): (Int, Int) = (3, 4)
 </pre>
-  <ol>      
+  <ol>  
     <li>Prints:
       <pre class="prettyprint lang-scala">
-ij: (3, 4)
-i: 3
-j: 4
+IJ: (Int, Int) = (3, 4)
+I: Int = 3
+J: Int = 4
 </pre>
     </li>
-    <li>Both fail with compilation exceptions</li>
-    <li>Both fail with runtime exceptions</li>
-    <li id="correct-answer">The first one fails with a compilation exception and the second one fails with a runtime exception</li>
+    <li>
+	Both fail with compilation exceptions
+    </li>
+    <li id="correct-answer">
+ The first one succeeds and prints: 
+ <pre class="prettyprint lang-scala">
+IJ: (Int, Int) = (3, 4)
+</pre>
+and the second one fails with a compilation exception
+    </li>
+    <li>
+	The first one succeeds and prints:
+      <pre class="prettyprint lang-scala">
+IJ: (Int, Int) = (3, 4)
+</pre>
+	and the second one fails with a  runtime exception
+    </li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-	The former is an assignment of a tuple which is not type correct. 
-	The latter is a pattern match which for which type information is 
-	erased, so it will compile (with a warning) but fail at runtime.
+	The former is an assignment of a tuple which is type correct. The 
+latter tries to match (3, 4) against two constants I and J – Scala 
+assumes that UPPERCASE variables in pattern matches are constants.
   </p>
 </div>
 
