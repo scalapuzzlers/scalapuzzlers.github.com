@@ -108,13 +108,14 @@
           </div><!--/.well -->
         </div><!--/span-->	
 
-        <script type="text/javascript">     
+        <script type="text/javascript"> 
 	var activeElem = null;
 
         $('a[id|="pzzlr"]').each(function(index, elem) {          
 	  $(elem).click(function() {
 	    $('#prime-space').load('puzzlers/' + elem.id + '.html', function() {
 	      prettyPrint();
+	      document.location.hash = elem.id;
  	      $('#show-and-tell').click(function() {
 		$('#show-and-tell').addClass("disabled");
 		$('#correct-answer').addClass("correct-answer");
@@ -130,11 +131,11 @@
             $(activeElem).addClass("active");
 	  });          
 	});
-
 	
         </script> 
 
         <div id="prime-space" class="span9">
+	  <div id="welcome-content" style="display:none">
 	  <div class="headline">
             <h1>Yet another fun way to learn
 	   <img src="img/scala-logo.png" alt="Scala" style="padding-bottom:15px;padding-left:10px"/></h1><br/>
@@ -161,11 +162,33 @@
           <footer class="footer">
 
              Copyright 2012, Andrew Phillips and Nermin Serifovic
-
-          </div>          
+	  </footer>
+          </div> 
+          </div>         
 	</div>
       </div>
     </div>
-</body>
+    <script type="text/javascript"> 
+      if (document.location.hash) {
+	var elem = $(document.location.hash)[0]
+	$('#prime-space').load('puzzlers/' + elem.id + '.html', function() {
+	  prettyPrint();
+ 	  $('#show-and-tell').click(function() {
+	    $('#show-and-tell').addClass("disabled");
+	    $('#correct-answer').addClass("correct-answer");
+	    $('#explanation').show('slow');		
+	  });
+	}); 
+	    
+	if (activeElem != null) {
+	  $(activeElem).removeClass("active");           
+	}
 
+	activeElem = $(elem).parent();
+        $(activeElem).addClass("active");    
+	} else  {
+	  $('#welcome-content').show();
+        }
+    </script>
+  </body>
 </html>
