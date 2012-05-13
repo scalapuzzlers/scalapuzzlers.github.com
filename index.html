@@ -120,6 +120,7 @@
 	    $('#prime-space').load('puzzlers/' + elem.id + '.html', function() {
 	      prettyPrint();
 	      document.location.hash = elem.id;
+	      window.scrollTo(0, 0);
  	      $('#show-and-tell').click(function() {
 		$('#show-and-tell').addClass("disabled");
 		$('#correct-answer').addClass("correct-answer");
@@ -133,6 +134,7 @@
 
 	    activeElem = $(elem).parent();
             $(activeElem).addClass("active");
+
 	  });          
 	});
 	
@@ -177,6 +179,7 @@
 	var elem = $(document.location.hash)[0]
 	$('#prime-space').load('puzzlers/' + elem.id + '.html', function() {
 	  prettyPrint();
+          window.scrollTo(0, 0);
  	  $('#show-and-tell').click(function() {
 	    $('#show-and-tell').addClass("disabled");
 	    $('#correct-answer').addClass("correct-answer");
