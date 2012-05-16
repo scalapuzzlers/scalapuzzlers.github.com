@@ -124,7 +124,9 @@
  	      $('#show-and-tell').click(function() {
 		$('#show-and-tell').addClass("disabled");
 		$('#correct-answer').addClass("correct-answer");
-		$('#explanation').show('slow');		
+		$('#explanation').show('slow', function () {
+		  window.scrollTo(0, document.body.scrollHeight);	
+		});
 	      });
 	    }); 
 	    
