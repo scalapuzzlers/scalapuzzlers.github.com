@@ -1,0 +1,64 @@
+<h1>Closures can suck!</h1>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><strong>Contributed by</strong></td>
+'     <td>Simon Schaefer</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="http://stackoverflow.com/questions/9842476/closing-over-the-loop-variable-in-scala">StackOverflow</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What does the following code print?</h3>
+  <pre class="prettyprint lang-scala">
+val values = Array(100, 110, 120)
+val funcs = collection.mutable.Buffer[() => Int]()
+var i = 0
+while (i < values.length) {
+  funcs += (() => values(i))
+  i += 1
+}
+funcs foreach (f => println(f()))
+  </pre>
+  <ol>
+    <!--
+      The correct answer should have id for corresponding li element equal to "correct-answer".
+      When placing code snippets wrap them with pre tag:
+      <pre class="prettyprint lang-scala">
+        ...
+      </pre>
+     -->
+    <li id="correct-answer">It throws an ArrayIndexOutOfBoundsException</li>
+    <li>It prints the numbers of the Array: 100, 110, 120</li>
+    <li>The code does not compile</li>
+    <li>It prints three times the number 120</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+  When one uses a var instead of a val the functions closes over a variable and not over a value. As i changes inside the loop, all the three closures "see" the very same variable i and not a copy of it. Because after the loop i is 3 an ArrayIndexOutOfBoundsException is thrown. It is possible to avoid the Exception by adding another variable, which stores the numbers of the Array:
+  <pre class="prettyprint lang-scala">
+val values = Array(100, 110, 120)
+val funcs = collection.mutable.Buffer[() => Int]()
+var i = 0
+var value = 0
+while (i < values.length) {
+  value = values(i)
+  funcs += (() => value)
+  i += 1
+}
+funcs foreach (f => println(f()))
+  </pre>
+  This will print three times the number 120.
+  </p>
+</div>
+
