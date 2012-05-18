@@ -1,0 +1,43 @@
+<h1>Don't let it devour you!</h1>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><strong>Contributed by</strong></td>
+'     <td>Simon Schaefer</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="http://stackoverflow.com/a/4416436/465304">StackOverflow</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What does the following code do?</h3>
+  <pre class="prettyprint lang-scala">
+val xs = "a b c,d e f,g h,i j k" split "," map (_ split " ")
+val ys = for (Array(x,y,z) <- xs) yield x+y+z
+val zs = xs map { case Array(x,y,z) => x+y+z }
+  </pre>
+  <ol>
+    <li>Evaluating ys and zs result both in a MatchError</li>
+    <li>Both ys and zs evaluate to Array(abc, def, ijk)</li>
+    <li>ys throws a MatchError, zs evaluates to Array(abc, def, ijk)</li>
+    <li id="correct-answer">zs throws a MatchError, ys evaluates to Array(abc, def, ijk)</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    Most people think that a for-yield-expression is directly translated to an equivalent call of map, but this is only correct if no pattern-matching is used! If one uses pattern-matching there is also a call of filter is generated. In the example above, following code is generated:
+    <pre class="prettyprint lang-scala">
+xs filter { case Array(x,y,z) => true case _ => false } map { case Array(x,y,z) => x+y+z }
+    </pre>
+    Be aware of this silent filter! It can result in nasty bugs.
+  </p>
+</div>
+
