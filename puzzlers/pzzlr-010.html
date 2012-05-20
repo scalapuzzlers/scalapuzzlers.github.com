@@ -1,0 +1,65 @@
+<h1>Too many dots</h1>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><strong>Contributed by</strong></td>
+      <td>Rogach</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <!--
+        If no source (your puzzler is not mentioned anywhere on the web), just say N/A
+      --> 
+      <td><a target="_blank" href="http://stackoverflow.com/questions/10670559/why-does-cons-function-called-explicity-works-over-int-in-scala">stackoverflow</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>  
+</table>
+<div class="code-snippet">
+  <h3>What does the following code do?</h3>
+  <pre class="prettyprint lang-scala">
+val L = 1.::(2.::(Nil))
+  </pre>
+  <ol>  
+    <!--
+      The correct answer should have id for corresponding li element equal to "correct-answer".
+      When placing code snippets wrap them with pre tag:
+      <pre class="prettyprint lang-scala">
+        ...
+      </pre>
+     -->
+    <li id="correct-answer">
+      rints:
+      <pre class="prettyprint lang-scala">
+L: List[Double] = List(1.0, 2.0)
+      </pre>
+    </li>
+    <li>
+      Prints:
+      <pre class="prettyprint lang-scala">
+L: List[Int] = List(1, 2)
+      </pre>
+    </li>
+    <li>Fails to compile</li>
+    <li>
+      Prints:
+      <pre class="prettyprint lang-scala">
+L: List[Int] = List(2, 1)
+      </pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    Scala parser interprets "1." as "1.0" - a Double! Thus the expression becomes:
+      <pre class="prettyprint lang-scala">
+1.0 :: 2.0 :: Nil
+      </pre>
+  </p>
+</div>
+
