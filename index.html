@@ -127,8 +127,8 @@
  	      $('#show-and-tell').click(function() {
 		$('#show-and-tell').addClass("disabled");
 		$('#correct-answer').addClass("correct-answer");
-		$('#explanation').show('slow', function () {
-		  window.scrollTo(0, document.body.scrollHeight);	
+		$('#explanation').show('slow', function () {		  
+		  $('html, body').animate({scrollTop:$(document).height()}, 'slow');
 		});
 	      });
 	    }); 
