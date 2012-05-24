@@ -27,18 +27,15 @@ val zs = xs map { case Seq(x, y, z) => x + y + z }
     <li>Evaluating <tt>ys</tt> and <tt>zs</tt> both result in a <tt>MatchError</tt></li>
     <li>Both <tt>ys</tt> and <tt>zs</tt> evaluate to
       <pre class="prettyprint lang-scala">
-      Seq(abc, def, ijk)
-      </pre>
+Seq(abc, def, ijk)</pre>
     </li>
     <li><tt>ys</tt> throws a <tt>MatchError</tt>, <tt>zs</tt> evaluates to 
       <pre class="prettyprint lang-scala">
-      Seq(abc, def, ijk)
-      </pre>
+Seq(abc, def, ijk)</pre>
     </li>
     <li id="correct-answer"><tt>ys</tt> evaluates to
       <pre class="prettyprint lang-scala">
-      Seq(abc, def, ijk)
-      </pre>
+Seq(abc, def, ijk)</pre>
       <tt>zs</tt> throws a <tt>MatchError</tt>
     </li>
   </ol>
