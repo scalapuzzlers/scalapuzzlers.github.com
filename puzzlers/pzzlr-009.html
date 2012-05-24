@@ -18,24 +18,25 @@
 <div class="code-snippet">
   <h3>What does the following code do?</h3>
   <pre class="prettyprint lang-scala">
-val xs = "a b c,d e f,g h,i j k" split "," map (_ split " ")
-val ys = for (Array(x,y,z) <- xs) yield x+y+z
-val zs = xs map { case Array(x,y,z) => x+y+z }
+val xs = Seq(Seq("a", "b", "c"), Seq("d", "e", "f"), Seq("g", "h"), Seq("i", "j", "k"))
+
+val ys = for (Seq(x, y, z) <- xs) yield x + y + z
+val zs = xs map { case Seq(x, y, z) => x + y + z }
   </pre>
   <ol>
-    <li>Evaluating ys and zs result both in a MatchError</li>
-    <li>Both ys and zs evaluate to Array(abc, def, ijk)</li>
-    <li>ys throws a MatchError, zs evaluates to Array(abc, def, ijk)</li>
-    <li id="correct-answer">zs throws a MatchError, ys evaluates to Array(abc, def, ijk)</li>
+    <li>Evaluating <tt>ys</tt> and <tt>zs</tt> result both in a <tt>MatchError</tt></li>
+    <li>Both <tt>ys</tt> and <tt>zs</tt> evaluate to <tt>Seq(abc, def, ijk)</tt></li>
+    <li><tt>ys</tt> throws a <tt>MatchError</tt>, <tt>zs</tt> evaluates to <tt>Seq(abc, def, ijk)</tt></li>
+    <li id="correct-answer"><tt>ys</tt> evaluates to <tt>Seq(abc, def, ijk)</tt>, zs throws a <tt>MatchError</tt></li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    Most people think that a for-yield-expression is directly translated to an equivalent call of map, but this is only correct if no pattern-matching is used! If one uses pattern-matching there is also a call of filter is generated. In the example above, following code is generated:
+    Most people think that a for-yield-expression is directly translated to an equivalent call of <tt>map</tt>, but this is only correct if no pattern-matching is used! If one uses pattern-matching there is also a call of <tt>filter</tt> generated. In the example above, following code is generated:
     <pre class="prettyprint lang-scala">
-xs filter { case Array(x,y,z) => true case _ => false } map { case Array(x,y,z) => x+y+z }
+xs filter { case Seq(x, y, z) => true case _ => false } map { case Seq(x, y, z) => x + y + z }
     </pre>
     Be aware of this silent filter! It can result in nasty bugs.
   </p>

@@ -18,14 +18,18 @@
 <div class="code-snippet">
   <h3>What does the following code print?</h3>
   <pre class="prettyprint lang-scala">
-val values = Array(100, 110, 120)
-val funcs = collection.mutable.Buffer[() => Int]()
-var i = 0
-while (i < values.length) {
-  funcs += (() => values(i))
-  i += 1
+val values = Seq(100, 110, 120)
+val funcs1 = collection.mutable.Buffer[() => Int]()
+val funcs2 = collection.mutable.Buffer[() => Int]()
+var j = 0
+for (i <- 0 until values.length) {
+ funcs1 += (() => values(i))
+ funcs2 += (() => values(j))
+ j += 1
 }
-funcs foreach (f => println(f()))
+
+funcs1.foreach { f1 => println(f1()) }
+funcs2.foreach { f2 => println(f2()) }
   </pre>
   <ol>
     <!--
@@ -35,30 +39,34 @@ funcs foreach (f => println(f()))
         ...
       </pre>
      -->
-    <li id="correct-answer">It throws an ArrayIndexOutOfBoundsException</li>
-    <li>It prints the numbers of the Array: 100, 110, 120</li>
+    <li id="correct-answer"><tt>funcs1</tt> prints <tt>100, 110, 120</tt> whereas <tt>funcs2</tt> throws an <tt>ArrayIndexOutOfBoundsException</tt></li>
+    <li>Both print <tt>100, 110, 120</tt></li>
     <li>The code does not compile</li>
-    <li>It prints three times the number 120</li>
+    <li><tt>funcs1</tt> prints <tt>100, 110, 120</tt> whereas <tt>funcs2</tt> prints three times the number <tt>120</tt></li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-  When one uses a var instead of a val the functions closes over a variable and not over a value. As i changes inside the loop, all the three closures "see" the very same variable i and not a copy of it. Because after the loop i is 3 an ArrayIndexOutOfBoundsException is thrown. It is possible to avoid the Exception by adding another variable, which stores the numbers of the Array:
+  When one uses a <tt>var</tt> instead of a <tt>val</tt> the functions closes over a variable and not over a value. Because <tt>i</tt> is defined in the for-comprehension it is defined as a <tt>val</tt>. This means each time <tt>i</tt> is stored somewhere its value is copied - therefore it prints the expected result <tt>100, 110, 120</tt>. As <tt>j</tt> changes inside the loop, all the three closures "see" the very same variable <tt>j</tt> and not a copy of it. Because after the loop <tt>j</tt> is <tt>3</tt> an <tt>ArrayIndexOutOfBoundsException</tt> is thrown. It is possible to avoid the exception by adding another variable, which stores the numbers of the Seq:
   <pre class="prettyprint lang-scala">
-val values = Array(100, 110, 120)
-val funcs = collection.mutable.Buffer[() => Int]()
-var i = 0
+val values = Seq(100, 110, 120)
+val funcs1 = collection.mutable.Buffer[() => Int]()
+val funcs2 = collection.mutable.Buffer[() => Int]()
+var j = 0
 var value = 0
-while (i < values.length) {
-  value = values(i)
-  funcs += (() => value)
-  i += 1
+for (i <- 0 until values.length) {
+ funcs1 += (() => values(i))
+ value = values(i)
+ funcs2 += (() => value)
+ j += 1
 }
-funcs foreach (f => println(f()))
+
+funcs1.foreach { f1 => println(f1()) }
+funcs2.foreach { f2 => println(f2()) }
   </pre>
-  This will print three times the number 120. Nevertheless most times the expected behavior is to print the elements of the Array. To achieve this one should use immutable values.
+  When the functions in <tt>funcs2</tt> are called three times the number <tt>120</tt> is printed. Nevertheless most times the expected behavior is to print the elements of the Seq as it is done with <tt>funcs1</tt>.
   </p>
 </div>
 
