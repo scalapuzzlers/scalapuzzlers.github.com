@@ -1,0 +1,44 @@
+<h1>Fail whale</h1>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><strong>Contributed by</strong></td>
+'     <td>Konstantine Golikov</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="http://stackoverflow.com/questions/9449474/def-vs-val-vs-lazy-val-evaluation-in-scala/9450146#9450146"></a>stackoverflow</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>  
+</table>
+<div class="code-snippet">
+  <h3>What does the following code print?</h3>
+  <pre class="prettyprint lang-scala">
+  var x = 0
+  lazy val y = { 1/x }
+  try { 
+    println(y)
+  } catch {
+    case _ => 
+      x+=1
+      println(y)
+  }
+  </pre>
+  <ol>  
+    <li>No output at all</li>
+    <li>\<lazy\> since value defined as lazy and will not be evaluated</li>
+    <li>Empty line.</li>
+    <li id="correct-answer">1 will be outputted</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    One of the most interesting things in lazy values (besides that they are defer actual computations) is that they will be recomputed on call if there was an exception at the moment of their first access, until some definite value will be acquired. So you can use theese sweet pattern in many cases, for example for handling missing files.
+  </p>
+</div>
