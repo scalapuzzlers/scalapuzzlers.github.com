@@ -1,4 +1,4 @@
-<h1>Closures can suck!</h1>
+<h1>Captured by Closures</h1>
 <table class="table table-condensed">
   <tbody>
     <tr>
@@ -39,10 +39,22 @@ funcs2.foreach { f2 => println(f2()) }
         ...
       </pre>
      -->
-    <li id="correct-answer"><tt>funcs1</tt> prints <tt>100, 110, 120</tt> whereas <tt>funcs2</tt> throws an <tt>ArrayIndexOutOfBoundsException</tt></li>
-    <li>Both print <tt>100, 110, 120</tt></li>
+    <li id="correct-answer"><tt>funcs1</tt> prints
+      <pre class="prettyprint lang-scala">
+100, 110, 120</pre>
+      whereas <tt>funcs2</tt> throws an <tt>ArrayIndexOutOfBoundsException</tt></li>
+    <li>Both print
+      <pre class="prettyprint lang-scala">
+100, 110, 120</pre>
+    </li>
     <li>The code does not compile</li>
-    <li><tt>funcs1</tt> prints <tt>100, 110, 120</tt> whereas <tt>funcs2</tt> prints three times the number <tt>120</tt></li>
+    <li><tt>funcs1</tt> prints
+      <pre class="prettyprint lang-scala">
+100, 110, 120</pre>
+      whereas <tt>funcs2</tt> prints
+      <pre class="prettyprint lang-scala">
+120, 120, 120</pre>
+    </li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>

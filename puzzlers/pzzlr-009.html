@@ -1,4 +1,4 @@
-<h1>Don't let it devour you!</h1>
+<h1>Map Comprehension</h1>
 <table class="table table-condensed">
   <tbody>
     <tr>
@@ -24,10 +24,20 @@ val ys = for (Seq(x, y, z) <- xs) yield x + y + z
 val zs = xs map { case Seq(x, y, z) => x + y + z }
   </pre>
   <ol>
-    <li>Evaluating <tt>ys</tt> and <tt>zs</tt> result both in a <tt>MatchError</tt></li>
-    <li>Both <tt>ys</tt> and <tt>zs</tt> evaluate to <tt>Seq(abc, def, ijk)</tt></li>
-    <li><tt>ys</tt> throws a <tt>MatchError</tt>, <tt>zs</tt> evaluates to <tt>Seq(abc, def, ijk)</tt></li>
-    <li id="correct-answer"><tt>ys</tt> evaluates to <tt>Seq(abc, def, ijk)</tt>, zs throws a <tt>MatchError</tt></li>
+    <li>Evaluating <tt>ys</tt> and <tt>zs</tt> both result in a <tt>MatchError</tt></li>
+    <li>Both <tt>ys</tt> and <tt>zs</tt> evaluate to
+      <pre class="prettyprint lang-scala">
+Seq(abc, def, ijk)</pre>
+    </li>
+    <li><tt>ys</tt> throws a <tt>MatchError</tt>, <tt>zs</tt> evaluates to 
+      <pre class="prettyprint lang-scala">
+Seq(abc, def, ijk)</pre>
+    </li>
+    <li id="correct-answer"><tt>ys</tt> evaluates to
+      <pre class="prettyprint lang-scala">
+Seq(abc, def, ijk)</pre>
+      <tt>zs</tt> throws a <tt>MatchError</tt>
+    </li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
