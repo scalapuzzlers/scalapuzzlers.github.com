@@ -18,28 +18,27 @@
 <div class="code-snippet">
 <h3>What does the following program print upon execution?</h3>
 <pre class="prettyprint lang-scala">
-trait Base {
+trait OverridesEquals {
   override def equals(x: Any) = super.equals(x)
 }
 
-class C(val id: Int) extends Base
-case class CC(id: Int) extends Base
+class C extends OverridesEquals
+case class CC extends OverridesEquals
 
-object Test extends App {
-  val c1 = new C(1)
-  val c2 = new C(1)
-  val cc1 = CC(2)
-  val cc2 = CC(2)
+val c1 = new C()
+val c2 = new C()
+val cc1 = CC()
+val cc2 = CC()
 
-  println(c1 == c2)
-  println(c1.## == c2.##)
-  println(cc1 == cc2)
-  println(cc1.## == cc2.##)
-}
+println(c1 == c2)
+println(c1.## == c2.##)
+println(cc1 == cc2)
+println(cc1.## == cc2.##)
 </pre>
 
 <ol>
 <li>
+Prints:
 <pre class="prettyprint lang-scala">
 false
 false
@@ -49,6 +48,7 @@ false
 </li>
 
 <li id="correct-answer">
+Prints:
 <pre class="prettyprint lang-scala">
 false
 false
@@ -58,6 +58,7 @@ true
 </li>
 
 <li>
+Prints:
 <pre class="prettyprint lang-scala">
 false
 false
@@ -67,6 +68,7 @@ false
 </li>
 
 <li>
+Prints:
 <pre class="prettyprint lang-scala">
 false
 false
