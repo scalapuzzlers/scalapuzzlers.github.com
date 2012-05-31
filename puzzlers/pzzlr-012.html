@@ -3,7 +3,7 @@
   <tbody>
     <tr>
       <td><strong>Contributed by</strong></td>
-'     <td>Konstantine Golikov</td>
+      <td>Konstantine Golikov</td>
     </tr>
     <tr>
       <td><strong>Source</strong></td>
@@ -19,7 +19,7 @@
   <h3>What does the following code print?</h3>
   <pre class="prettyprint lang-scala">
   var x = 0
-  lazy val y = { 1/x }
+  lazy val y = 1/x
   try { 
     println(y)
   } catch {
@@ -29,10 +29,10 @@
   }
   </pre>
   <ol>  
-    <li>No output at all</li>
-    <li>&lt;lazy&gt; since value defined as lazy and will not be evaluated</li>
-    <li>Empty line.</li>
-    <li id="correct-answer">1 will be outputted</li>
+    <li>Prints nothing</li>
+    <li>Prints &lt;lazy&gt; since the value will not be evaluated</li>
+    <li>Prints an empty line</li>
+    <li id="correct-answer">Prints 1</li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
