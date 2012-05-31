@@ -1,0 +1,69 @@
+<h1>Initialization</h1>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><strong>Contributed by</strong></td>
+      <td>Dominik Gruntz</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>  
+</table>
+<div class="code-snippet">
+<h3>What does the following program print upon execution?</h3>
+<pre class="prettyprint lang-scala">
+object InitXY extends App {
+  object X {
+    val value: Int = Y.value + 1
+  }
+  object Y {
+    val value: Int = X.value + 1
+  }
+
+  import scala.collection.immutable.HashSet
+  val s = HashSet(() => X.value, () => Y.value)
+  println(s.head())
+}
+</pre>
+
+<ol>
+<li>
+The program prints always <tt>1</tt>.
+</li>
+
+<li id="correct-answer">
+The program prints always <tt>2</tt>.
+</li>
+
+<li>
+The program prints (nondeterministicly) either <tt>1</tt> or <tt>2</tt>.
+</li>
+
+<li>
+The program does not compile.
+</li>
+
+<li>
+The program stops with a <tt>StackOverflowError</tt> at runtime.
+</li>
+</ol>
+
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
+<div id="explanation" class="explanation" style="display:none">
+<h3>Explanation</h3>
+<p>
+The recursive definition of the two fields <tt>X.value</tt> and <tt>Y.value</tt> is valid and does compile, but as it is recursive, the type (<tt>Int</tt>) has to be specified for at least <tt>X.value</tt>. 
+<p>
+When either object <tt>X</tt> or <tt>Y</tt> is accessed, then its field <tt>value</tt> is initialized (objects are not initialized until they are accessed). If object <tt>X</tt> is initialized first, then the initialization of its field <tt>value</tt> triggers the initialization of object <tt>Y</tt>. In order to initialize the field <tt>Y.value</tt>, the field <tt>X.value</tt> is accessed. The VM takes notice that the initialization of object <tt>X</tt> is already running and returns the current value of <tt>X.value</tt> which is zero (the default value for <tt>Int</tt> fields), so no stack overflow at runtime. As a consequence <tt>Y.value</tt> is set to <tt>0+1=1</tt> and <tt>X.value</tt> to <tt>1+1=2</tt>. However, if object <tt>Y</tt> is initialized first, then <tt>Y.value</tt> is initialized with <tt>2</tt> and <tt>X.value</tt> with <tt>1</tt>.
+<p>
+Now, with the definition of <tt>HashSet(() => X.value, () => Y.value)</tt> <em>no</em> initialization takes place, i.e. neither <tt>X</tt> nor <tt>Y</tt> are initialized! But, as the generated set is a hash set, the order of its elements is not specified (i.e. depends on the hash code of the two functions). We then access with <tt>s.head()</tt> the first element of this set, and this may either be <tt>() => X.value</tt> or <tt>() => Y.value</tt>. We then force the evaluation of this function and with that the initialization of either <tt>X</tt> or <tt>Y</tt>. But as we have seen above, which ever object is accessed first, its field <tt>value</tt> is initialized to <tt>2</tt>, therefore the <tt>println</tt>-statement <em>always</em> prints <tt>2</tt>.
+</p>
+</div>
+
