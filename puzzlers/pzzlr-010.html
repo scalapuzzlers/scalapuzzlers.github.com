@@ -18,35 +18,37 @@
 <div class="code-snippet">
 <h3>What does the following code print?</h3>
 <pre class="prettyprint lang-scala">
-object X {
-  val value: Int = Y.value + 1
-}
-object Y {
-  val value: Int = X.value + 1
+object XY {
+  object X {
+    val value: Int = Y.value + 1
+  }
+  object Y {
+    val value: Int = X.value + 1
+  }
 }
 
-if(math.random > 0.5) X.value else Y.value
+if(math.random > 0.5) XY.X.value else XY.Y.value
 </pre>
 
 <ol>
 <li>
-The program prints always <tt>1</tt>.
+Always prints <tt>1</tt>.
 </li>
 
 <li id="correct-answer">
-The program prints always <tt>2</tt>.
+Always prints <tt>2</tt>.
 </li>
 
 <li>
-The program prints (nondeterministicly) either <tt>1</tt> or <tt>2</tt>.
+Nnondeterministicly prints either <tt>1</tt> or <tt>2</tt>.
 </li>
 
 <li>
-The code fails with a compilation error.
+Fails with a compilation error.
 </li>
 
 <li>
-The code fails at runtime with a <tt>StackOverflowError</tt>.
+Fails at runtime with a <tt>StackOverflowError</tt>.
 </li>
 </ol>
 
