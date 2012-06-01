@@ -96,7 +96,7 @@ itself does not provide a definition for one of these methods and <em>only</em> 
 a concrete definition is not given in some base class of the case class
 (except <tt>AnyRef</tt>).
 </p><p>
-In our example, the base class <tt>OverridesEquals</tt> provides an <tt>equals</tt>
+In our example, the base trait <tt>OverridesEquals</tt> provides an <tt>equals</tt>
 method, so the case class does not provide its own definition and the
 comparison of two different instances returns <tt>false</tt>.
 </p><p>
