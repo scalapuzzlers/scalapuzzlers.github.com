@@ -16,7 +16,7 @@
   </tbody>
 </table>
 <div class="code-snippet">
-<h3>What does the following program print upon execution?</h3>
+<h3>What does the following code print?</h3>
 <pre class="prettyprint lang-scala">
 trait OverridesEquals {
   override def equals(x: Any) = super.equals(x)
@@ -96,7 +96,7 @@ itself does not provide a definition for one of these methods and <em>only</em> 
 a concrete definition is not given in some base class of the case class
 (except <tt>AnyRef</tt>).
 </p><p>
-In our example, the base class <tt>Base</tt> provides an <tt>equals</tt>
+In our example, the base class <tt>OverridesEquals</tt> provides an <tt>equals</tt>
 method, so the case class does not provide its own definition and the
 comparison of two different instances returns <tt>false</tt>.
 </p><p>
