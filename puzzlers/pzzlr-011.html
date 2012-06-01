@@ -1,0 +1,108 @@
+<h1>Case Class Catch</h1>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><strong>Contributed by</strong></td>
+      <td>Dominik Gruntz</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+<h3>What does the following program print upon execution?</h3>
+<pre class="prettyprint lang-scala">
+trait OverridesEquals {
+  override def equals(x: Any) = super.equals(x)
+}
+
+class C extends OverridesEquals
+case class CC extends OverridesEquals
+
+val c1 = new C()
+val c2 = new C()
+val cc1 = CC()
+val cc2 = CC()
+
+println(c1 == c2)
+println(c1.## == c2.##)
+println(cc1 == cc2)
+println(cc1.## == cc2.##)
+</pre>
+
+<ol>
+<li>Prints:
+<pre class="prettyprint lang-scala">
+false
+false
+false
+false
+</pre>
+</li>
+
+<li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+false
+false
+false
+true
+</pre>
+</li>
+
+<li>Prints:
+<pre class="prettyprint lang-scala">
+false
+false
+true
+false
+</pre>
+</li>
+
+<li>Prints:
+<pre class="prettyprint lang-scala">
+false
+false
+true
+true
+</pre>
+</li>
+</ol>
+
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
+<div id="explanation" class="explanation" style="display:none">
+<h3>Explanation</h3>
+<p>
+The first two expressions (<tt>c1 == c2</tt> and <tt>c1.## == c2.##</tt>)
+both return <tt>false</tt> (as given). The two instances of class <tt>C</tt>
+are different, therefore both <tt>equals</tt> and <tt>hashCode</tt> return
+different results.
+</p><p>
+For case classes however, the <tt>equals</tt>, <tt>hashCode</tt> and
+<tt>toString</tt> methods are generated, and for two instances of a case
+class with the same elements, we could expect that both  <tt>equals</tt> and
+<tt>hashCode</tt> return the same result (i.e. Answer 4).
+</p><p>
+According to the SLS (section 5.3.2) however, a case class implicitly
+overrides the methods <tt>equals</tt>, <tt>hashCode</tt> and
+<tt>toString</tt> of class <tt>scala.AnyRef</tt> <em>only</em> if the case class
+itself does not provide a definition for one of these methods and <em>only</em> if
+a concrete definition is not given in some base class of the case class
+(except <tt>AnyRef</tt>).
+</p><p>
+In our example, the base class <tt>Base</tt> provides an <tt>equals</tt>
+method, so the case class does not provide its own definition and the
+comparison of two different instances returns <tt>false</tt>.
+</p><p>
+For method <tt>hashCode</tt> however no implementation is provided, neither
+in class <tt>CC</tt> nor in some base class, so here the implicitly overridden version
+is used which returns the same value for equal elements.
+</p>
+</div>
+
