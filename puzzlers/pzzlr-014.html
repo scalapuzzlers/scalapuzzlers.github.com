@@ -1,0 +1,103 @@
+<h1>The Choice of Implicit Conversions</h1>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><strong>Contributed by</strong></td>
+      <td>Dominik Gruntz</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+<h3>What does the following code do?</h3>
+<pre class="prettyprint lang-scala">
+class A
+case class B(value: String)
+
+implicit def aToBdef(x: A) = B("def")
+implicit val aToBval = (x: A) => B("val")
+implicit object aToBobj extends (A => B) {
+  def apply(a: A) = new B("obj")
+}
+
+val b: B = new A
+</pre>
+
+<ol>
+<li>
+Prints:
+<pre class="prettyprint lang-scala">
+b: B = B(def)
+</pre>
+</li>
+
+<li>
+Prints:
+<pre class="prettyprint lang-scala">
+b: B = B(val)
+</pre>
+</li>
+
+<li  id="correct-answer">
+Prints:
+<pre class="prettyprint lang-scala">
+b: B = B(obj)
+</pre>
+</li>
+
+<li>Fails with the compiler error 
+<pre>
+&lt;console&gt;:14: error: type mismatch;
+ found   : A
+ required: B
+Note that implicit conversions are not applicable because they are ambiguous
+</pre>
+</li>
+</ol>
+
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
+<div id="explanation" class="explanation" style="display:none">
+<h3>Explanation</h3>
+<p>
+We assign a new instance of class <tt>A</tt> to a val of type <tt>B</tt>. 
+According to [SLS 6.26.1], a view application is applied on the expression <tt>new A</tt> in that case.
+</p><p>
+A view from type <tt>A</tt> to type <tt>B</tt> is defined by an implicit value which has
+function type <tt>A => B</tt> (holds for <tt>aToBval</tt> and <tt>aToBobj</tt>) 
+or by a method convertible to a value of that type (holds for <tt>aToBdef</tt>), cf. [SLS 7.3].
+</p><p>
+According to [SLS 7.3], the search for an implicit view proceeds as in the case of
+implicit parameters. As there are several eligible candidates of the expected type,
+the most specific one will be chosen using the rules of static overloading resolution
+[SLS 6.26.3]. It is a compile time error if there is no candidate view which is more
+specific than all other ones.
+</p><p>
+So let us compare the candidates:
+<ul>
+<li>
+<tt>aToBobj</tt> is strictly more specific than <tt>aToBval</tt> as both are members which are neither
+parameterized nor polymorphic method types and as the type of <tt>aToBobj</tt> is an extension 
+of the type of <tt>aToBval</tt>.
+<li>
+<tt>aToBobj</tt> is strictly more specific than <tt>aToBdef</tt> as 
+a member which is neither a polymorphic method nor a parameterized method is always
+as specific as a parameterized method and converse, <tt>aToBobj</tt> is not applicable to
+the argument <tt>A</tt>.
+</ul>
+</p><p>
+Thus, the most specific candidate <tt>aToBobj</tt> is chosen and the result of the assignment is
+<pre class="prettyprint lang-scala">
+scala> val b: B = new A
+b: B = B(obj)
+</pre>
+</p>
+</div>
+
