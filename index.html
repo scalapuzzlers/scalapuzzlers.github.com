@@ -124,6 +124,7 @@
 
         $('a[id|="pzzlr"]').each(function(index, elem) {          
 	  $(elem).click(function() {
+            $('#prime-space').html("");
 	    $('#prime-space').load('puzzlers/' + elem.id + '.html', function() {
 	      prettyPrint();
 	      document.location.hash = elem.id;
