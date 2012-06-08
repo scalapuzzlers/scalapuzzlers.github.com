@@ -24,15 +24,15 @@
     println(y)
   } catch {
     case _ => 
-      x+=1
+      x += 1
       println(y)
   }
   </pre>
   <ol>  
-    <li>Prints nothing</li>
-    <li>Prints &lt;lazy&gt; since the value will not be evaluated</li>
-    <li>Prints an empty line</li>
-    <li id="correct-answer">Prints 1</li>
+    <li>Throws a 'divide by zero' exception within the catch block</li>
+    <li>Prints 1</li>
+    <li>Prints NaN</li>
+    <li id="correct-answer">Prints &lt;lazy&gt;</li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
