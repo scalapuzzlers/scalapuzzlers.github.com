@@ -1,0 +1,61 @@
+<h1>Private Affairs</h1>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><strong>Contributed by</strong></td>
+      <td>Dominik Gruntz</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>  
+</table>
+<div class="code-snippet">
+  <h3>What is the result of compiling the following code?</h3>
+<pre class="prettyprint lang-scala">
+class Private {
+  def foo1: Any = new Private.C1
+  def foo2: Any = new Private.C2
+}
+
+object Private {
+  private class C1
+  class C2 private
+}
+</pre>
+  <ol>  
+    <li>Compiles without error.</li>
+    <li>The compiler reports an error on the implementation of method <tt>foo1</tt>.</li>
+    <li id="correct-answer">The compiler reports an error on the implementation of method <tt>foo2</tt>.</li>
+    <li>The compiler reports an error on the implementation of both methods <tt>foo1</tt> and <tt>foo2</tt>.</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    Object <tt>Private</tt> defines two classes <tt>C1</tt> and <tt>C2</tt>.
+	<tt>C1</tt> is a private class which is only accessible in object <tt>Private</tt> and its companion class, 
+	whereas <tt>C2</tt> is a public class with a private default constructor, so this class can only be 
+	instantiated within class <tt>C2</tt>.
+	</p><p>
+	As a consequence, method <tt>foo1</tt> just compiles fine (as the private class <tt>C1</tt> is visible in
+	class <tt>Private</tt>), whereas the implementation of method <tt>foo2</tt> reports the following compiler error:
+<pre class="prettyprint lang-scala">
+error: constructor C2 in class C2 cannot be accessed in class Private
+         def foo2: Any = new Private.C2
+                         ^
+</pre>
+    </p><p>
+	Note, that the result type of method <tt>foo1</tt> has to be set to a base type of <tt>Private.C1</tt>, 
+	otherwise the result type of this method would be a type which is invisible by any caller outside of 
+	class/object <tt>Private</tt> (the compiler would report that the private class <tt>C1</tt> escapes its defining scope).
+	For method <tt>foo2</tt> this is not necessary.
+  </p>
+</div>
+
