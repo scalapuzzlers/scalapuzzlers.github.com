@@ -1,0 +1,85 @@
+<h1>Looking Forward</h1>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><strong>Contributed by</strong></td>
+      <td>Dominik Gruntz</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+<h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+val x, y, z: Int = x+1
+println(x,y,z)
+</pre>
+
+<ol>
+<li>Fails with a compilation error:
+<pre class="prettyprint lang-scala">
+error: illegal forward reference
+val x, y, z: Int = x+1
+                   ^
+</pre>
+</li>
+
+<li>Prints:
+<pre class="prettyprint lang-scala">
+(1,1,1)
+</pre>
+</li>
+
+<li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+(1,2,2)
+</pre>
+</li>
+
+<li>Prints:
+<pre class="prettyprint lang-scala">
+(1,2,3)
+</pre>
+</li>
+</ol>
+
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
+<div id="explanation" class="explanation" style="display:none">
+<h3>Explanation</h3>
+<p>
+According to the SLS (section 4.1), a value definition <tt>val p1, . . . , pn : T = e</tt> is a shorthand for 
+the sequence of value definitions <tt>val p1 : T = e; ...; val pn : T = e</tt>. 
+This means that in our example the expression <tt>x+1</tt> is evaluated three times.
+Moreover, since the value definition is recursive, the type of the declared values has to be provided.
+</p><p>
+It remains to explain how <tt>val x: Int = x+1</tt> is evaluated. The result of this assignment is 1
+as object fields are preinitialized to their default value, and for the type <tt>Int</tt> the default
+value is 0. 
+</p><p>
+This is as in Java.
+However, such a recursive definition of a field in a Java class body gives an <tt>illegal forward reference</tt> 
+compiler error,
+<pre class="prettyprint lang-java">
+class Z {
+   int x = x+1;
+}
+</pre>
+but the following compiles fine.
+<pre class="prettyprint lang-java">
+class Z {
+   int x = this.x+1;
+}
+</pre>
+This demonstrates, that the checking which is done by the Java compiler is quite shallow.
+The Scala definition to accept recursive definitions for all situations is more consistent.	 
+</p>
+</div>
+
