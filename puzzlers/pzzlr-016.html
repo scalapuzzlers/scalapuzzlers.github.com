@@ -1,0 +1,92 @@
+<h1>Looking Forward</h1>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><strong>Contributed by</strong></td>
+      <td>Dominik Gruntz</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+<h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+val s: String = s + s
+println(s.length)
+</pre>
+
+<ol>
+<li>Fails with a compilation error:
+<pre class="prettyprint lang-scala">
+error: illegal forward reference
+val s: String = s + s
+                ^
+</pre>
+</li>
+
+<li>Prints:
+<pre class="prettyprint lang-scala">
+0
+</pre>
+</li>
+
+<li>Prints:
+<pre class="prettyprint lang-scala">
+4
+</pre>
+</li>
+
+<li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+8
+</pre>
+</li>
+</ol>
+
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
+<div id="explanation" class="explanation" style="display:none">
+<h3>Explanation</h3>
+<p>
+The definition of <tt>val s: String = s + s</tt> is valid. As the definition is recursive, 
+the type of the declared values has to be provided (SLS, section 4.1).
+</p><p>
+In Scala, object fields are preinitialized to their default value, and for the type <tt>String</tt> 
+(and any other reference type) the default value is <tt>null</tt>.
+</p><p>
+This is as in Java.
+However, such a recursive definition of a field in a Java class body gives an <tt>illegal forward reference</tt> 
+compiler error,
+<pre class="prettyprint lang-java">
+class Z {
+   String s = s + s;
+}
+</pre>
+but the following compiles fine.
+<pre class="prettyprint lang-java">
+class Z {
+   String s = this.s + this.s;
+}
+</pre>
+This demonstrates, that the checking which is done by the Java compiler is quite shallow.
+The Scala definition to accept recursive definitions for all situations is more consistent.	 
+</p><p>
+What remains to explain is the result <tt>8</tt> which is printed. The initialization actually gets translated to 
+byte code equvalent to
+<pre class="prettyprint lang-java">
+s = (new StringBuilder()).append(s).append(s).toString()
+</pre>
+where the argument <tt>s</tt> has its default value <tt>null</tt>. According to  
+<a href="http://docs.oracle.com/javase/specs/jls/se5.0/html/expressions.html#15.18.1.1">JLS, Section 15.18.1.1</a>
+the reference <tt>null</tt> is converted to the string <tt>"null"</tt>, and the value which gets assigned to <tt>s</tt>
+is the string <tt>"nullnull"</tt> which has length 8.
+</p>
+</div>
+
