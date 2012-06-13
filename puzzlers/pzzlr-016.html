@@ -18,33 +18,50 @@
 <div class="code-snippet">
 <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
-val s: String = s + s
-println(s.length)
+val s1: String = s1
+val s2: String = s2 + s2
+try { println(s1.length) } catch { case e => println(e) }
+try { println(s2.length) } catch { case e => println(e) }
 </pre>
 
 <ol>
-<li>Fails with a compilation error:
+<!--
+<li>Fails at compile time with the following errors:
 <pre class="prettyprint lang-scala">
 error: illegal forward reference
-val s: String = s + s
-                ^
+val s1: String = s1
+                 ^
+error: illegal forward reference
+val s2: String = s2 + s2
+                 ^
+</pre>
+</li>
+-->
+
+<li>Prints:
+<pre class="prettyprint lang-scala">
+0
+0
 </pre>
 </li>
 
 <li>Prints:
 <pre class="prettyprint lang-scala">
-0
-</pre>
-</li>
-
-<li>Fails at runtime with a 
-<pre class="prettyprint lang-scala">
+java.lang.NullPointerException
 java.lang.NullPointerException
 </pre>
 </li>
 
 <li id="correct-answer">Prints:
 <pre class="prettyprint lang-scala">
+java.lang.NullPointerException
+8
+</pre>
+</li>
+
+<li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+4
 8
 </pre>
 </li>
@@ -55,11 +72,12 @@ java.lang.NullPointerException
 <div id="explanation" class="explanation" style="display:none">
 <h3>Explanation</h3>
 <p>
-The definition of <tt>val s: String = s + s</tt> is valid. As the definition is recursive, 
+The definitions of the values <tt>s1</tt> and <tt>s2</tt> are valid and compile without an error. 
+As the definitions are recursive, 
 the type of the declared values has to be provided (SLS, section 4.1).
 </p><p>
 In Scala, object fields are preinitialized to their default value, and for the type <tt>String</tt> 
-(and any other reference type) the default value is <tt>null</tt>.
+(and all other reference types) the default value is <tt>null</tt>.
 </p><p>
 This is as in Java.
 However, such a recursive definition of a field in a Java class body gives an <tt>illegal forward reference</tt> 
@@ -76,17 +94,24 @@ class Z {
 }
 </pre>
 This demonstrates, that the checking which is done by the Java compiler is quite shallow.
-The Scala definition to accept recursive definitions for all situations is more consistent.	 
+The Scala way to accept recursive definitions for all situations is more consistent.	 
 </p><p>
-What remains to explain is the result <tt>8</tt> which is printed. The initialization actually gets translated to 
+What remains to explain is the result of this puzzler.
+<ul>
+<li>
+Value <tt>s1</tt> is initialized to <tt>null</tt>, therefore the expression <tt>s1.length</tt>
+ends in a <tt>NullPointerException</tt> at run-time.
+<li>
+The initialization of the value <tt>s2</tt> actually gets translated to 
 byte code equvalent to
 <pre class="prettyprint lang-java">
-s = (new StringBuilder()).append(s).append(s).toString()
+s2 = (new StringBuilder()).append(s2).append(s2).toString()
 </pre>
-where the argument <tt>s</tt> has its default value <tt>null</tt>. According to  
+where the argument <tt>s2</tt> has its default value <tt>null</tt>. According to the
 <a href="http://docs.oracle.com/javase/specs/jls/se5.0/html/expressions.html#15.18.1.1">JLS, Section 15.18.1.1</a>
-the reference <tt>null</tt> is converted to the string <tt>"null"</tt>, and the value which gets assigned to <tt>s</tt>
+the reference <tt>null</tt> is converted to the string <tt>"null"</tt>, and the value which gets assigned to <tt>s2</tt>
 is the string <tt>"nullnull"</tt> which has length 8.
+</ul>
 </p>
 </div>
 
