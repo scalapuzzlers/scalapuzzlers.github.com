@@ -16,29 +16,41 @@
   </tbody>  
 </table>
 <div class="code-snippet">
-  <h3>What does the following code print?</h3>
-  <pre class="prettyprint lang-scala">
-  var x = 0
-  lazy val y = 1/x
-  try { 
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+var x = 0
+lazy val y = 1/x
+try {
+  println(y)
+} catch {
+  case _ =>
+    x = 1
     println(y)
-  } catch {
-    case _ => 
-      x += 1
-      println(y)
-  }
-  </pre>
+}
+</pre>
   <ol>  
-    <li>Throws a 'divide by zero' exception within the catch block</li>
-    <li id="correct-answer">Prints 1</li>
-    <li>Prints NaN</li>
-    <li>Prints &lt;lazy&gt;</li>
+    <li>Throws a 'divide by zero' exception</li>
+    <li id="correct-answer">Prints
+<pre class="prettyprint lang-scala">
+1
+</pre>
+    </li>
+    <li>Prints
+<pre class="prettyprint lang-scala">
+NaN
+</pre>
+</li>
+    <li>Prints
+<pre class="prettyprint lang-scala">
+&lt;lazy&gt;
+</pre>
+</li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    One of the most interesting things in lazy values (besides that they are defer actual computations) is that they will be recomputed on call if there was an exception at the moment of their first access, until some definite value will be acquired. So you can use theese sweet pattern in many cases, for example for handling missing files.
+    One of the most interesting things about lazy values (besides that they defer actual computation) is that they will be recomputed on call if there was an exception at the moment of first access, until some definite value is acquired. So you can use this useful pattern in many situations, for example to handle missing files.
   </p>
 </div>
