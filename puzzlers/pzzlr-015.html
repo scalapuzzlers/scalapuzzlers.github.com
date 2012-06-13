@@ -18,14 +18,16 @@
 <div class="code-snippet">
   <h3>What is the result of compiling the following code?</h3>
 <pre class="prettyprint lang-scala">
-class Private {
-  def foo1: Any = new Private.C1
-  def foo2: Any = new Private.C2
-}
+object Affairs {
+  class Private {
+    def foo1: Any = new Private.C1
+    def foo2: Any = new Private.C2
+  }
 
-object Private {
-  private class C1
-  class C2 private
+  object Private {
+    private class C1
+    class C2 private
+  }
 }
 </pre>
   <ol>  
