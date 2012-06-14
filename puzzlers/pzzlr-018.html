@@ -1,0 +1,81 @@
+<h1>Return in Time</h1>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><strong>Contributed by</strong></td>
+      <td>Dominik Gruntz</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+<h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+def value: Int = {
+  val one = (x: Int) => { return x; 1 }
+  1 + one(2) + one(3)
+}
+
+println(value)
+</pre>
+
+<ol>
+<li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+2
+</pre>
+</li>
+
+<li>Prints:
+<pre class="prettyprint lang-scala">
+3
+</pre>
+</li>
+
+<li>Prints:
+<pre class="prettyprint lang-scala">
+6
+</pre>
+</li>
+
+<li>The code does not compile, the compiler reports an <tt>unreachable code</tt> error.
+</li>
+</ol>
+
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
+<div id="explanation" class="explanation" style="display:none">
+<h3>Explanation</h3>
+<p>
+Scala does not complain about unreachable code bloks, therefore the code compiles fine.
+</p><p>
+The answer to this question can be found in section 6.20 of the SLS:
+<blockquote>
+A return expression <tt>return e</tt> must occur inside the body of some enclosing named
+method or function. The innermost enclosing named method or function in a
+source program, <em>f</em>, must have an explicitly declared result type, and the type of <tt>e</tt>
+must conform to it. The return expression evaluates the expression <tt>e</tt> and returns its
+value as the result of <em>f</em>. The evaluation of any statements or expressions following
+the return expression is omitted.
+</blockquote>
+This means, that the statement <tt>return x</tt> in our example returns from the 
+method <tt>value</tt> (and therefore this method explicitly declares its result type).
+When the function <tt>one(2)</tt> is called as part of the expression <tt>1 + one(2) + one(3)</tt>,
+then the result 2 is returned <em>as the result of method <tt>value</tt></em>.
+</p><p>
+Btw, returning from a nested anonymous function is implemented by throwing and
+catching a <tt>scala.runtime.NonLocalReturnException</tt>.
+</p><p>
+The most common reason you actually would want to return from inside a nested function is to 
+break out of an imperative for-comprehension or resource control block.
+See the answers to the stackoverflow question <a href="http://stackoverflow.com/a/3771243/714104">Purpose of 
+"return" statement in Scala?</a> for a further discussion of that aspect.
+</p>
+</div>
