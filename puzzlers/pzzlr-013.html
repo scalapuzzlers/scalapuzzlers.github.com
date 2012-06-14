@@ -16,8 +16,8 @@
   </tbody>  
 </table>
 <div class="code-snippet">
-  <h3>What does the following code do?</h3>
-  <pre class="prettyprint lang-scala">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
 case class RomanNumeral(value: Int, representation: String) extends Ordered[RomanNumeral] {
   override def compare(numeral: RomanNumeral) = this.value - numeral.value
 }
@@ -28,7 +28,7 @@ val numerals: SortedSet[RomanNumeral] = SortedSet(RomanNumeral(1000, "M"), Roman
 println("1 10 100 1000 in Roman numerals:")
 numerals.foreach { numeral => print(numeral.representation + " ") }
 numerals.map(_.representation).foreach { representation => print(representation + " ") }
-  </pre>
+</pre>
   <ol>  
     <li id="correct-answer">Prints
 <pre class="prettyprint lang-scala">
