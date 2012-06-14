@@ -1,0 +1,81 @@
+<h1>To Map, or Not To Map</h1>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>Based on a suggestion by <a target="_blank" href="http://www.schmitztech.com/">Michael Schmitz</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>  
+</table>
+<div class="code-snippet">
+  <h3>What does the following code do?</h3>
+  <pre class="prettyprint lang-scala">
+case class RomanNumeral(value: Int, representation: String) extends Ordered[RomanNumeral] {
+  override def compare(numeral: RomanNumeral) = this.value - numeral.value
+}
+
+import collection.immutable.SortedSet
+val numerals: SortedSet[RomanNumeral] = SortedSet(RomanNumeral(1000, "M"), RomanNumeral(100, "C"), RomanNumeral(1, "I"), RomanNumeral(10, "X"))
+
+println("1 10 100 1000 in Roman numerals:")
+numerals.foreach { numeral => print(numeral.representation + " ") }
+numerals.map(_.representation).foreach { representation => print(representation + " ") }
+  </pre>
+  <ol>  
+    <li id="correct-answer">Prints
+<pre class="prettyprint lang-scala">
+I X C M
+C I M X
+</pre>
+    </li>
+    <li>Prints
+<pre class="prettyprint lang-scala">
+M C I X
+I X C M
+</pre>
+    </li>
+    <li>Prints
+<pre class="prettyprint lang-scala">
+I X C M
+I X C M
+</pre>
+    </li>
+    <li>Prints
+<pre class="prettyprint lang-scala">
+M C I X
+C M I X
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    Since <tt>RomanNumeral</tt>s are ordered by their values, iterating over the sorted set of <tt>numerals</tt> will return them in that order and result in the representations being printed according to the <strong>value</strong>.
+  </p>
+  <p>
+    Mapping the numerals to their <em>representation</em> will result in a sorted set of <tt>String</tt>s which, naturally enough, will be ordered lexicographically. Iterating over them will thus return them in that order.
+  </p>
+  <p>
+    The potentially unexpected reordering of the items in the iterable could have been prevented by, for example,
+<pre class="prettyprint lang-scala">
+numerals.view.map(_.representation).foreach { ... }
+</pre>
+or
+<pre class="prettyprint lang-scala">
+numerals.toSeq.map(_.representation).foreach { ... }
+</pre>
+  </p>
+  <p>
+    Note that the initial declaration order of the set does not have any effect on the iteration order. Also, note that, of course, the code sample using <tt>map</tt> inefficiently iterates over <tt>numerals</tt> <strong>twice</strong>.
+  </p>
+</div>
