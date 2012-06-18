@@ -1,4 +1,4 @@
-<h1>Looking Forward</h1>
+<h1>Self: See 'Self'</h1>
 <table class="table table-condensed">
   <tbody>
     <tr>
@@ -20,23 +20,11 @@
 <pre class="prettyprint lang-scala">
 val s1: String = s1
 val s2: String = s2 + s2
-try { println(s1.length) } catch { case e => println(e) }
-try { println(s2.length) } catch { case e => println(e) }
+println(s1.length)
+println(s2.length)
 </pre>
 
 <ol>
-<!--
-<li>Fails at compile time with the following errors:
-<pre class="prettyprint lang-scala">
-error: illegal forward reference
-val s1: String = s1
-                 ^
-error: illegal forward reference
-val s2: String = s2 + s2
-                 ^
-</pre>
-</li>
--->
 
 <li>Prints:
 <pre class="prettyprint lang-scala">
@@ -45,16 +33,10 @@ val s2: String = s2 + s2
 </pre>
 </li>
 
-<li>Prints:
-<pre class="prettyprint lang-scala">
-java.lang.NullPointerException
-java.lang.NullPointerException
-</pre>
-</li>
+<li>Both fail at runtime with NullPointerExceptions</li>
 
-<li id="correct-answer">Prints:
+<li id="correct-answer">The first fails at runtime with a NullPointerException, the second prints:
 <pre class="prettyprint lang-scala">
-java.lang.NullPointerException
 8
 </pre>
 </li>
