@@ -73,13 +73,19 @@ If no implicit parameter were available, the compiler would issue an error messa
 scala> def sum(x: Int)(y: Int)(implicit z: Int) = x+y+z
 sum: (x: Int)(y: Int)(implicit z: Int)Int
 
-scala> sum(1) scala> sum(1) _
+scala> sum(1) _
 <console>:9: error: could not find implicit value for parameter z: Int
               sum(1) _
                  ^
 </pre>
-</p>
-<p>
+</p><p>
+One could also specify an explicit value for <tt>z</tt> if no implicit value is defined in the current context, but then
+the type has to be specified on the placeholder.
+<pre class="prettyprint lang-scala">
+scala> val f2 = sum(1)(_: Int)(3)
+f2: Int => Int = <function1>
+</pre>
+</p><p>
 This explains the result, i.e. the invocation of <tt>f(2)</tt> returns <tt>5</tt> (<tt>1</tt> + <em>&lt;param&gt;</em> + <tt>2</tt>) and
 <tt>f(2)(3)</tt> fails with a compilation error as on the object <tt>5</tt> (result of <tt>f(2)</tt>) no method <tt>apply</tt> is defined.
 <pre class="prettyprint lang-scala">
