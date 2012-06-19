@@ -19,8 +19,9 @@
 <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
 def value: Int = {
-  val one = (x: Int) => { return x; 1 }
-  1 + one(2) + one(3)
+  def one(x: Int): Int = { return x; 1 }
+  val two = (x: Int) => { return x; 2 }
+  1 + one(2) + two(3)
 }
 
 println(value)
@@ -29,13 +30,13 @@ println(value)
 <ol>
 <li id="correct-answer">Prints:
 <pre class="prettyprint lang-scala">
-2
+3
 </pre>
 </li>
 
 <li>Prints:
 <pre class="prettyprint lang-scala">
-3
+4
 </pre>
 </li>
 
@@ -54,7 +55,7 @@ println(value)
 <div id="explanation" class="explanation" style="display:none">
 <h3>Explanation</h3>
 <p>
-Scala does not complain about unreachable code blocks, therefore the code compiles fine.
+Scala does not complain about unreachable code, therefore the code compiles fine.
 If you want to be warned about unreachable code, then use the compiler option <tt>-Ywarn-dead-code</tt>.
 If you want to see a compiler error instead of a warning, then in addition use the compiler option <tt>-Xfatal-warnings</tt>.
 </p><p>
@@ -67,10 +68,10 @@ must conform to it. The return expression evaluates the expression <tt>e</tt> an
 value as the result of <em>f</em>. The evaluation of any statements or expressions following
 the return expression is omitted.
 </blockquote>
-This means, that the statement <tt>return x</tt> in our example returns from the 
-method <tt>value</tt> (and therefore this method explicitly declares its result type).
-When the function <tt>one(2)</tt> is called as part of the expression <tt>1 + one(2) + one(3)</tt>,
-then the result 2 is returned <em>as the result of method <tt>value</tt></em>.
+For the first <tt>return x</tt> statement the enclosing named method is method <tt>one</tt>, but
+for the second <tt>return x</tt> statement the enclosing named method is method <tt>value</tt>.
+When the function <tt>two(3)</tt> is called as part of the expression <tt>1 + one(2) + two(3)</tt>,
+then the result <tt>3</tt> is returned <em>as the result of method <tt>value</tt></em>.
 </p><p>
 Btw, returning from a nested anonymous function is implemented by throwing and
 catching a <tt>scala.runtime.NonLocalReturnException</tt>.
