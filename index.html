@@ -81,7 +81,18 @@
         }
       });
 
-     
+      /* * * DISQUS CONFIGURATION VARIABLES * * */
+      var disqus_shortname = 'scalapuzzlers'; // required: replace example with your forum shortname
+      var disqus_identifier = 'elem.id';
+      var disqus_url = 'http://scalapuzzlers.com/!#/' + 'elem.id';
+      var disqus_title = $('#title').find("h1").text();
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+      	var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+       })(); 
     </script>
 
     <div class="container-fluid">
@@ -110,23 +121,38 @@
               <li class="divider"></li>
             </ul>
           </div><!--/.well -->
-        </div><!--/span-->	
+        </div><!--/span3-->	
 
         <script type="text/javascript"> 
 	var activeElem = null;
 
         $('a[id|="pzzlr"]').each(function(index, elem) {          
 	  $(elem).click(function() {
+	    $('#disqus_thread').hide();
             $('#prime-space').html("");
 	    $('#prime-space').load('puzzlers/' + elem.id + '.html', function() {
 	      prettyPrint();
+              
+
 	      document.location.hash = elem.id;
 	      window.scrollTo(0, 0);
  	      $('#show-and-tell').click(function() {
 		$('#show-and-tell').addClass("disabled");
 		$('#correct-answer').addClass("correct-answer");
 		$('#explanation').show('slow', function () {		  
-		  $('html, body').animate({scrollTop:$(document).height()}, 'slow');
+		  				  
+                 DISQUS.reset({
+		  reload: true,
+		  config: function () {  
+		    this.page.identifier = elem.id;  
+		    this.page.url = 'http://scalapuzzlers.com/#!/' + elem.id;
+		    this.page.title = $('#title').find("h1").text();
+		  }
+		}); 
+		
+                  $('#disqus_thread').show();          		
+
+	          $('html,body').animate({scrollTop:$('#correct-answer').offset().top - $('.navbar').height() - 2}, 900);
 		});
 	      });
 	    }); 
@@ -142,39 +168,40 @@
 	});
 	
         </script> 
-
-        <div id="prime-space" class="span9">
-	  <div id="welcome-content" style="display:none">
-	  <div class="headline">
-            <h1>A fun way to learn more about
-	   <img src="img/scala-logo.png" alt="Scala" style="padding-bottom:15px;padding-left:10px"/></h1><br/>
-            <p>Welcome to Scala Puzzlers, a central repository of <i>Traps, Pitfalls and Corner Cases</i> in the Scala language.<br/><br/>
+        <div class="span9">
+          <div id="prime-space">
+	    <div id="welcome-content" style="display:none">
+	      <div class="headline">
+                <h1>A fun way to learn more about
+	        <img src="img/scala-logo.png" alt="Scala" style="padding-bottom:15px;padding-left:10px"/></h1><br/>
+                <p>Welcome to Scala Puzzlers, a central repository of <i>Traps, Pitfalls and Corner Cases</i> in the Scala language.<br/><br/>
 		Prepare to be surprised, entertained and...well, puzzled! What is presented here is a selection of seemingly simple examples which demonstrate that there's plenty of head-scratching left in Scala. Let your mind be challenged by unexpected and unintuitive behaviour and results and learn something in the process. 		
 <br/><br/>
             Choose a puzzler from the left-hand list to get started!</p>
-	  </div>	
-	  <div class="row-fluid">
- 	    <div class="span6 headline-unit">
-	      <h2>Your contributions are welcomed</h2>
-	      <p>Scala Puzzlers is a community effort! Have a puzzler you would like to share with the rest of the Scala community?	Please follow <a href="/contribute.html">these instructions</a> to submit your puzzler. 
+	      </div>	
+	      <div class="row-fluid">
+ 	        <div class="span6 headline-unit">
+	        <h2>Your contributions are welcomed</h2>
+	        <p>Scala Puzzlers is a community effort! Have a puzzler you would like to share with the rest of the Scala community?	Please follow <a href="/contribute.html">these instructions</a> to submit your puzzler. 
 		And don't worry, you will be properly credited for your contribution!</p>
-	    </div>	  
- 	    <div class="span6 headline-unit">
-	      <h2>We would love to hear from you</h2>
-	      <p>Any kind of feedback is appreciated, about the website but also about the puzzlers themselves. If there is something you would like to let us know, please <a href="/contact.html">contact us</a>.
-		</p>
-	    </div>
-          </div>
-          <footer class="footer">
-
-             Copyright &copy; 2012, Andrew Phillips and Nermin Serifovic
-	  </footer>
-          </div> 
-          </div>         
-	</div><!--/prime-space-->
+	        </div>	  
+ 	        <div class="span6 headline-unit">
+	          <h2>We would love to hear from you</h2>
+	          <p>Any kind of feedback is appreciated, about the website but also about the puzzlers themselves. If there is something you would like to let us know, please <a href="/contact.html">contact us</a>.
+		  </p>
+	        </div>
+              </div><!--/row-fluid-->
+              <footer class="footer">
+               Copyright &copy; 2012, Andrew Phillips and Nermin Serifovic
+	      </footer>
+            </div><!--/welcome-->         
+	  </div><!--/prime-space-->
+          <div id="disqus_thread" class="comments"></div>
+        </div><!--/span9-->                                
       </div><!--/raw-fluid-->
     </div><!--/container-fluid-->
     <script type="text/javascript"> 
+      $('#disqus_thread').hide();
       if (document.location.hash) {
 	var elem = $(document.location.hash)[0]
 	$('#prime-space').load('puzzlers/' + elem.id + '.html', function() {
@@ -183,8 +210,27 @@
  	  $('#show-and-tell').click(function() {
 	    $('#show-and-tell').addClass("disabled");
 	    $('#correct-answer').addClass("correct-answer");
-	    $('#explanation').show('slow');		
+	    $('#explanation').show('slow', function() {
+               
+	      disqus_identifier = elem.id;
+              disqus_url = 'http://scalapuzzlers.com/#!/' + elem.id;
+     	      disqus_title = $('#title').find("h1").text();
+
+	      DISQUS.reset({
+		  reload: true,
+		  config: function () {  
+		    this.page.identifier = elem.id;  
+		    this.page.url = 'http://scalapuzzlers.com/#!/' + elem.id;
+		    this.page.title = $('#title').find("h1").text();
+		  }
+		}); 
+	      
+	      $('#disqus_thread').show();
+                                  	      
+	      $('html,body').animate({scrollTop:$('#correct-answer').offset().top - $('.navbar').height() - 2}, 900);
+            });
 	  });
+	  
 	}); 
 	    
 	if (activeElem != null) {
@@ -192,10 +238,15 @@
 	}
 
 	activeElem = $(elem).parent();
-        $(activeElem).addClass("active");    
-	} else  {
-	  $('#welcome-content').show();
-        }
+        $(activeElem).addClass("active"); 
+	 	
+      } else  {
+	$('#welcome-content').show();
+
+	$('#disqus_thread').hide();
+
+ 	
+      }
     </script>
 
     <script type="text/javascript">
