@@ -68,11 +68,15 @@ This function object has an <tt>apply</tt> method (inherited from <tt>Function2[
 <pre class""prettyprint lang-scala">
   def apply(v1: T1, v2: T2): R
 </pre>
-In partucular, this method defines no default values for its arguments!
+In partucular, this method defines <em>no</em> default values for its arguments!
+As a consequence, <tt>invert3(v1 = 2)</tt> leads to a compile time error (as there are not enough actual arguments for method <tt>apply</tt>).
 </p>
 <p>
-As a consequence, <tt>invert3(v1 = 2)</tt> leads to a compile time error (as there are not enough arguments for method <tt>apply</tt>), 
-and <tt>invert3(v1 = 2, v2 = 1)</tt> prints <tt>1, 2, 3</tt> as the parameter <tt>v1</tt> (which corresponds to the parameter
+The argument names <tt>v1</tt> and <tt>v2</tt> are the names as they are defined in the <tt>apply</tt>-method of <tt>Function2[T1, T2, R]</tt>.
+The argument names of <tt>apply</tt>-method of <em>every</em> function with two arguments are named <tt>v1</tt> and <tt>v2</tt>, in particular
+these names are by no means related to the argument names of method <tt>invert3</tt>. Method <tt>invert3</tt> has by chance aruments
+with the same names, but unfortunately in a different order, and this is really painful.
+<tt>invert3(v1 = 2, v2 = 1)</tt> prints <tt>1, 2, 3</tt> as the parameter <tt>v1</tt> (which corresponds to the parameter
 <tt>v2</tt> in method <tt>invert</tt>) is set to <tt>2</tt> and parameter <tt>v2</tt> (which corresponds to the parameter
 <tt>v1</tt> in method <tt>invert</tt>) is set to <tt>1</tt>.
 </p>
