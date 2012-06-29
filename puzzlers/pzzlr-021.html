@@ -1,0 +1,105 @@
+<h1>Top-Level</h1>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><strong>Contributed by</strong></td>
+      <td>Dominik Gruntz</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://groups.google.com/forum/?fromgroups#!topic/scala-language/p3K7HEwCXhc">scala-lang mailing list</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+<h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+object base {
+  class X { val context = "object base" }
+}
+
+package base {
+  class X { val context = "package base" }
+}
+
+object Main extends App {
+  println((new base.X).context)
+  
+  import base.X
+  println((new X).context)
+} 
+</pre>
+
+<ol>
+<li>Fails with a compile-time error.
+</li>
+
+<li>Prints:
+<pre class="prettyprint lang-scala">
+object base
+package base
+</pre>
+</li>
+
+<li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+object base
+object base
+</pre>
+</li>
+
+<li>Prints:
+<pre class="prettyprint lang-scala">
+package base
+package base
+</pre>
+</li>
+
+
+</ol>
+
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
+<div id="explanation" class="explanation" style="display:none">
+<h3>Explanation</h3>
+<p>
+According to the SLS (Section 9.2) it is illegal to have a package with the same fully qualified name as a module or a class.
+For example, on the following compilation unit
+<pre class="prettyprint lang-scala">
+package com.scalapuzzlers
+object base { class X }
+package base { class X }
+</pre>
+the compiler will report an error:
+<pre class="prettyprint lang-scala">
+X.scala:3: error: base is already defined as object base
+package base { class X }
+        ^
+one error found
+</pre>
+Top-level definitions outside a packaging however are assumed to be injected into a special empty package.
+That package can neither be named nor imported, but the members of the empty package are visible to each other
+without qualification.
+</p>
+<p>
+The example above defines the two classes <tt>base.X</tt> and <tt>&lt;empty&gt;.X</tt>, where the latter 
+is visible without qualification. Thus the code compiles fine and the first invocation prints
+<tt>object base</tt>. The import statement imports class <tt>X</tt> from object <tt>base</tt>, as this object is 
+visible here, and the second invocation prints <tt>object base</tt> as well.
+</p>
+<p>
+Class <tt>X</tt> in the package <tt>base</tt> can be accessed with a full qualified identifier:
+<pre class="prettyprint lang-scala">
+println((new _root_.base.X).context)
+</pre>
+</p>
+<p>
+Members of the empty package are however only visible from within the empty package, i.e. only from
+other top-level classes. In all other packages, top-level objects and classes are not accessible.
+Real projects will thus never use top-level classes.
+</div>
+
