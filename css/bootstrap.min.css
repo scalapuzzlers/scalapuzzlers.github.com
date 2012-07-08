@@ -715,7 +715,7 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .hide{display:none;}
 .show{display:block;}
 .invisible{visibility:hidden;}
-.header-column{width:250px;}
+.header-column{width:30%;}
 .meta-table{width:92%;}
 .prettyprint{margin:1px 80px 20px 10px;}
 .correct-answer{border-style:solid;border-width:4px;border-color:#0064cd;padding-top:5px;padding-bottom:5px;padding-right:25px;padding-left:5px;}
