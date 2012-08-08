@@ -1,4 +1,4 @@
-<h1>Look Before You Leap?</h1>
+<h1>Count Me Now, Count Me Later</h1>
 <table class="table meta-table table-condensed">
   <tbody>
     <tr>
@@ -89,4 +89,14 @@ described in SLS 6.23.  Evaluation is deferred.
 <p><tt>f(a) _</tt> is eta expansion, described in SLS 6.26.5.
 Arguments given are evaluated eagerly; only the method call itself
 is deferred.
+</p>
+<p>In this example, the eta expansion in
+<pre class="prettyprint lang-scala">
+val adder2 = add(counter) _
+</pre>
+causes eager evaluation, as described: as soon as that line is run, Scala actually evaluates counter and binds <tt>1</tt>, the result, to the <tt>counter</tt> argument for <tt>adder2</tt>. Hence <tt>x</tt> is <tt>1</tt> when first printed.
+</p>
+<p>
+<tt>adder1</tt>, on the other hand, is an anonymous function, so its <tt>counter</tt> argument is only bound when <tt>adder1</tt> is evaluated. Since <tt>x</tt> is already <tt>1</tt> at this point, <tt>counter</tt> will be <tt>2</tt> and the evaluation of <tt>adder1</tt> prints <tt>12</tt>. The value of <tt>x</tt> is now <tt>2</tt>, as indicated by the program's output.
+</p>
 </div>
