@@ -1,0 +1,92 @@
+<h1>Look Before You Leap?</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Seth Tisue</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://groups.google.com/d/topic/scala-language/W1ZUNDAq7Fc/discussion">scala-language group</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+<h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+var x = 0
+def counter = { x += 1; x }
+def add(a: Int)(b: Int) = a + b
+val adder1 = add(counter)(_)
+val adder2 = add(counter) _
+println("x = " + x)
+println(adder1(10))
+println("x = " + x)
+println(adder2(10))
+println("x = " + x)
+</pre>
+
+<ol>
+
+<li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+x = 1
+12
+x = 2
+11
+x = 2
+</pre>
+</li>
+
+<li>Prints:
+<pre class="prettyprint lang-scala">
+x = 1
+11
+x = 1
+12
+x = 2
+</pre>
+</li>
+
+<li>Prints:
+<pre class="prettyprint lang-scala">
+x = 0
+11
+x = 1
+12
+x = 2
+</pre>
+</li>
+
+<li>Prints:
+<pre class="prettyprint lang-scala">
+x = 2
+11
+x = 2
+12
+x = 2
+</pre>
+</li>
+
+</ol>
+
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer and explanation</button>
+<div id="explanation" class="explanation" style="display:none">
+<h3>Explanation</h3>
+<p>
+<tt>f(a) _</tt> and <tt>f(a)(_)</tt> have different meanings, governed by
+different sections of the Scala language specification.
+</p>
+<p>
+<tt>f(a)(_)</tt> is the placeholder syntax for anonymous functions,
+described in SLS 6.23.  Evaluation is deferred.
+</p>
+<p><tt>f(a) _</tt> is eta expansion, described in SLS 6.26.5.
+Arguments given are evaluated eagerly; only the method call itself
+is deferred.
+</div>
