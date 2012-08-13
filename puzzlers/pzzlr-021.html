@@ -1,4 +1,4 @@
-<h1>Top-Level</h1>
+<h1>Views From the Top</h1>
 <table class="table meta-table table-condensed">
   <tbody>
     <tr>
@@ -17,8 +17,10 @@
 </table>
 <div class="code-snippet">
 <h3>What is the result of executing the following code?</h3>
-Note: This example cannot <a href="https://issues.scala-lang.org/browse/SI-5299">currently</a> be run from the REPL (as it contains a package definition).
-Copy the sample into a file and compile with <tt>scalac</tt>.
+
+<em>Note: This example cannot <a href="https://issues.scala-lang.org/browse/SI-5299">currently</a> be run from the REPL (as it contains a package definition).
+Copy the sample into a file and compile with <tt>scalac</tt>.</em>
+
 <pre class="prettyprint lang-scala">
 object base {
   class X { val context = "object base" }
@@ -112,4 +114,3 @@ Members of the empty package are however only visible from within the empty pack
 other top-level classes. In all other packages, top-level objects and classes are not accessible.
 Real projects will thus never use top-level classes.
 </div>
-
