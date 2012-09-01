@@ -1,4 +1,4 @@
-<h1>Overloaded</h1>
+<h1>Information Overload</h1>
 <table class="table meta-table table-condensed">
   <tbody>
     <tr>
@@ -67,21 +67,12 @@ println(Overload.foo(y : y.type))
 <div id="explanation" class="explanation" style="display:none">
 <h3>Explanation</h3>
 <p>
-If the method <tt>Overload.foo(x)</tt> is invoked, then overload resolution (SLS Section 6.26.3) comes into play.
-Both alternatives <tt>foo(Any)</tt> and <tt>foo(x.type)</tt> are potentiall applicable candidates (based on the shape of the arguments).
-As a next step in overload resolution, the argument <tt>x</tt> is typed <em>without</em> an expected type and is checked against each candidate method for applicability.
-The type of the argument <tt>x</tt> is <tt>X</tt> (and not <tt>x.type</tt>) and therefore only the method <tt>foo(arg: Any)</tt> remains as alternative
-and is chosen. This explains, why <tt>Overload.foo(arg: Any)</tt> returns <tt>1</tt>.
+If the method <tt>Overload.foo(x)</tt> is invoked, then overload resolution (SLS Section 6.26.3) comes into play. Both alternatives <tt>foo(Any)</tt> and <tt>foo(x.type)</tt> are potentiall applicable candidates (based on the shape of the arguments). As a next step in overload resolution, the argument <tt>x</tt> is typed <em>without</em> an expected type and is checked against each candidate method for applicability. The type of the argument <tt>x</tt> is <tt>X</tt> (and not <tt>x.type</tt>) and therefore only the method <tt>foo(arg: Any)</tt> remains as alternative and is chosen. This explains, why <tt>Overload.foo(arg: Any)</tt> returns <tt>1</tt>.
 </p>
 <p>
-If a path <tt>y</tt> has singleton type <tt>x.type</tt>, then <tt>x.type</tt> and <tt>y.type</tt> are equivalent,
-i.e. they are interchangeable in all contexts (SLS Section 3.5.1).
-When <tt>Overload.foo(y : y.type)</tt> is invoked, then typing the argument results in <tt>y.type</tt>, and this type is compatible with the
-parameter type <tt>x.type</tt> and this variant is applicable. From the two remaining candidates in overload resolution the most
-specific alternative is chosen, and this is <tt>foo(x.type)</tt>.
+If a path <tt>y</tt> has singleton type <tt>x.type</tt>, then <tt>x.type</tt> and <tt>y.type</tt> are equivalent, i.e. they are interchangeable in all contexts (SLS Section 3.5.1). When <tt>Overload.foo(y : y.type)</tt> is invoked, then typing the argument results in <tt>y.type</tt>, and this type is compatible with the parameter type <tt>x.type</tt> and this variant is applicable. From the two remaining candidates in overload resolution the most specific alternative is chosen, and this is <tt>foo(x.type)</tt>.
 </p>
-Interesting: in the non-overloaded case the argument <tt>x</tt> is  with the parameter type <tt>x.type</tt> as expected type.
-This typing succeeds and therefore the method is applicable to the argument <tt>x</tt> without an explicit type ascription:
+Interesting: in the non-overloaded case the argument <tt>x</tt> is with the parameter type <tt>x.type</tt> as expected type. This typing succeeds and therefore the method is applicable to the argument <tt>x</tt> without an explicit type ascription:
 <pre class="prettyprint lang-scala">
 scala> def bar(arg: x.type) = 3
 bar: (arg: x.type)Int
