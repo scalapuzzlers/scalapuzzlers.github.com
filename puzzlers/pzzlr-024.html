@@ -1,4 +1,4 @@
-<h1>What's in a name?</h1>
+<h1>What's In a Name?</h1>
 <table class="table meta-table table-condensed">
   <tbody>
     <tr>
@@ -71,19 +71,12 @@ d.sum(x = 0)
 <div id="explanation" class="explanation" style="display:none">
 <h3>Explanation</h3>
 <p>
-Scala uses the static type of a variable to bind parameter names, but the defaults are determined
-by the runtime type:
+Scala uses the static type of a variable to bind parameter names, but the defaults are determined by the runtime type:
 <ul>
 <li>
-The binding of parameter names is done by the compiler and the only information the compiler can use is the
-static type of the variable. 
+The binding of parameter names is done by the compiler and the only information the compiler can use is the static type of the variable. 
 <li>
-For parameters with a default value the compiler creates methods
-which compute the default argument expressions (SLS Section 4.6).
-In the above example, both classes <tt>C</tt> and <tt>D</tt> contain the methods
-<tt>sum$default$1</tt> and <tt>sum$default$2</tt> for the two default parameters.
-When a parameter is missing, the compiler uses the result of these methods, and these 
-methods are invoked at run-time.
+For parameters with a default value the compiler creates methods which compute the default argument expressions (SLS Section 4.6). In the above example, both classes <tt>C</tt> and <tt>D</tt> contain the methods <tt>sum$default$1</tt> and <tt>sum$default$2</tt> for the two default parameters. When a parameter is missing, the compiler uses the result of these methods, and these methods are invoked at run-time.
 </ul>
 </p>
 <p>
