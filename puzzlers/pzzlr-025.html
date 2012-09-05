@@ -1,4 +1,4 @@
-<h1>A Regex Iterator</h1>
+<h1>$!.*% Iterators!</h1>
 <table class="table meta-table table-condensed">
   <tbody>
     <tr>
@@ -46,7 +46,7 @@ non-empty iterator
 <pre class="prettyprint lang-scala">
 empty iterator
 java.lang.IllegalStateException: No match available
-(same output as the above line on REPL, or no output from a program)
+java.lang.IllegalStateException: No match available
 </pre></li>
      <li id="correct-answer">
 <pre class="prettyprint lang-scala">
@@ -58,7 +58,7 @@ java.lang.IllegalStateException: No match available
 <pre class="prettyprint lang-scala">
 non-empty iterator
 java.lang.IllegalStateException: No match available
-(same output as the above line on REPL, or no output from a program)
+java.lang.IllegalStateException: No match available
 </pre></li>
   </ol>
 </div>
@@ -66,10 +66,7 @@ java.lang.IllegalStateException: No match available
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-  The result of <tt>findAll</tt> is an <tt>Iterator</tt>. Until you somehow ask for or check the first element,
-  such as calling <tt>next</tt>, <tt>hasNext</tt> or causing them to be called through <tt>toString</tt>, no regex match
-  will be tried, causing the <tt>end</tt> method -- from <tt>MatchData</tt>, also extends by <tt>MatchIterator</tt> --
-  to throw an exception.
+  The result of <tt>findAll</tt> is an <tt>Iterator</tt>. Until you somehow ask for or check the first element, such as calling <tt>next</tt>, <tt>hasNext</tt> or causing them to be called through <tt>toString</tt>, no regex match will be tried, causing the <tt>end</tt> method - from <tt>MatchData</tt>, also extended by <tt>MatchIterator</tt> - to throw an exception.
   </p>
 </div>
 
