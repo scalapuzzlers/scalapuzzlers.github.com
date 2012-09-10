@@ -51,7 +51,7 @@ println(result)
     What is interesting is that this works as expected:
   <pre class="prettyprint lang-scala">
 map match {
-  case m: Map[String,Int] => Option(m.get("death"))
+  case m: Map[String,Int] => Option(m("death"))
 }
   </pre>
   if what you expected was <code>None</code>.
