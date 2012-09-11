@@ -72,7 +72,7 @@ var j = 0
 var value = 0
 for (i <- 0 until values.length) {
  funcs1 += (() => values(i))
- value = values(i)
+ value = values(j)
  funcs2 += (() => value)
  j += 1
 }
