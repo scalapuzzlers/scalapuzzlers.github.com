@@ -43,9 +43,16 @@ println(s"[$sb]")
 <li id="correct-answer"><pre class="prettyprint lang-scala">
 [Hello, kitteh! ]
 </pre></li>
-<li><pre class="prettyprint lang-scala">
+<li>
+<!-- kill this kitteh!
+<pre class="prettyprint lang-scala">
 [       kitteh!]
-</pre></li>
+</pre>
+-->
+Does not compile.
+<pre class="prettyprint lang-scala">
+</pre>
+</li>
 <li>Throws an exception, such as StackOverflowError or StringIndexOutOfBoundsException.</li>
   </ol>
 </div>
@@ -53,9 +60,21 @@ println(s"[$sb]")
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
+Recall that Scala has a
+<tt>StringBuilder</tt> that
+<a href="http://www.artima.com/pins1ed/working-with-lists.html#footnote16-5">
+shadows <tt>java.lang.StringBuilder</tt>
+</a>
+and that it has an
+<a href="http://www.scala-lang.org/api/current/index.html#scala.collection.mutable.StringBuilder">
+<tt>apply</tt>
+</a>
+method.
+  </p>
+  <p>
 The <tt>foreach</tt> takes a function with an Int parameter.
-Since <tt>StringBuilder.append</tt> returns a <tt>StringBuilder</tt>
-which is a function, that function is eta-expanded.
+<tt>StringBuilder.append</tt> returns a <tt>StringBuilder</tt>
+which, as a <tt>Seq</tt>, is such a function; that function is eta-expanded.
 The <tt>append</tt> is evaluated once at eta-expansion;
 each iteration invokes <tt>StringBuilder.apply</tt>, which is an
 alias for <tt>StringBuilder.charAt</tt>.
