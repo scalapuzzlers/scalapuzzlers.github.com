@@ -1,0 +1,66 @@
+<h1>Padded Answer</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>A. P. Marki</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <!--
+        If no source (your puzzler is not mentioned anywhere on the web), just say N/A
+      --> 
+      <td>Local idiocy</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.10</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+  <pre class="prettyprint lang-scala">
+val sb = new StringBuilder("Hello, kitteh!")
+val width = 20
+1 to width - sb.length foreach sb.append(' ')
+println(s"[$sb]")
+  </pre>
+  <ol>
+    <!--
+      The correct answer should have id for corresponding li element equal to "correct-answer".
+      When placing code snippets wrap them with pre tag:
+      <pre class="prettyprint lang-scala">
+        ...
+      </pre>
+     -->
+<li><pre class="prettyprint lang-scala">
+[Hello, kitteh!       ]
+</pre></li>
+<li><pre class="prettyprint lang-scala">
+[       ]
+</pre></li>
+<li id="correct-answer"><pre class="prettyprint lang-scala">
+[Hello, kitteh! ]
+</pre></li>
+<li><pre class="prettyprint lang-scala">
+[       kitteh!]
+</pre></li>
+<li>Throws an exception, such as StackOverflowError or StringIndexOutOfBoundsException.</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+The <tt>foreach</tt> takes a function with an Int parameter.
+Since <tt>StringBuilder.append</tt> returns a <tt>StringBuilder</tt>
+which is a function, that function is eta-expanded.
+The <tt>append</tt> is evaluated once at eta-expansion;
+each iteration invokes <tt>StringBuilder.apply</tt>, which is an
+alias for <tt>StringBuilder.charAt</tt>.
+If the <tt>StringBuilder</tt> had not been initialized with data,
+that invocation would throw <tt>StringIndexOutOfBoundsException</tt>.
+  </p>
+</div>
+
