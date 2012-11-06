@@ -1,4 +1,4 @@
-<h1>Padded Answer</h1>
+<h1>Keep On Padding</h1>
 <table class="table meta-table table-condensed">
   <tbody>
     <tr>
@@ -7,53 +7,41 @@
     </tr>
     <tr>
       <td><strong>Source</strong></td>
-      <!--
-        If no source (your puzzler is not mentioned anywhere on the web), just say N/A
-      --> 
-      <td>Local idiocy</td>
+      <td>N/A</td>
     </tr>
     <tr>
       <td><strong>Tested with Scala version</strong></td>
-      <td>2.10</td>
+      <td>2.10.0-RC1</td>
     </tr>
   </tbody>
 </table>
 <div class="code-snippet">
   <h3>What is the result of executing the following code?</h3>
   <pre class="prettyprint lang-scala">
+def padTo(width: Int)(sb: StringBuilder) = {
+  0 until (width - sb.length) foreach {
+    sb.append('*')
+  }
+  sb
+}
+
+// sb.length == 14
 val sb = new StringBuilder("Hello, kitteh!")
-val width = 20
-1 to width - sb.length foreach sb.append(' ')
-println(s"[$sb]")
+println(padTo(20)(sb))
   </pre>
   <ol>
-    <!--
-      The correct answer should have id for corresponding li element equal to "correct-answer".
-      When placing code snippets wrap them with pre tag:
-      <pre class="prettyprint lang-scala">
-        ...
-      </pre>
-     -->
 <li><pre class="prettyprint lang-scala">
-[Hello, kitteh!       ]
+Hello, kitteh!******
 </pre></li>
 <li><pre class="prettyprint lang-scala">
-[       ]
+******
 </pre></li>
 <li id="correct-answer"><pre class="prettyprint lang-scala">
-[Hello, kitteh! ]
+Hello, kitteh!*
 </pre></li>
 <li>
-<!-- kill this kitteh!
-<pre class="prettyprint lang-scala">
-[       kitteh!]
-</pre>
--->
-Does not compile.
-<pre class="prettyprint lang-scala">
-</pre>
+Fails with a compilation exception
 </li>
-<li>Throws an exception, such as StackOverflowError or StringIndexOutOfBoundsException.</li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
@@ -79,7 +67,10 @@ The <tt>append</tt> is evaluated once at eta-expansion;
 each iteration invokes <tt>StringBuilder.apply</tt>, which is an
 alias for <tt>StringBuilder.charAt</tt>.
 If the <tt>StringBuilder</tt> had not been initialized with data,
-that invocation would throw <tt>StringIndexOutOfBoundsException</tt>.
+that invocation would throw <tt>StringIndexOutOfBoundsException</tt>:
+<pre class="prettyprint lang-scala">
+val sb2 = new StringBuilder()
+println(padTo(20)(sb2)) // throws StringIndexOutOfBoundsException
+</pre>.
   </p>
 </div>
-
