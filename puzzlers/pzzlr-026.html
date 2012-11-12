@@ -1,0 +1,66 @@
+<h1>null will be the death of me</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Vassil Dichev</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <!--
+        If no source (your puzzler is not mentioned anywhere on the web), just say N/A
+      --> 
+      <td><a target="_blank" href="N/A">N/A</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+  <pre class="prettyprint lang-scala">
+val map = Map("death" -> null)
+val result = map match {
+  case m: Map[String,Int] => m.get("death") flatMap Option.apply
+}
+println(result)
+  </pre>
+  <ol>
+    <!--
+      The correct answer should have id for corresponding li element equal to "correct-answer".
+      When placing code snippets wrap them with pre tag:
+      <pre class="prettyprint lang-scala">
+        ...
+      </pre>
+     -->
+    <li>throws <code>ClassCastException</code></li>
+    <li>throws <code>NullPointerException</code></li>
+    <li><code>None</code></li>
+    <li id="correct-answer"><code>Some(0)</code></li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    This is yet another example of why you should not ignore the compiler's warnings. This code is typical of deserialization from e.g. JSON. The snippet doesn't throw a <code>ClassCastException</code>, because due to erasure the object is only checked if it's a <code>Map</code>.
+  </p>
+  <p>
+    What is interesting is that this works as expected:
+  <pre class="prettyprint lang-scala">
+map match {
+  case m: Map[String,Int] => Option(m("death"))
+}
+  </pre>
+  if what you expected was <code>None</code>.
+  </p>
+  <p>
+    So what is the explanation of this? Scala creates a function object as an argument to <code>flatMap</code> and it needs to unbox and box the parameter from <code>Integer</code> to <code>int</code> and back again. However, on the JVM unboxing <code>null</code> to an integral type(such as <code>byte</code>, <code>short</code>, <code>int</code> or <code>long</code>), results in 0, and Scala is also affected by this behaviour.
+  </p>
+  <p>
+    The moral of the story is that erasure warnings are insidious since they will sometimes result in unexpected behaviour in a different location than the one which triggers the warning. Another thing we learn is that nulls do not fit well with autoboxing in Java, and Scala must bear this burden of integrating with the JVM.
+  </p>
+</div>
+
