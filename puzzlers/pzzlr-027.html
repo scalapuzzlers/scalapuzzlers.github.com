@@ -126,8 +126,9 @@ implicit def cbf = new CanBuildFrom[StringBuilder, Char, String] {
 }
 // This uses a new intermediate builder and copies before padding.
 // The unspecialized ++= operation is a grisly oldsb foreach { newsb += }
-println(new StringBuilder("U go now.") padTo (20, '*')) // the expected String, albeit built by
-                                                        // the unexpected StringBuilder
+val mysb = new StringBuilder("U go now.")
+println(mysb padTo (20, '*')) // the expected String, but built by different *new* StringBuilder instance
+                              // mysb still contains "U go now."
 
 // One could go to greater lengths to reuse the builder
 class StringBuilderBuilder(private var sb: StringBuilder) extends Builder[Char, StringBuilder] {
