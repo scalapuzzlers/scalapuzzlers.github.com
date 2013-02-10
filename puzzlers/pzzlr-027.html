@@ -17,7 +17,7 @@
 </table>
 <div class="code-snippet">
   <h3>What is the result of executing the following code?</h3>
-  <pre class="prettyprint lang-scala">
+<pre class="prettyprint lang-scala">
 implicit class Padder(val sb: StringBuilder) extends AnyVal {
   def pad2(width: Int) = {
     1 to width - sb.length foreach { sb append '*' }
@@ -32,7 +32,7 @@ println(greeting pad2 20)
 // farewell.length == 9
 val farewell = new StringBuilder("U go now.")  // I hatez long bye-bye.
 println(farewell pad2 20)
-  </pre>
+</pre>
   <ol>
 <li>Prints:
 <pre class="prettyprint lang-scala">
