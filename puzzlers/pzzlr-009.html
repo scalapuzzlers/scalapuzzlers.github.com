@@ -19,12 +19,12 @@
 </table>
 <div class="code-snippet">
   <h3>What is the result of executing the following code?</h3>
-  <pre class="prettyprint lang-scala">
+<pre class="prettyprint lang-scala">
 val xs = Seq(Seq("a", "b", "c"), Seq("d", "e", "f"), Seq("g", "h"), Seq("i", "j", "k"))
 
 val ys = for (Seq(x, y, z) <- xs) yield x + y + z
 val zs = xs map { case Seq(x, y, z) => x + y + z }
-  </pre>
+</pre>
   <ol>
     <li>Evaluating <tt>ys</tt> and <tt>zs</tt> both result in a <tt>MatchError</tt></li>
     <li>Both <tt>ys</tt> and <tt>zs</tt> evaluate to
