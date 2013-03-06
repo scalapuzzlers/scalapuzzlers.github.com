@@ -67,7 +67,8 @@ Scala automatically handles convertions such as <tt>java.lang.Integer</tt> to <t
   </p>
   <p>
 <pre class="prettyprint lang-java">
-Predef$.MODULE$.println(BoxesRunTime.boxToBoolean($outer.map().apply("key") == Predef$.MODULE$.println(BoxesRunTime.boxToBoolean(BoxesRunTime.unboxToInt($outer.map().apply("key")) == 0));
+Predef$.MODULE$.println(BoxesRunTime.boxToBoolean($outer.map().apply("key") == null));
+Predef$.MODULE$.println(BoxesRunTime.boxToBoolean(BoxesRunTime.unboxToInt($outer.map().apply("key")) == 0));
 </pre>
   <p>
 The interesting part here is <a href="https://github.com/scala/scala/blob/v2.10.0-RC1/src/library/scala/runtime/BoxesRunTime.java" target="_new"><tt>BoxesRunTime.unboxToInt</tt></a> in the second call, which is defined as:
