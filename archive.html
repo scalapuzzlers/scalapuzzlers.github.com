@@ -8,7 +8,20 @@
  <link href="css/prettify.css" type="text/css" rel="stylesheet" />
  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
  <script type="text/javascript" src="js/prettify.js"></script>
- 
+ <script type="text/javascript">
+
+   var _gaq = _gaq || [];
+   _gaq.push(['_setAccount', 'UA-31486114-1']);
+   _gaq.push(['_trackPageview']);
+
+   (function() {
+     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+   })();
+  
+
+ </script> 
 </head>
 
 <body data-spy="scroll" data-target=".subnav" data-offset="50">
@@ -59,7 +72,7 @@
       var pathToID = {
         "/"                        : '#navbar-home',
         "index.html"              : '#navbar-home', 
-        "archive.html"              : '#navbar-archive',
+        "archive.html"              : '#navbar-archive', 
         "contribute.html"	 : '#navbar-contribute',   
         "contact.html"          : '#navbar-contact',
 	"about.html"		 : '#navbar-about'
@@ -105,34 +118,7 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Puzzlers</li>
-              <li><a href="#" id="pzzlr-001">Hi There!</a></li>
-              <li><a href="#" id="pzzlr-002">Match Me</a></li>
-              <li><a href="#" id="pzzlr-003">UPSTAIRS downstairs</a></li> 
-              <li><a href="#" id="pzzlr-004">The Trouble With Traits</a></li>
-              <li><a href="#" id="pzzlr-005">The Trouble With Traits 2</a></li>
-              <li><a href="#" id="pzzlr-006">The Missing List</a></li>  
-              <li><a href="#" id="pzzlr-007">Seeing Double</a></li>
-              <li><a href="#" id="pzzlr-008">Captured by Closures</a></li>
-              <li><a href="#" id="pzzlr-009">Map Comprehension</a></li>
-              <li><a href="#" id="pzzlr-010">Init You, Init Me</a></li>
-              <li><a href="#" id="pzzlr-011">A Case of Equality</a></li>
-              <li><a href="#" id="pzzlr-012">If At First You Don't Succeed...</a></li>
-              <li><a href="#" id="pzzlr-013">To Map, or Not to Map</a></li>
-              <li><a href="#" id="pzzlr-015">Private Lives</a></li>
-              <li><a href="#" id="pzzlr-016">Self: See 'Self'</a></li>
-              <li><a href="#" id="pzzlr-017">One Egg or Two..?</a></li>
-              <li><a href="#" id="pzzlr-018">Return to Me!</a></li>
-              <li><a href="#" id="pzzlr-019">Implicitly Surprising</a></li>
-              <li><a href="#" id="pzzlr-020">One Bound, Two to Go</a></li>
-              <li><a href="#" id="pzzlr-021">Views From the Top</a></li>
-              <li><a href="#" id="pzzlr-022">Count Me Now, Count Me Later</a></li>
-              <li><a href="#" id="pzzlr-023">Information Overload</a></li>
-              <li><a href="#" id="pzzlr-024">What's In a Name?</a></li>
-              <li><a href="#" id="pzzlr-025">$!.*% Iterators!</a></li>
-              <!-- 26 'reserved' for Scalaz - suggestion by A.P. Marki -->
-              <li><a href="#" id="pzzlr-027">I Can Has Padding?</a></li>
-              <li><a href="#" id="pzzlr-028">Cast Away</a></li>
-              <li><a href="#" id="pzzlr-029">Pick an Int, Any Int!</a></li>
+              <li class="nav-header">2.9</li>
               <li class="divider"></li>
             </ul>
           </div><!--/.well -->
