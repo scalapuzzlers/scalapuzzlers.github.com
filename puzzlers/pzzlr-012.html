@@ -13,7 +13,7 @@
     </tr>
     <tr>
       <td><strong>Tested with Scala version</strong></td>
-      <td>2.9.2</td>
+      <td>2.10.0</td>
     </tr>
   </tbody>  
 </table>
@@ -25,7 +25,7 @@ lazy val y = 1/x
 try {
   println(y)
 } catch {
-  case _ =>
+  case _ : Throwable =>
     x = 1
     println(y)
 }
