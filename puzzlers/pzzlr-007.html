@@ -1,5 +1,5 @@
 <div id="title">
-  <h1>Seeing Double</h1>
+  <h1>Arg Arrgh!</h1>
 </div>
 <table class="table meta-table table-condensed">
   <tbody>
@@ -64,13 +64,7 @@ Int = 16
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-		For square to be applicable as an argument, the compiler has to 
-	know that T is bound to (a type that can implicitly be converted to) 
-	a Numeric. 
-	Even though it would appear that 2, as an Int, obviously fulfills this 
-	condition, that information is not available to the compiler in a 
-	multi-arg list. Only in the fourth version is T bound "sufficiently 
-	early" for square to be allowed.
+    For <tt>square</tt> to be applicable as an argument, the compiler has to know that <tt>T</tt> is bound to (a type that can implicitly be converted to) a Numeric. Even though it would appear that 2, as an Int, obviously fulfills this 	condition, that information is not available to the compiler in a multi-arg list. Only in the fourth version is <tt>T</tt> bound "sufficiently early" for <tt>square</tt> to be allowed.
   </p>
 </div>
 
