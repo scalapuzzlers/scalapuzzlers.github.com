@@ -1,0 +1,74 @@
+<h1>Double Take</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://groups.google.com/forum/?fromgroups=#!topic/scala-language/fWnULi1SH44">scala-lang mailing list</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.9.2</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+val doubleOps = implicitly[Numeric[Double]]
+println(Double.NaN > 1.0)
+println(doubleOps.gt(Double.NaN, 1.0))
+println(Double.NaN < 1.0)
+println(doubleOps.lt(Double.NaN, 1.0))
+</pre>
+  <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+false
+true
+false
+true
+</pre>
+    </li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+false
+true
+false
+false
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+true
+false
+true
+false
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+false
+false
+false
+false
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    <tt>Double</tt> extends <tt>Ordering</tt>, which as a total order requires that a comparison between two values yield either a <a href="https://github.com/scala/scala/blob/master/src/library/scala/math/Ordering.scala#L85" target="_blank">positive, negative or zero result</a>. Since the comparison operations <tt>gt</tt>, <tt>lt</tt> and <tt>equiv</tt> are implemented in terms of this comparison, one of the three must be true, even for comparisons involving <tt>NaN</tt>.
+  </p>
+  <p>
+    The equivalent primitive operators <tt>&gt;</tt>, <tt>&lt;</tt> and <tt>==</tt> implement the IEEE floating-point specification, under which these three comparisons <tt>NaN</tt> are false.
+  </p>
+  <p>
+    This behaviour <a href="https://groups.google.com/forum/?fromgroups=#!topic/scala-language/fWnULi1SH44" target="_blank" >was changed in 2.10</a> as part of <a href="https://github.com/scala/scala/commit/460bbc1276fb4ba83b9bcbdc7f7ba475b352b7c6" target="_blank" >the fix</a> for <a href="https://issues.scala-lang.org/browse/SI-5104" target="_blank" >SI-5104</a>. The change &quotretires&quot; this puzzler but results in new, unexpected results in relation to operations that expect <tt>Double</tt> to adhere to the contract of <tt>Ordering</tt>, e.g. when sorting sequences of <tt>Double</tt>s containing <tt>NaN</tt>.
+  </p>
+</div>
