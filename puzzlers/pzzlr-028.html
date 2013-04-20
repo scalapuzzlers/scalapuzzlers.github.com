@@ -84,6 +84,6 @@ public static int unboxToInt(Object i) {
 This logic, which treats <tt>null</tt> as <tt>0</tt>, differs from both Java <tt>Integer</tt>-to-<tt>int</tt> unboxing and <a href="https://github.com/scala/scala/blob/v2.10.0-RC1/src/library/scala/Int.scala" target="_new"><tt>scala.Int.unbox</tt></a>, both of which fail with a <tt>NullPointerException</tt> for <tt>null</tt>.
   </p>
   <p>
-As Daniel Sobral commented: "Whenever you cast, you lie, and _anything_ can come out of it." Strange things can happen when you "know better" than the compiler! ;-)
+As Daniel Sobral commented: "Whenever you cast, you lie, and <em>anything</em> can come out of it." Strange things can happen when you "know better" than the compiler! ;-)
   </p>
 </div>
