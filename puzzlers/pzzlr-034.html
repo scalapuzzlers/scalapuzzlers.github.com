@@ -1,0 +1,101 @@
+<h1>Adaptive Reasoning</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>A. P. Marki</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://groups.google.com/forum/#!msg/scala-user/ut94m5bH2Xs/C9pqbcinFhYJ">scala-user mailing list</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.10.1</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+class Printer(labeller: =>Unit) {
+  def print(message: =>String, labelled: Boolean = false) {
+    if (labelled) labeller
+    Console println s"$message  $message"  // repeat message to make sure it gets thru
+  }   
+}
+
+object Test extends App {
+
+  final val debug = args.headOption map (_.toBoolean) getOrElse false
+
+  import util.Properties._
+  def prompt() {
+    Console print (if (userName == "root") "#admin> " else s"$userName$$ ")
+  }
+  val p = new Printer{ prompt }
+  p print {
+    if (userName == "root") {
+      if (debug) Console println "Shouldn't be logged in as root of evil!"
+      "I am Master of the Universe!"
+    } else {
+      if (debug) Console println "Welcome, humble user."
+      "hello, world."
+    }
+  }
+}
+</pre>
+<p>You may assume that you are logged in as user "paulp",
+   who happens to be Master of the Universe.
+</p>
+  <ol>
+    <!--
+      The correct answer should have id for corresponding li element equal to "correct-answer".
+      When placing code snippets wrap them with pre tag:
+      <pre class="prettyprint lang-scala">
+        ...
+      </pre>
+     -->
+     <li>
+<pre class="prettyprint lang-scala">
+#admin> I am Master of the Universe!  I am Master of the Universe!
+</pre></li>
+     <li id="correct-answer">
+<pre class="prettyprint lang-scala">
+paulp$ hello, world.  hello, world.
+</pre></li>
+     <li>
+<pre class="prettyprint lang-scala">
+hello, world.  hello, world.
+</pre></li>
+     <li>
+Does not compile.
+     </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+  The <tt>message</tt> parameter to the <tt>print</tt> routine is call-by-name. 
+  If you turn on the debug flag, you'll see the argument get evaluated twice.
+  </p>
+  <p>
+  But the curly braces after the invocation of <tt>new Printer</tt> is not a call-by-name
+  parameter.  It's a class body.  Although the intention was to supply <tt>prompt</tt> as
+  the <tt>labeller</tt> for the <tt>Printer</tt>, in fact <tt>prompt</tt> is called in the
+  constructor of an anonymous subclass.
+  </p>
+  <p>
+  How could this be?  Constructors always have a parameter list, and if no arguments are
+  provided for the application, then an empty argument list is supplied (SLS 5.1.1).
+  Since the parameter to the constructor is of type <tt>Unit</tt>, the compiler is willing
+  to adapt the empty argument list to an empty tuple, the Unit value.
+  </p>
+  <p>
+  Adapting an argument list so that it is taken as a single Tuple argument is usually helpful.
+  In this case, under <tt>-Ywarn-adapted-args</tt>, the compiler will warn: "this is unlikely
+  to be what you want."  The feature can be disabled with <tt>-Yno-adapted-args</tt>.
+  </p>
+</div>
+
