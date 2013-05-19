@@ -18,7 +18,8 @@
 <div class="code-snippet">
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
-val (x, y) = (List(1,3,5), List(2,4,6)).zipped find (_._1 > 10) getOrElse (10)  // cap it at ... wait for it ... ten!
+// cap it at ... wait for it ... ten!
+val (x, y) = (List(1,3,5), List(2,4,6)).zipped find (_._1 > 10) getOrElse (10)
 Console println s"Found $x"
 </pre>
   <ol>
