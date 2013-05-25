@@ -1,0 +1,83 @@
+<h1>A Case of Strings</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Nermin Serifovic</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.10</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+def objFromJava: Object = "string"
+def stringFromJava: String = null
+
+def printLengthIfString(a: AnyRef) {
+  a match {
+    case s: String => println("String of length " + s.length)
+    case _ => println("Not a string")
+  }
+}
+
+printLengthIfString(objFromJava)
+printLengthIfString(stringFromJava)
+</pre>
+  <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Not a string
+String of length 0
+</pre>
+    </li>
+    <li>The first prints:
+<pre class="prettyprint lang-scala">
+Not a string
+</pre>
+      and the second fails with a NullPointerException
+    </li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+String of length 6
+Not a string
+</pre>
+    </li>
+    <li>The first prints:
+<pre class="prettyprint lang-scala">
+String of length 6
+</pre>
+      and the second fails with a NullPointerException
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    As explained on <a href="http://scala-programming-language.1934581.n4.nabble.com/Pattern-matching-null-td1942570.html" target="_blank">scala-user</a>, 
+    Scala inherits the following behavior from Java:
+<pre class="prettyprint lang-scala">
+val s: String = null  // perfectly fine
+println(s.isInstanceOf[String]) // prints "false" since, as in Java, null instanceof String == false
+</pre>
+    This then drives the pattern matching resolution. Therefore, if you pattern match against a value that may be <tt>null</tt>, you explicitly need to check for <tt>null</tt> value <em>first</em>:
+<pre class="prettyprint lang-scala">
+a match {
+  case null => println("Got null!")
+  case s: String => println("String of length " + s.length)
+  ...
+}
+</pre>
+  </p>
+  <p>
+    Pattern matching resolution is based on the <em>runtime</em>-type, so the first example matches the <tt>s: String</tt> case even though the <em>compile-</em>time type is <tt>java.lang.Object</tt>.
+  </p>
+</div>
