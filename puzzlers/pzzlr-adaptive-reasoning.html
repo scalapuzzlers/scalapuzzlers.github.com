@@ -25,29 +25,26 @@ class Printer(labeller: =>Unit) {
   }   
 }
 
-object Test extends App {
+var userName: String = "root"
 
-  var userName: String = "root"
+def prompt() {
+  Console print (if (userName == "root") "Yes, Master> " else s"$userName$$ ")
+}
+val printer = new Printer{ prompt }
 
-  def prompt() {
-    Console print (if (userName == "root") "#admin> " else s"$userName$$ ")
-  }
-  val printer = new Printer{ prompt }
-
-  def greet(whom: String) {
-    userName = whom      // to whom are we speaking?
-    printer print {
-      if (userName == "root") {
-        Console println "Shouldn't be logged in as root of evil!"
-        "I am Master of the Universe!"
-      } else {
-        Console println "Welcome, humble user."
-        "hello, world."
-      }
+def greet(whom: String) {
+  userName = whom      // to whom are we speaking?
+  printer print {
+    if (userName == "root") {
+      Console println "Shouldn't be logged in as root of evil!"
+      "I am Master of the Universe!"
+    } else {
+      Console println "Welcome, humble user."
+      "hello, world."
     }
   }
-  greet(whom = "paulp")  // paulp happens to be Master of the Universe.
 }
+greet(whom = "paulp")  // paulp happens to be Master of the Universe.
 </pre>
   <ol>
      <li>
@@ -57,7 +54,7 @@ I am Master of the Universe!  I am Master of the Universe!
 </pre></li>
      <li id="correct-answer">
 <pre class="prettyprint lang-scala">
-#admin> Welcome, humble user.
+Yes, Master> Welcome, humble user.
 Welcome, humble user.
 hello, world. hello, world.
 </pre></li>
