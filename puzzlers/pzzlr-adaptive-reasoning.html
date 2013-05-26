@@ -1,0 +1,86 @@
+<h1>Adaptive Reasoning</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>A. P. Marki</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://groups.google.com/forum/#!msg/scala-user/ut94m5bH2Xs/C9pqbcinFhYJ">scala-user mailing list</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.10.1</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+class Printer(prompter: =>Unit) {
+  def print(message: =>String, prompted: Boolean = false) {
+    if (prompted) prompter
+    Console println message
+  }
+}
+
+def prompt() {
+  Console print "puzzler$ "
+}
+
+new Printer { prompt } print (message = "Puzzled yet?")
+new Printer { prompt } print (message = "Puzzled yet?", prompted = true)
+</pre>
+  <ol>
+     <li>
+<pre class="prettyprint lang-scala">
+Puzzled yet?
+puzzler$ Puzzled yet?
+</pre></li>
+     <li id="correct-answer">
+<pre class="prettyprint lang-scala">
+puzzler$ Puzzled yet?
+puzzler$ Puzzled yet?
+</pre></li>
+     <li>
+<pre class="prettyprint lang-scala">
+puzzler$ Puzzled yet?
+Puzzled yet?
+</pre></li>
+     <li>Fails with a compilation exception</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    The <tt>message</tt> parameter to the <tt>print</tt> routine is call-by-name. 
+    That's why the argument is evaluated twice.
+  </p>
+  <p>
+    But the curly braces after the invocation of <tt>new Printer</tt> is not a call-by-name
+    parameter. It's a class body. Although the intention was to supply <tt>prompt</tt> as
+    the <tt>prompter</tt> for the <tt>Printer</tt>, in fact <tt>prompt</tt> is called in the
+    constructor of an anonymous subclass.
+  </p>
+  <p>
+    How could this be? Constructors always have a parameter list, and if no arguments are
+    provided for the application, then an empty argument list is supplied (SLS 5.1.1).
+    Since the parameter to the constructor is of type <tt>Unit</tt>, the compiler is willing
+    to adapt the empty argument list to an empty tuple, the <tt>Unit</tt> value.
+  </p>
+  <p>
+    Adapting an argument list so that it is taken as a single <tt>Tuple</tt> argument is usually helpful.
+    In this case, under <tt>-Ywarn-adapted-args</tt>, the compiler will warn: "this is unlikely
+    to be what you want." The feature can be disabled with <tt>-Yno-adapted-args</tt>.
+  </p>
+  <p>
+    The desired behavior was, presumably, for the prompt to be evaluated only when the <tt>prompted</tt>
+    parameter is <tt>true</tt>, which can be achieved by the construction:
+<pre class="prettyprint lang-scala">
+val printer = new Printer{ prompt _ }
+</pre>
+  </p>
+</div>
+
