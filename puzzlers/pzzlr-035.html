@@ -68,16 +68,28 @@ String of length 6
 val s: String = null  // perfectly fine
 println(s.isInstanceOf[String]) // prints "false" since, as in Java, null instanceof String == false
 </pre>
-    This then drives the pattern matching resolution. Therefore, if you pattern match against a value that may be <tt>null</tt>, you explicitly need to check for <tt>null</tt> value <em>first</em>:
+    This then drives the pattern matching resolution. Therefore, if you pattern match against a value that may be <tt>null</tt>, you explicitly need to check for <tt>null</tt> value:
 <pre class="prettyprint lang-scala">
 a match {
-  case null => println("Got null!")
   case s: String => println("String of length " + s.length)
-  ...
+  case null      => println("Got null!")
+  case _         => println("Something else I don't care about...")
 }
 </pre>
   </p>
   <p>
     Pattern matching resolution is based on the <em>runtime</em>-type, so the first example matches the <tt>s: String</tt> case even though the <em>compile-</em>time type is <tt>java.lang.Object</tt>.
   </p>
+  <p>
+  Your best idomatic bet is to convert the maybe-null you receive from a Java API to an <tt>Option</tt>:
+  </p>
+<pre class="prettyprint lang-scala">
+val maybeNull: String = null
+val useful = Option(maybeNull)
+useful match { 
+    case Some(s: String) => println("String of length " + s.length)
+    case Some(_)         => println("Something else I don't care about...")
+    case None            => println("Nothing to write home about...")
+} 
+</pre>
 </div>
