@@ -1,0 +1,63 @@
+<h1>Accepts Any Args</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://groups.google.com/forum/#!topic/scala-language/E-YzZBY9510">scala-lang mailing list</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.10</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+def acceptsAnyArgs(any1: Any)(any2: Any*) {
+  println(any1)
+  println(any2)
+}
+
+acceptsAnyArgs("Psst", "hey", "world:")(4, 2)
+</pre>
+  <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Psst hey world:
+(4,2)
+</pre>
+    </li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+(Psst,hey,world:)
+WrappedArray(4, 2)
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Psst
+WrappedArray(hey, world:, 4, 2)
+</pre>
+    </li>
+    <li>Fails with a compilation exception</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    It may not be widely-known or -publicized, but Scala supports &quot;auto-tupling&quot; of arguments. In order to match the requirement of a single first argument of type <tt>Any</tt>, the compiler converts the invocation to:
+<pre class="prettyprint lang-scala">
+...
+acceptsAnyArgs(("Psst", "hey", "world:"))(4, 2)
+</pre>
+  </p>
+  <p>
+    Auto-tupling is currently <a href="https://issues.scala-lang.org/browse/SI-3583" target="_blank">not documented in the SLS</a>.
+  </p>
+</div>
