@@ -18,54 +18,39 @@
 <div class="code-snippet">
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
-class Printer(labeller: =>Unit) {
-  def print(message: =>String, labelled: Boolean = false) {
-    if (labelled) labeller
-    Console println s"$message  $message"  // repeat message to make sure it gets thru
+class Printer(prompter: =>Unit) {
+  def print(message: =>String, prompted: Boolean = false) {
+    if (prompted) prompter
+    Console println message
   }   
 }
 
-var userName: String = "root"
-
 def prompt() {
-  Console print (if (userName == "root") "Yes, Master> " else s"$userName$$ ")
+  Console print "puzzler$ "
 }
-val printer = new Printer{ prompt }
 
-def greet(whom: String) {
-  userName = whom      // to whom are we speaking?
-  printer print {
-    if (userName == "root") {
-      Console println "Shouldn't be logged in as root of evil!"
-      "I am Master of the Universe!"
-    } else {
-      Console println "Welcome, humble user."
-      "hello, world."
-    }
-  }
-}
-greet(whom = "paulp")  // paulp happens to be Master of the Universe.
+new Printer { prompt } print (message = "Puzzled yet?")
+new Printer { prompt } print (message = "Puzzled yet?", prompted = true)
 </pre>
   <ol>
      <li>
 <pre class="prettyprint lang-scala">
-paulp$ Shouldn't be logged in as root of evil!
-I am Master of the Universe!  I am Master of the Universe!
+Puzzled yet?
+puzzler$ Puzzled yet?
 </pre></li>
      <li id="correct-answer">
 <pre class="prettyprint lang-scala">
-Yes, Master> Welcome, humble user.
-Welcome, humble user.
-hello, world. hello, world.
+puzzler$ Puzzled yet?
+puzzler$ Puzzled yet?
 </pre></li>
      <li>
 <pre class="prettyprint lang-scala">
-hello, world.  hello, world.
+puzzler$ Puzzled yet?
+Puzzled yet?
 </pre></li>
      <li>
 <pre class="prettyprint lang-scala">
-Welcome, humble user.
-hello, world.  hello, world.
+Does not compile.
 </pre></li>
   </ol>
 </div>
@@ -79,7 +64,7 @@ hello, world.  hello, world.
   <p>
   But the curly braces after the invocation of <tt>new Printer</tt> is not a call-by-name
   parameter.  It's a class body.  Although the intention was to supply <tt>prompt</tt> as
-  the <tt>labeller</tt> for the <tt>Printer</tt>, in fact <tt>prompt</tt> is called in the
+  the <tt>prompter</tt> for the <tt>Printer</tt>, in fact <tt>prompt</tt> is called in the
   constructor of an anonymous subclass.
   </p>
   <p>
