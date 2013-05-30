@@ -56,7 +56,7 @@ Puzzled yet?
   <h3>Explanation</h3>
   <p>
     The <tt>message</tt> parameter to the <tt>print</tt> routine is call-by-name. 
-    That's why the argument is evaluated twice.
+    The argument is not evaluated until it is used, and it is evaluated each time it is called.
   </p>
   <p>
     But the curly braces after the invocation of <tt>new Printer</tt> is not a call-by-name
@@ -79,7 +79,11 @@ Puzzled yet?
     The desired behavior was, presumably, for the prompt to be evaluated only when the <tt>prompted</tt>
     parameter is <tt>true</tt>, which can be achieved by the construction:
 <pre class="prettyprint lang-scala">
-val printer = new Printer{ prompt _ }
+scala> new Printer(prompt) print (message = "Puzzled yet?", prompted = true)
+puzzler$ Puzzled yet?
+
+scala> new Printer(prompt) print (message = "Puzzled yet?")
+Puzzled yet?
 </pre>
   </p>
 </div>
