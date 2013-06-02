@@ -6,3 +6,11 @@
 .headline p {
 	margin: 10px 0;
 }
+
+.explanation, .kata-form {
+	display: none;
+}
+
+#disqus_thread {
+	display: none;
+}

@@ -1,0 +1,82 @@
+/*.kata-form {
+    height: 200px;
+}
+*/
+
+.kata-vertical-resize-handle {
+    margin: 0;
+    border: none;
+    height: 5px;
+    background-color: black;
+}
+
+.kata-vertical-resize-handle:hover {
+    cursor: row-resize;
+}
+
+.kata-code-wrap .CodeMirror {
+    height: 100%;
+}
+
+.kata-code-wrap.with-results{
+    height: 60%;
+}
+
+.kata-code-wrap {
+    height:100%
+}
+
+.kata-result-wrap,
+.CodeMirror {
+    height: 100%;
+}
+
+.kata-result-window {
+    height: 40%;
+}
+
+.kata-result-wrap {
+    height: 100%;
+}
+
+.kata-code-wrap, .kata-result-wrap {
+    position: relative;
+}
+
+.kata-controls {
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.kata-controls button {
+    float: right;
+    clear: both;
+    display: block;
+    margin: 10px;
+}
+
+label[for="code"], label[for="result"] {
+    transition: opacity 1s;
+    -o-transition: opacity 1s;
+    -moz-transition: opacity 1s;
+    -webkit-transition: opacity 1s;
+}
+
+label[for="code"], label[for="result"] {
+    bottom: 20px;
+    font-size: 50px;
+    opacity: 1;
+    position: absolute;
+    right: 10px;
+    color: #586E75;
+    z-index: 2;
+}
+
+.kata-code-wrap:focus label[for="code"],
+.kata-result-window:focus label[for="result"],
+.kata-code-wrap:hover label[for="code"],
+.kata-result-window:hover label[for="result"] {
+    opacity: 0;
+}

@@ -1,0 +1,24 @@
+{{ content }}
+<form class="kata-form" action="https://scalakatatwo.herokuapp.com/eval" method="post">
+    <div class="kata-code-wrap">
+        <textarea class="kata-code" name="code">
+"Try it !"
+        </textarea>
+        <div class="kata-controls">
+            <button class="kata-run btn btn-success" type="submit" name="run" value="Run">
+                <i class="icon-play icon-white"></i>
+            </button>
+        </div>
+    </div>
+    <div class="kata-result-window hidden">
+        <hr class="kata-vertical-resize-handle" />
+        <div class="kata-result-wrap">
+            <div class="CodeMirror">
+                <div class="CodeMirror-scroll cm-s-solarized-dark">
+                    <pre class="kata-console"></pre>
+                    <div class="kata-result"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

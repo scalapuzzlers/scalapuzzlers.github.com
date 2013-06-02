@@ -1,0 +1,63 @@
+.CodeMirror-scroll {
+  height: auto;
+  overflow-y: hidden;
+  overflow-x: auto;
+  min-height: 400px;
+  max-height: 600px;
+}
+
+.CodeMirror {
+    font-size:16px;
+    font-family:'DejaVuSerifBook',Georgia
+}
+
+.CodeMirror-gutter {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.CodeMirror-activeline-background {
+    background-color: #073642 !important;
+}
+
+.true {
+    background-color: #135022; /* Green-ich */
+}
+
+.false {
+    background-color: #550505;	/* Red-ich */
+}
+
+.error-list {
+    list-style: none;
+}
+
+.error {
+    clear: both;
+    margin-bottom: 10px;
+}
+
+.severity {
+    float: left;
+    display: inline-block;
+    margin-right: 10px;
+    width: 32px;
+    height: 32px;
+}
+
+.severity.error {
+    background-image: url("/img/error.png");
+}
+
+.severity.warning {
+    background-image: url("/img/warning.png");
+}
+
+.severity.info {
+    /* nothing for now */
+}
+
+.error-solved {
+    background-color: green;
+    color: white;
+}
