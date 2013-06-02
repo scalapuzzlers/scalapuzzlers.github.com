@@ -47,12 +47,12 @@ $(document).ready(function () {
 				 
 	activeElem = null;
 
-	function showSolution (elem) {
+	function showSolution (id) {
 		$('#disqus_thread').hide();
 		$('#prime-space').html("");
-		$('#prime-space').load('puzzlers/' + elem.id + '.html', function () {
+		$('#prime-space').load('puzzlers/' + id + '.html', function () {
 			prettyPrint();
-			document.location.hash = elem.id;
+			document.location.hash = id;
 			window.scrollTo(0, 0);
 			$('#show-and-tell').click(function () {
 				$('#show-and-tell').addClass("disabled");
@@ -61,8 +61,8 @@ $(document).ready(function () {
 					DISQUS.reset({
 						reload: true,
 						config: function () {
-							this.page.identifier = elem.id;
-							this.page.url = 'http://scalapuzzlers.com/#!/' + elem.id;
+							this.page.identifier = id;
+							this.page.url = 'http://scalapuzzlers.com/#!/' + id;
 							this.page.title = $('#title').find("h1").text();
 						}
 					});
@@ -79,10 +79,16 @@ $(document).ready(function () {
 		activeElem = $(elem).parent();
 		$(activeElem).addClass("active");
 	}
+
+	if (document.location.hash) {
+		if( void 0 !== document.location.hash ) {
+			showSolution(document.location.hash.replace("#",""))
+		}
+	}
 	
 	$('a[id|="pzzlr"]').each(function (index, elem) {
 		$(elem).click(function(){
-			showSolution(elem)
+			showSolution(elem.id);
 		});
 	});
 	
