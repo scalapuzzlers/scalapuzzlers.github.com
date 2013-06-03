@@ -3,15 +3,15 @@
 
 <head> 
 <title>Scala Puzzlers</title>
-  <link rel="shortcut icon" href="{{ site.baseurl }}/img/favicon.gif" type="image/x-icon"> 
-  <link href="{{ site.baseurl }}/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="{{ site.baseurl }}/vendors/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
-  <link href="{{ site.baseurl }}/vendors/prettify.css" type="text/css" rel="stylesheet">
-  <link href="{{ site.baseurl }}/vendors/codemirror-3.13/codemirror.css" type="text/css" rel="stylesheet">
-  <link href="{{ site.baseurl }}/vendors/scalakata/solarized.css" rel="stylesheet" type="text/css">
-  <link href="{{ site.baseurl }}/vendors/scalakata/code-mirror.css" rel="stylesheet" type="text/css">
-  <link href="{{ site.baseurl }}/vendors/scalakata/kata.css" rel="stylesheet" type="text/css">
-  <link href="{{ site.baseurl }}/css/main.css" rel="stylesheet" type="text/css">
+  <link rel="shortcut icon" href="{{site.baseurl}}/img/favicon.gif" type="image/x-icon"> 
+  <link href="{{site.baseurl}}/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{site.baseurl}}/vendors/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link href="{{site.baseurl}}/vendors/prettify.css" type="text/css" rel="stylesheet">
+  <link href="{{site.baseurl}}/vendors/codemirror-3.13/codemirror.css" type="text/css" rel="stylesheet">
+  <link href="{{site.baseurl}}/vendors/scalakata/solarized.css" rel="stylesheet" type="text/css">
+  <link href="{{site.baseurl}}/vendors/scalakata/code-mirror.css" rel="stylesheet" type="text/css">
+  <link href="{{site.baseurl}}/vendors/scalakata/kata.css" rel="stylesheet" type="text/css">
+  <link href="{{site.baseurl}}/css/main.css" rel="stylesheet" type="text/css">
 </head>
 
 <body data-spy="scroll" data-target=".subnav" data-offset="50">
@@ -21,13 +21,13 @@
     </a>
     <div class="navbar-inner">
       <div class="container">
-				<a class="brand" href="{{ site.baseurl }}">Scala ?uzz<img src="/img/l.png" alt="Scala Logo">ers</a>
+				<a class="brand" href="{{site.baseurl}}">Scala ?uzz<img src="{{site.baseurl}}img/l.png" alt="Scala Logo">ers</a>
         <div class="nav-collapse collapse">
           <ul class="nav">
-            <li><a href="{{ site.baseurl }}/index.html">Home</a></li>
-            <li><a href="{{ site.baseurl }}/contribute.html">How to Contribute</a></li>
-            <li><a href="{{ site.baseurl }}/contact.html">Contact</a></li>
-						<li><a href="{{ site.baseurl }}/about.html">About</a></li>
+            <li><a href="{{site.baseurl}}index.html">Home</a></li>
+            <li><a href="{{site.baseurl}}contribute.html">How to Contribute</a></li>
+            <li><a href="{{site.baseurl}}contact.html">Contact</a></li>
+						<li><a href="{{site.baseurl}}about.html">About</a></li>
           </ul>
         </div>
       </div>
@@ -41,7 +41,7 @@
           <ul class="nav nav-list">
             {% for puzzle in site.pages %}
               <li {%if page.url == puzzle.url %}class="active"{% endif %}>
-                <a href="{{ site.baseurl }}/{{puzzle.url}}">{{puzzle.title}}</a>
+                <a href="{{site.baseurl}}{{puzzle.url}}">{{puzzle.title}}</a>
               </li>
             {% endfor %}
           </ul>
@@ -54,11 +54,11 @@
       </div>
     </div>
   </div>
-	<script src="{{ site.baseurl }}/vendors/jquery-1.9.0.min.js"></script>
-  <script src="{{ site.baseurl }}/vendors/prettify.js"></script>
-  <script src="{{ site.baseurl }}/vendors/codemirror-3.13/codemirror.js"></script>
-  <script src="{{ site.baseurl }}/vendors/codemirror-3.13/clike.js"></script>
-  <script src="{{ site.baseurl }}/vendors/scalakata/kata.js"></script>
-  <script src="{{ site.baseurl }}/js/puzzle.js"></script>
+	<script src="{{site.baseurl}}/vendors/jquery-1.9.0.min.js"></script>
+  <script src="{{site.baseurl}}/vendors/prettify.js"></script>
+  <script src="{{site.baseurl}}/vendors/codemirror-3.13/codemirror.js"></script>
+  <script src="{{site.baseurl}}/vendors/codemirror-3.13/clike.js"></script>
+  <script src="{{site.baseurl}}/vendors/scalakata/kata.js"></script>
+  <script src="{{site.baseurl}}/js/puzzle.js"></script>
 </body>
 </html>
