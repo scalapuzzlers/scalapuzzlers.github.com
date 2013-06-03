@@ -1,0 +1,71 @@
+---
+layout: puzzler
+title: Implicitly Surprising
+author: Dominik Gruntz
+sourceName:
+sourceHref:
+scalaVersion: 2.10.0
+puzzle: |
+  def getFunction = {
+     def sum(x: Int)(y: Int)(implicit z: Int) = x+y+z
+     implicit val z1 = 2
+     sum(1) _
+  }
+
+  val f = getFunction
+  implicit val z2 = 3
+  f(2)(3)
+  f(2)
+possibleSolutions:
+  a: 
+    text: Prints
+    code: |
+      6
+      5
+
+  b:
+    text: Prints
+    code: |
+      6
+      6
+  c:
+    text: |
+      The first invocation of <code>f</code> fails with a compilation error, and the second prints 5
+  d:
+    text: |
+      The second invocation of <code>f</code> fails with a compilation error, and the first prints: 6
+solution: c
+explanation: |
+  <p>
+    When eta-expansion is applied on method <code>sum</code>, the result is a function of type <code>Int => Int</code>,
+    i.e. the implicit parameters are resolved <em>before</em> eta expansion is applied. Therefore the implicit value
+    <code>z1 = 2</code> is used as value for the implicit parameter <code>z</code>.
+    </p><p>
+    If no implicit parameter were available, the compiler would issue an error message:
+    <pre class="prettyprint lang-scala">
+    scala> def sum(x: Int)(y: Int)(implicit z: Int) = x+y+z
+    sum: (x: Int)(y: Int)(implicit z: Int)Int
+
+    scala> sum(1) _
+    <console>:9: error: could not find implicit value for parameter z: Int
+                  sum(1) _
+                     ^
+    </pre>
+    </p><p>
+    One could also specify an explicit value for <code>z</code> if no implicit value is defined in the current context, but then
+    the type has to be specified on the placeholder.
+    <pre class="prettyprint lang-scala">
+    scala> val f2 = sum(1)(_: Int)(3)
+    f2: Int => Int = <function1>
+    </pre>
+    </p><p>
+    This explains the result, i.e. the invocation of <code>f(2)</code> returns <code>5</code> (<code>1</code> + <em>&lt;param&gt;</em> + <code>2</code>) and
+    <code>f(2)(3)</code> fails with a compilation error as on the object <code>5</code> (result of <code>f(2)</code>) no method <code>apply</code> is defined.
+    <pre class="prettyprint lang-scala">
+    scala> f(2)(3)
+    <console>:10: error: Int does not take parameters
+                  f(2)(3)
+                      ^
+    </pre>
+  </p>
+---

@@ -1,0 +1,88 @@
+---
+layout: puzzler
+title: Implicit Kryptonite
+author: Andrew Phillips
+sourceName: scala-lang mailing list
+sourceHref: https://groups.google.com/forum/#!msg/scala-language/OWTVHhsP3JU/Kyb8h2SqnS4J
+scalaVersion: 2.10.1
+puzzle: |
+  trait Messages { def greeting: String }
+  trait Printer { def print(msg: String) }
+  object NormalDay {
+    implicit val EverydayMessages = new Messages { val greeting = "Hello, world!" }
+    implicit val ConsolePrinter = new Printer {
+      def print(msg: String) { println(msg) }
+    }
+  }
+  object SunnyDay {
+    implicit val HappyMessages = new Messages { val greeting = "What a nice day!" }
+    implicit val ConsolePrinter = new Printer {
+      def print(msg: String) { println(s"$msg :-)") }
+    }
+  }
+
+  import NormalDay._
+  implicitly[Printer] print implicitly[Messages].greeting
+
+  {
+    import SunnyDay._
+    implicitly[Printer] print implicitly[Messages].greeting
+  }
+possibleSolutions:
+  a: 
+    text: The first prints
+    code: Hello, world!
+    text2: and the second fails with a compilation error
+  b:
+    code: |
+      Hello, world!
+      What a nice day! :-)
+  c:
+    code: |
+      Hello, world!
+      What a nice day!
+  d:
+    code: |
+      Hello, world! :-)
+      What a nice day! :-)
+solution: a
+explanation: |
+  <p>
+    According to <a href="http://www.scala-lang.org/docu/files/ScalaReference.pdf" target="_blank">SLS &sect;7.2</a>:
+    <blockquote>If there are several eligible arguments which match the implicit parameter's type, a most specifc one will be chosen using the rules of static overloading resolution (&sect;6.26.3).</blockquote>
+    If the rules for static overloading resolution cannot determine a most specific type, this results in an error, as is the case here:
+    <pre class="prettyprint lang-scala">
+  <console>:17: error: ambiguous implicit values:
+   both value EverydayMessages in object NormalDay of type => Messages{val greeting: String}
+   and value HappyMessages in object SunnyDay of type => Messages{val greeting: String}
+   match expected type Messages
+                  implicitly[Printer].print(implicitly[Messages].greeting)
+                                                    ^
+    </pre>
+    So far, so unremarkably according to the spec. What is puzzling here is that importing an implicit in an inner scope does not override the <tt>default</tt> declaration in the outer scope, even though implicits are often intended to be &quot;overridden&quot; in this way.
+  </p>
+  <p>
+    Of course, if we choose the same <em>name</em> for the &quot;overridding&quot; implicit (as is the case with <tt>ConsolePrinter</tt>), we achieve the intended result:
+    <pre class="prettyprint lang-scala">
+  ...
+  object SunnyDay {
+    implicit val EverydayMessages = new Messages { val greeting = "What a nice day!" }
+  ...
+  {
+    import SunnyDay._
+    implicitly[Printer].print(implicitly[Messages].greeting)
+  }
+  What a nice day! :-)
+    </pre>
+    This is because <em>name</em> resultion, unlike implicit resolution, means that <tt>ConsolePrinter</tt> declared in the inner scope has higher precedence than the default value in the outer scope.
+  </p>
+  <p>
+    Thus, if we happen to know the <em>name</em> of the implicit we are trying to &quot;override&quot;, we can achieve the intended result. But since implicits are essentially anonymous, having to know the <em>name</em> of one to be able to override it seems an odd requirement.
+  </p>
+  <p>
+    If the default implicit is provided by external code, where its name might change at any time, this results in brittle code, too. At least the &quot;ambiguous implicit values&quot;error message helpfully provides the name of the implicit that we need to override.
+  </p>
+  <p>
+    See the <a href="https://groups.google.com/d/topic/scala-language/OWTVHhsP3JU/discussion" target="_blank">scala-lang thread</a> for further discussion. Don't let <a href="https://groups.google.com/forum/#!msg/scala-internals/8TrS3ar5LcY/Ic7M4YkRD68J" target="_blank">implicit scope become your kryptonite</a>!
+  </p>
+---

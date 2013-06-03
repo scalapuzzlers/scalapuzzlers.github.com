@@ -1,0 +1,73 @@
+---
+layout: puzzler
+title: Count Me Now, Count Me Later
+author: Seth Tisue
+sourceName: scala-language group
+sourceHref: https://groups.google.com/d/topic/scala-language/W1ZUNDAq7Fc/discussion
+scalaVersion: 2.10.0
+puzzle: |
+  var x = 0
+  def counter = { x += 1; x }
+  def add(a: Int)(b: Int) = a + b
+  val adder1 = add(counter)(_)
+  val adder2 = add(counter) _
+  println("x = " + x)
+  println(adder1(10))
+  println("x = " + x)
+  println(adder2(10))
+  println("x = " + x)
+possibleSolutions:
+  a: 
+    code: |
+      x = 1
+      12
+      x = 2
+      11
+      x = 2
+  b:
+    code: |
+      x = 1
+      11
+      x = 1
+      12
+      x = 2
+  c:
+    code: |
+      x = 0
+      11
+      x = 1
+      12
+      x = 2
+  d:
+    code: |
+      x = 2
+      11
+      x = 2
+      12
+      x = 2
+solution: a
+explanation: |
+  <p>
+    <code>f(a) _</code> and <code>f(a)(_)</code> have different meanings, governed by
+    different sections of the Scala language specification.
+    </p>
+    <p>
+    <code>f(a)(_)</code> is the placeholder syntax for anonymous functions,
+    described in SLS 6.23.  Evaluation is deferred.
+  </p>
+  <p>
+    <code>f(a) _</code> is eta expansion, described in SLS 6.26.5.
+    Arguments given are evaluated eagerly; only the method call itself
+    is deferred.
+  </p>
+  <p>
+    In this example, the eta expansion in
+    <pre class="prettyprint lang-scala">
+  val adder2 = add(counter) _
+    </pre>
+    causes eager evaluation, as described: as soon as that line is run, Scala actually evaluates counter and binds <code>1</code>, the result, to the <code>counter</code> argument for <code>adder2</code>. Hence <code>x</code> is <code>1</code> when first printed.
+  </p>
+  <p>
+    <code>adder1</code>, on the other hand, is an anonymous function, so its <code>counter</code> argument is only bound when <code>adder1</code> is evaluated. Since <code>x</code> is already <code>1</code> at this point, <code>counter</code> will be <code>2</code> and the evaluation of <code>adder1</code> prints <code>12</code>. The value of <code>x</code> is now <code>2</code>, as indicated by the program's output.
+  </p>
+---

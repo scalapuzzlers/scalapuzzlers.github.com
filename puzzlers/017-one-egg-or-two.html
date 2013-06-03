@@ -1,0 +1,48 @@
+---
+layout: puzzler
+title: One Egg or Two..?
+author: Dominik Gruntz
+sourceName:
+sourceHref:
+scalaVersion: 2.10.0
+puzzle: |
+  class C
+  val x1,x2 = new C
+  val y1@y2 = new C
+  println(x1 == x2)
+  println(y1 == y2)
+possibleSolutions:
+  a: 
+    text: Prints
+    code: |
+      false
+      false
+  b:
+    text: Prints
+    code: |
+      false
+      true 
+  c:
+    text: Prints
+    code: |
+      true
+      false
+  d:
+    text: Prints
+    code: |
+      true
+      true
+solution: b
+explanation: |
+  According to the SLS (section 4.1), a value definition <code>val p1, . . . , pn : T = e</code> is a shorthand for the sequence of value definitions <code>val p1 : T = e; ...; val pn : T = e</code>. 
+  This means that in our example the expression <code>new C</code> is evaluated twice
+  and therefore <code>x1 == x2</code> is <code>false</code>.
+  </p><p>
+  The second value definition is a pattern binder which is defined in section 8.1.3 of the SLS.
+  A pattern binder <code>x@p</code> consists of a pattern variable <code>x</code> and a pattern <code>p</code>.
+  In our case the pattern <code>p</code> is a variable pattern which matches any value and binds
+  the variable name (in our case <code>y2</code>) to that value. The pattern binder binds that 
+  value also to the pattern variable <code>y1</code>. 
+  As the same value is bound to both variables <code>y1</code> and <code>y2</code>,
+  the expression <code>y1 == y2</code> is <code>true</code>.
+---

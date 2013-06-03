@@ -1,0 +1,35 @@
+---
+layout: puzzler
+title: UPSTAIRS downstairs
+author: Andrew Phillips &amp; Nermin Serifovic
+sourceName: stackoverflow
+sourceHref: http://stackoverflow.com/questions/2727612/scalas-tuple-unwrapping-nuance
+scalaVersion: 2.10.0
+puzzle: |
+  var IJ: (Int, Int) = (3, 4)
+  var (I, J): (Int, Int) = (3, 4)
+possibleSolutions:
+  a: 
+    text: Prints
+    code: |
+      IJ: (Int, Int) = (3, 4)
+      I: Int = 3
+      J: Int = 4
+  b:
+    text: Both fail with compilation exceptions
+  c:
+    text: The first one succeeds and prints
+    code: |
+      IJ: (Int, Int) = (3, 4)
+    text2: and the second one fails with a compilation exception
+  d:
+    text: The first one succeeds and prints
+    code: |
+      IJ: (Int, Int) = (3, 4)
+    text2: and the second one fails with a runtime exception
+solution: c
+explanation: |
+  The former is an assignment of a tuple which is type correct. The 
+  latter tries to match (3, 4) against two constants I and J – Scala 
+  assumes that UPPERCASE variables in pattern matches are constants.
+---

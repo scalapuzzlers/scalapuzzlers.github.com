@@ -1,0 +1,57 @@
+---
+layout: puzzler
+title: Captured by Closures
+author: Simon Schaefer
+sourceName: stackoverflow
+sourceHref: http://stackoverflow.com/questions/9842476/closing-over-the-loop-variable-in-scala
+scalaVersion: 2.10.0
+puzzle: |
+  val values = Seq(100, 110, 120)
+  val funcs1 = collection.mutable.Buffer[() => Int]()
+  val funcs2 = collection.mutable.Buffer[() => Int]()
+  var j = 0
+  for (i <- 0 until values.length) {
+   funcs1 += (() => values(i))
+   funcs2 += (() => values(j))
+   j += 1
+  }
+
+  funcs1.foreach { f1 => println(f1()) }
+  funcs2.foreach { f2 => println(f2()) }
+possibleSolutions:
+  a: 
+    text: <code>funcs1</code> prints
+    code: 100, 110, 120
+    text2: whereas <code>funcs2</code> throws an <code>ArrayIndexOutOfBoundsException</code>
+  b:
+    text: Both print
+    code: 100, 110, 120
+  c:
+    text: The code does not compile
+  d:
+    text: <code>funcs1</code> prints
+    code: 100, 110, 120
+    text2: <code>funcs2</code> prints
+    code2: 120, 120, 120
+
+solution: b
+explanation: |
+  When one uses a <code>var</code> instead of a <code>val</code> the functions closes over a variable and not over a value. Because <code>i</code> is defined in the for-comprehension it is defined as a <code>val</code>. This means each time <code>i</code> is stored somewhere its value is copied - therefore it prints the expected result <code>100, 110, 120</code>. As <code>j</code> changes inside the loop, all the three closures "see" the very same variable <code>j</code> and not a copy of it. Because after the loop <code>j</code> is <code>3</code> an <code>ArrayIndexOutOfBoundsException</code> is thrown. It is possible to avoid the exception by adding another variable, which stores the numbers of the Seq:
+  <pre class="prettyprint lang-scala">
+    val values = Seq(100, 110, 120)
+    val funcs1 = collection.mutable.Buffer[() => Int]()
+    val funcs2 = collection.mutable.Buffer[() => Int]()
+    var j = 0
+    var value = 0
+    for (i <- 0 until values.length) {
+     funcs1 += (() => values(i))
+     value = values(j)
+     funcs2 += (() => value)
+     j += 1
+    }
+
+    funcs1.foreach { f1 => println(f1()) }
+    funcs2.foreach { f2 => println(f2()) }
+  </pre>
+  When the functions in <code>funcs2</code> are called three times the number <code>120</code> is printed. Nevertheless most times the expected behavior is to print the elements of the Seq as it is done with <code>funcs1</code>.
+---

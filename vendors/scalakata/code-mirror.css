@@ -2,8 +2,8 @@
   height: auto;
   overflow-y: hidden;
   overflow-x: auto;
-  min-height: 400px;
-  max-height: 600px;
+  min-height: 200px;
+  max-height: 400px;
 }
 
 .CodeMirror {

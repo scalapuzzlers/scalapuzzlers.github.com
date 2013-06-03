@@ -1,0 +1,69 @@
+---
+layout: puzzler
+title: A Case of Strings
+author: Nermin Serifovic
+scalaVersion: 2.10.0
+puzzle: |
+  def objFromJava: Object = "string"
+  def stringFromJava: String = null
+
+  def printLengthIfString(a: AnyRef) {
+    a match {
+      case s: String => println("String of length " + s.length)
+      case _ => println("Not a string")
+    }
+  }
+
+  printLengthIfString(objFromJava)
+  printLengthIfString(stringFromJava)
+possibleSolutions:
+  a: 
+    code: |
+      Not a string
+      String of length 0
+  b:
+    text: |
+      The first prints: 
+    code: Not a string
+    text2: and the second fails with a NullPointerException
+  c:
+    code: |
+      String of length 6
+      Not a string
+  d:
+    text: |
+      The first prints:
+    code: String of length 6
+    text2: and the second fails with a NullPointerException
+solution: c
+explanation: |
+  <p>
+    As explained on <a href="http://scala-programming-language.1934581.n4.nabble.com/Pattern-matching-null-td1942570.html" target="_blank">scala-user</a>, 
+    Scala inherits the following behavior from Java:
+    <pre class="prettyprint lang-scala">
+  val s: String = null  // perfectly fine
+  println(s.isInstanceOf[String]) // prints "false" since, as in Java, null instanceof String == false
+    </pre>
+    This then drives the pattern matching resolution. Therefore, if you pattern match against a value that may be <code>null</code>, you explicitly need to check for <code>null</code> value:
+    <pre class="prettyprint lang-scala">
+  a match {
+    case s: String => println("String of length " + s.length)
+    case null      => println("Got null!")
+    case _         => println("Something else...")
+  }
+    </pre>
+  </p>
+  <p>
+    Pattern matching resolution is based on the <em>runtime</em>-type, so the first example matches the <code>s: String</code> case even though the <em>compile-</em>time type is <code>java.lang.Object</code>.
+  </p>
+  <p>
+    A good Scala idiom is to convert the &quot;maybe-<code>null</code>&quot; from a Java API to an <a href="http://www.scala-lang.org/api/current/scala/Option.html" target="_blank"><code>Option</code></a>:
+  </p>
+  <pre class="prettyprint lang-scala">
+  val str: Option[String] = Option(stringFromJava)
+  str match {
+    case Some(s: String) => println("String of length " + s.length)
+    case None => println("stringFromJava was null")
+  }
+  </pre>
+---

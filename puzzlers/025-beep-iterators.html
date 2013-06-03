@@ -1,0 +1,41 @@
+---
+layout: puzzler
+title: $!.*% Iterators!
+author: Daniel C. Sobral
+sourceName: scala-user mailing list
+sourceHref: https://groups.google.com/forum/#!topic/scala-user/7B6fPJ03Vww/discussion
+scalaVersion: 2.10.0
+puzzle: |
+  val t = "this is a test"
+  val rx = " ".r
+  val m = rx.findAllIn(t)
+  println(m)
+  println(m.end)
+  println(rx.findAllIn(t).end)
+possibleSolutions:
+  a: 
+    code: |
+      non-empty iterator
+      5
+      5
+  b:
+    code: |
+      empty iterator
+      java.lang.IllegalStateException: No match available
+      java.lang.IllegalStateException: No match available
+  c:
+    code: |
+      non-empty iterator
+      5
+      java.lang.IllegalStateException: No match available
+  d:
+    code: |
+      non-empty iterator
+      java.lang.IllegalStateException: No match available
+      java.lang.IllegalStateException: No match available
+solution: c
+explanation: |
+  <p>
+    The result of <code>findAll</code> is an <code>Iterator</code>. Until you somehow ask for or check the first element, such as calling <code>next</code>, <code>hasNext</code> or causing them to be called through <code>toString</code>, no regex match will be tried, causing the <code>end</code> method - from <code>MatchData</code>, also extended by <code>MatchIterator</code> - to throw an exception.
+  </p>
+---

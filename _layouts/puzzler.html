@@ -1,0 +1,78 @@
+---
+layout: default
+---
+<h1>{{page.title}}</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>{{page.author}}</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="{{page.sourceHref}}">{{page.sourceName}}</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>{{page.scalaVersion}}</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+  <em>{{page.puzzleNote}}</em>
+  <pre class="prettyprint lang-scala">
+{{page.puzzle}}
+  </pre>
+  <ol class="possibleSolutions">
+    {% for possibility in page.possibleSolutions %}
+    <li {% if possibility[0] == page.solution %}id=solution{% endif %}>
+        {{ possibility[1].text }}
+        {% if possibility[1].code %}
+          <pre class="prettyprint lang-scala output">
+{{possibility[1].code}}
+          </pre>
+        {% endif %}
+        {{ possibility[1].text2 }}
+        {% if possibility[1].code2 %}
+          <pre class="prettyprint lang-scala output">
+{{possibility[1].code2}}
+          </pre>
+        {% endif %}
+        {% if possibility[0] == page.solution %}
+          <form class="kata-form" action="https://scalakatatwo.herokuapp.com/eval" method="post">
+              <div class="kata-code-wrap">
+                  <textarea class="kata-code" name="code">
+{{page.puzzle}}
+                  </textarea>
+                  <div class="kata-controls">
+                      <button class="kata-run btn btn-success" type="submit" name="run" value="Run">
+                          <i class="icon-play icon-white"></i>
+                      </button>
+                  </div>
+              </div>
+              <div class="kata-result-window hidden">
+                  <hr class="kata-vertical-resize-handle" />
+                  <div class="kata-result-wrap">
+                      <div class="CodeMirror">
+                          <div class="CodeMirror-scroll cm-s-solarized-dark">
+                              <pre class="kata-console"></pre>
+                              <div class="kata-result"></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </form>
+          <div class="explanation">
+            <h3>Explanation</h3>
+            <p>
+              {{page.explanation}}
+            </p>
+            <div id="disqus_thread" class="comments"></div>
+          </div>
+        {% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+</div>
+<a class="btn btn-primary" href="#solution">Solution</a>

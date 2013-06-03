@@ -1,0 +1,56 @@
+---
+layout: puzzler
+title: Return to Me!
+author: Dominik Gruntz
+sourceName:
+sourceHref:
+scalaVersion: 2.10.0
+puzzle: |
+  def value: Int = {
+    def one(x: Int): Int = { return x; 1 }
+    val two = (x: Int) => { return x; 2 }
+    1 + one(2) + two(3)
+  }
+  println(value)
+possibleSolutions:
+  a: 
+    text: 3
+  b:
+    text: 4
+  c:
+    text: 6
+  d:
+    text: The code does not compile, the compiler reports an <code>unreachable code</code> error.
+solution: a
+explanation: |
+  <p>
+    Scala does not complain about unreachable code, therefore the code compiles fine.
+    If you want to be warned about unreachable code, then use the compiler option <code>-Ywarn-dead-code</code>.
+    If you want to see a compiler error instead of a warning, then in addition use the compiler option <code>-Xfatal-warnings</code>.
+  </p>
+  <p>
+    The answer to this question can be found in section 6.20 of the SLS:
+    <blockquote>
+      A return expression <code>return e</code> must occur inside the body of some enclosing named
+      method or function. The innermost enclosing named method or function in a
+      source program, <em>f</em>, must have an explicitly declared result type, and the type of <code>e</code>
+      must conform to it. The return expression evaluates the expression <code>e</code> and returns its
+      value as the result of <em>f</em>. The evaluation of any statements or expressions following
+      the return expression is omitted.
+    </blockquote>
+    For the first <code>return x</code> statement the enclosing named method is method <code>one</code>, but
+    for the second <code>return x</code> statement the enclosing named method is method <code>value</code>.
+    When the function <code>two(3)</code> is called as part of the expression <code>1 + one(2) + two(3)</code>,
+    then the result <code>3</code> is returned <em>as the result of method <code>value</code></em>.
+  </p>
+  <p>
+    Btw, returning from a nested anonymous function is implemented by throwing and
+    catching a <code>scala.runtime.NonLocalReturnException</code>.
+  </p>
+  <p>
+    The most common reason you actually would want to return from inside a nested function is to 
+    break out of an imperative for-comprehension or resource control block.
+    See the answers to the stackoverflow question <a href="http://stackoverflow.com/a/3771243/714104">Purpose of 
+    "return" statement in Scala?</a> for a further discussion of that aspect.
+  </p>
+---

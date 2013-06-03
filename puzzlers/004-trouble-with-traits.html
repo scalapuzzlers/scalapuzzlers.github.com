@@ -1,0 +1,56 @@
+---
+layout: puzzler
+title: Trouble With Traits
+author: Andrew Phillips &amp; Nermin Serifovic
+sourceName: stackoverflow
+sourceHref: http://stackoverflow.com/questions/4701749/nullpointerexception-when-accessing-overriden-val-in-abstract-constructor
+scalaVersion: 2.10
+puzzle: |
+  trait A {
+    val foo: Int
+    val bar = 10
+    println("In A: foo: " + foo + ", bar: " + bar)
+  }
+
+  class B1 extends A {
+    val foo = 25
+    println("In B1: foo: " + foo + ", bar: " + bar)
+  }
+
+  class B2(val foo: Int = 25) extends A {
+    println("In B2: foo: " + foo + ", bar: " + bar)
+  }
+
+  new B1
+  new B2
+possibleSolutions:
+  a: 
+    code: |
+      In A: foo: 25, bar: 10
+      In B1: foo: 25, bar: 10
+      In A: foo: 25, bar: 10
+      In B2: foo: 25, bar: 10
+  b:
+    code: |
+      In A: foo: 0, bar: 10
+      In B1: foo: 25, bar: 10
+      In A: foo: 0, bar: 10
+      In B2: foo: 25, bar: 10
+  c:
+    code: |
+      In A: foo: 0, bar: 10
+      In B1: foo: 25, bar: 10
+      In A: foo: 25, bar: 10
+      In B2: foo: 25, bar: 10
+  d:
+    code: |
+      In A: foo: 25, bar: 10
+      In B1: foo: 25, bar: 10
+      In A: foo: 0, bar: 10
+      In B2: foo: 25, bar: 10
+solution: c
+explanation: |
+  When instantiating superclasses or traits, the parent constructor 
+  can be visualized as being executed before the first line of the child 
+  constructor but after the class definition.
+---

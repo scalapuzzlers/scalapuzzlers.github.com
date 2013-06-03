@@ -1,0 +1,69 @@
+---
+layout: puzzler
+title: Cast Away
+author: Vassil Dichev
+sourceName:
+sourceHref:
+scalaVersion: 2.10.0
+kata: false
+puzzle: |
+  import scala.collection.JavaConverters._
+  def fromJava: java.util.Map[String, java.lang.Integer] = {
+    val map = new java.util.HashMap[String, java.lang.Integer]()
+    map.put("key", null)
+    map
+  }
+
+  // watch out here...Integer is not Int!
+  val map = fromJava.asScala.asInstanceOf[scala.collection.Map[String, Int]]
+  println(map("key") == null)
+  println(map("key") == 0)
+possibleSolutions:
+  a: 
+    code: |
+      true
+      true
+  b: 
+    text: Both fail with a NullPointerException
+  c:
+    code: |
+      true
+      false
+  d:
+    code: |
+      false
+      true
+  e:
+    code: |
+      false
+      false
+solution: a
+explanation: |
+  <p>
+    The motivation for this puzzler comes from interactions with Java libraries, where you may be tempted to "convert" to more "natural" Scala types by casting. In this particular case - <tt>java.lang.Integer</tt> to <tt>Int</tt> - the types are not <em>quite</em> the same, unfortunately, and this is ultimately the source of the puzzler.
+  </p>
+  <p>
+    Scala automatically handles convertions such as <tt>java.lang.Integer</tt> to <tt>Int</tt> using autoboxing. If you decompile the resuting code with a Java decompiler (<tt>scalac -Xprint:jvm</tt> outputs something different!) we get
+  </p>
+    <p>
+  <pre class="prettyprint lang-java">
+  Predef$.MODULE$.println(BoxesRunTime.boxToBoolean($outer.map().apply("key") == null));
+  Predef$.MODULE$.println(BoxesRunTime.boxToBoolean(BoxesRunTime.unboxToInt($outer.map().apply("key")) == 0));
+  </pre>
+  <p>
+    The interesting part here is <a href="https://github.com/scala/scala/blob/v2.10.0-RC1/src/library/scala/runtime/BoxesRunTime.java" target="_new"><tt>BoxesRunTime.unboxToInt</tt></a> in the second call, which is defined as:
+  </p>
+  <p>
+    <pre class="prettyprint lang-java">
+  public static int unboxToInt(Object i) {
+    return i == null ? 0 : ((java.lang.Integer)i).intValue();
+  }
+    </pre>
+  </p>
+  <p>
+    This logic, which treats <tt>null</tt> as <tt>0</tt>, differs from both Java <tt>Integer</tt>-to-<tt>int</tt> unboxing and <a href="https://github.com/scala/scala/blob/v2.10.0-RC1/src/library/scala/Int.scala" target="_new"><tt>scala.Int.unbox</tt></a>, both of which fail with a <tt>NullPointerException</tt> for <tt>null</tt>.
+  </p>
+  <p>
+    As Daniel Sobral commented: "Whenever you cast, you lie, and <em>anything</em> can come out of it." Strange things can happen when you "know better" than the compiler! ;-)
+  </p>
+---

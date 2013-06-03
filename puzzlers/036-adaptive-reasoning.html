@@ -1,0 +1,71 @@
+---
+layout: puzzler
+title: Adaptive Reasoning
+author: A. P. Marki
+sourceName: scala-user mailing list
+sourceHref: https://groups.google.com/forum/#!msg/scala-user/ut94m5bH2Xs/C9pqbcinFhYJ
+scalaVersion: 2.10.0
+puzzle: |
+  class Printer(prompter: =>Unit) {
+    def print(message: =>String, prompted: Boolean = false) {
+      if (prompted) prompter
+      Console println message
+    }
+  }
+
+  def prompt() {
+    Console print "puzzler$ "
+  }
+
+  new Printer { prompt } print (message = "Puzzled yet?")
+  new Printer { prompt } print (message = "Puzzled yet?", prompted = true)
+possibleSolutions:
+  a: 
+    code: |
+      Puzzled yet?
+      puzzler$ Puzzled yet?
+  b:
+    code: |
+      puzzler$ Puzzled yet?
+      puzzler$ Puzzled yet?
+  c:
+    code: |
+      puzzler$ Puzzled yet?
+      Puzzled yet?
+  d:
+    text: Fails with a compilation exception
+solution: b
+explanation: |
+  <p>
+    The <tt>message</tt> parameter to the <tt>print</tt> routine is call-by-name. 
+    The argument is not evaluated until it is used, and it is evaluated each time it is called.
+  </p>
+  <p>
+    But the curly braces after the invocation of <tt>new Printer</tt> is not a call-by-name
+    parameter. It's a class body. Although the intention was to supply <tt>prompt</tt> as
+    the <tt>prompter</tt> for the <tt>Printer</tt>, in fact <tt>prompt</tt> is called in the
+    constructor of an anonymous subclass.
+  </p>
+  <p>
+    How could this be? Constructors always have a parameter list, and if no arguments are
+    provided for the application, then an empty argument list is supplied (SLS 5.1.1).
+    Since the parameter to the constructor is of type <tt>Unit</tt>, the compiler is willing
+    to adapt the empty argument list to an empty tuple, the <tt>Unit</tt> value.
+  </p>
+  <p>
+    Adapting an argument list so that it is taken as a single <tt>Tuple</tt> argument is usually helpful.
+    In this case, under <tt>-Ywarn-adapted-args</tt>, the compiler will warn: "this is unlikely
+    to be what you want." The feature can be disabled with <tt>-Yno-adapted-args</tt>.
+  </p>
+  <p>
+    The desired behavior was, presumably, for the prompt to be evaluated only when the <tt>prompted</tt>
+    parameter is <tt>true</tt>, which can be achieved by the construction:
+    <pre class="prettyprint lang-scala">
+  scala> new Printer(prompt) print (message = "Puzzled yet?", prompted = true)
+  puzzler$ Puzzled yet?
+
+  scala> new Printer(prompt) print (message = "Puzzled yet?")
+  Puzzled yet?
+    </pre>
+  </p>
+---

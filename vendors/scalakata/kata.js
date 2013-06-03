@@ -1,4 +1,4 @@
-var kataify = function(){
+window.kataify  = function(){
     $(".kata-form").each(function(){
         var form = this;
         $(this).find(".kata-code").each(function(){
@@ -19,20 +19,20 @@ var kataify = function(){
                 $.post(form.action,{code: mirror.getValue()})
                     .done(function (data) {
                         if(data.errors !== undefined ) {
-                            var $res = $(form).find(".kata-result");
-                            $res.text("");
-                            $res.append("<ol>");
-                            var errorList = document.createElement("ol");
+                            var $res, $errorList;
+                            $res = $(form).find(".kata-result");
+                            $res.empty();
+                            $errorList = $("<ol></ol>");
+                            $res.append($errorList);
                             $.each(data.errors, function(i, error){
-                                var errorElement = document.createElement("li");
-                                errorElement.text
-                                $res.append("<li>");
-                                $res.append("line: " + error.line );
-                                $res.append(":" + error.column );
-                                $res.append(" " + error.message);
-                                $res.append("</li>");
+                                var $errorElement, $errorLine, $errorMessage;
+                                $errorElement = $("<li>");
+                                $errorLine = $("<div>L" + error.line + ":" + error.column + "</div>")
+                                $errorMessage = $("<pre>" + error.message + "</pre>")
+                                $errorElement.append($errorLine);
+                                $errorElement.append($errorMessage);
+                                $errorList.append($errorElement);
                             })
-                            $res.append("</ol>");
                         } else {
                             $(form).find(".kata-console").text(data.console);
                             $(form).find(".kata-result").text(data.result);
@@ -45,11 +45,10 @@ var kataify = function(){
                     .always( function () {
                         $(form).find(".kata-code-wrap").addClass("with-results");
                         $(form).find(".kata-result-window").removeClass("hidden");
-                        mirror.refresh();
                     });
 
                 return false;
             });
-        })
-    })
+        });
+    });
 };

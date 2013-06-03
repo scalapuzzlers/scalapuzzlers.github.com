@@ -1,0 +1,55 @@
+---
+layout: puzzler
+title: Trouble With Traits 2
+author: Paul Phillips
+sourceName: Paul Phillips's Scala FAQ
+sourceHref: https://github.com/paulp/scala-faq/wiki/Initialization-Order
+scalaVersion: 2.10.0
+puzzle: |
+  trait A {
+    val foo: Int
+    val bar = 10
+    println("In A: foo: " + foo + ", bar: " + bar)
+  }
+
+  class B extends A {
+    val foo: Int = 25
+    println("In B: foo: " + foo + ", bar: " + bar)
+  }
+
+  class C extends B {
+    override val bar = 99
+    println("In C: foo: " + foo + ", bar: " + bar)
+  }
+
+  new C
+possibleSolutions:
+  a: 
+    code: |
+      In A: foo: 0, bar: 0
+      In B: foo: 25, bar: 0
+      In C: foo: 25, bar: 99
+  b:
+    code: |
+      In A: foo: 0, bar: 10
+      In B: foo: 25, bar: 10
+      In C: foo: 25, bar: 99
+  c:
+    text: c
+    code: |
+      In A: foo: 0, bar: 0
+      In B: foo: 25, bar: 99
+      In C: foo: 25, bar: 99
+  d:
+    text: d
+    code: |
+      In A: foo: 25, bar: 99
+      In B: foo: 25, bar: 99
+      In C: foo: 25, bar: 99
+solution: a
+explanation: |
+  Notice that bar is a val that is overridden in C. The Scala compiler 
+  will only initialize vals once, so since bar will be initialized in C it is 
+  not initialized before that time and appears as its default value (0, 
+  in this case) during the construction of the superclass.  
+---

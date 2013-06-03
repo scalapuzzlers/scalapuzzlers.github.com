@@ -1,97 +1,30 @@
-/*global $, document, window, prettyPrint, DISQUS, kataify */
-
-$(document).ready(function () {
+$(function(){
 	'use strict';
-	var disqus_shortname, disqus_identifier, disqus_url, pathToID, id, activeElem, elem, gaq;
-	
-	String.prototype.endsWith = function (suffix) {
-		return this.indexOf(suffix, this.length - suffix.length) !== -1;
-	};
-	
-	pathToID = {
-		"/": '#navbar-home',
-		"index.html": '#navbar-home',
-		"archive.html": '#navbar-archive',
-		"contribute.html": '#navbar-contribute',
-		"contact.html": '#navbar-contact',
-		"about.html": '#navbar-about'
-	};
+	var gaq;
 
-	function mapPathToID(path) {
-		var key, id = null;
-		$.each(function (key) {
-			if (path === key) {
-				id = pathToID[key];
-			}
-		});
-		return id;
+	// Solution
+	function showSolution() {
+		var loc, id;
+		setTimeout(kataify,0); // defer
+
+		loc = location.href.substring(location.href.lastIndexOf("/")+1) // loc: XYZ-hey.html#solution;
+		id = "pzzlr-" + loc.substring(0,loc.indexOf("-")); // XYZ
+
+		(function () {
+			var dsq;
+			window.disqus_developer = 1;
+			window.disqus_shortname = 'scalapuzzlers';
+			window.disqus_identifier = id;
+			window.disqus_url = 'http://scalapuzzlers.com/!#/' + id;
+			dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+		}());
 	}
+	$("[href='#solution']").click(showSolution);
+	if( void 0 !== document.location.hash ) { showSolution(); }	
 
-	id = mapPathToID(window.location.pathname);
-	if (id !== null) {
-		$(id).addClass("active");
-	}
-
-	(function () {
-		var dsq;
-		disqus_shortname = 'scalapuzzlers';
-		disqus_identifier = 'elem.id';
-		disqus_url = 'http://scalapuzzlers.com/!#/' + 'elem.id';
-
-		dsq = document.createElement('script');
-		dsq.type = 'text/javascript';
-		dsq.async = true;
-		dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	}());
-				 
-	activeElem = null;
-
-	function showSolution (id) {
-		$('#disqus_thread').hide();
-		$('#prime-space').html("");
-		$('#prime-space').load('puzzlers/' + id + '.html', function () {
-			prettyPrint();
-			document.location.hash = id;
-			window.scrollTo(0, 0);
-			$('#show-and-tell').click(function () {
-				$('#show-and-tell').addClass("disabled");
-				$('#correct-answer').addClass("correct-answer");
-				$('#explanation').show('slow', function () {
-					DISQUS.reset({
-						reload: true,
-						config: function () {
-							this.page.identifier = id;
-							this.page.url = 'http://scalapuzzlers.com/#!/' + id;
-							this.page.title = $('#title').find("h1").text();
-						}
-					});
-					$('#disqus_thread').show();
-					$('html,body').animate({scrollTop: $('#correct-answer').offset().top - $('.navbar').height() - 2}, 900);
-					$('.kata-form').css("display","block");
-					kataify();
-				});
-			});
-		});
-		if (activeElem !== null) {
-			$(activeElem).removeClass("active");
-		}
-		activeElem = $(elem).parent();
-		$(activeElem).addClass("active");
-	}
-
-	if (document.location.hash) {
-		if( void 0 !== document.location.hash ) {
-			showSolution(document.location.hash.replace("#",""))
-		}
-	}
-	
-	$('a[id|="pzzlr"]').each(function (index, elem) {
-		$(elem).click(function(){
-			showSolution(elem.id);
-		});
-	});
-	
+	// Analytic
 	gaq = gaq || [];
 	gaq.push(['_setAccount', 'UA-31486114-1']);
 	gaq.push(['_trackPageview']);

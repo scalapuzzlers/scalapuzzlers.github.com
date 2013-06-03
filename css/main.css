@@ -1,3 +1,24 @@
+.sidebar-nav {
+	font-size: 15px;
+}
+
+pre.prettyprint,
+.kata-form {
+	margin: 0;
+	margin-top: 10px;
+	margin-bottom: 10px;
+    /*margin: 20px 80px 10px 10px;*/
+}
+
+.container-fluid {
+	padding-top: 10px;
+}
+
+.possibleSolutions {
+	list-style-type: lower-alpha;
+	margin-left: 0;
+}
+
 .headline img {
 	padding-bottom:15px;
 	padding-left:10px
@@ -7,10 +28,33 @@
 	margin: 10px 0;
 }
 
-.explanation, .kata-form {
-	display: none;
+.brand img {
+	padding-bottom:10px;
+	padding-left:2px;
+	padding-right:2px;
 }
 
+.github-propaganda {
+	position: absolute; top: 0; right: 0; border: 0;
+}
+
+#solution:target {
+	border: 1px solid black;
+	padding: 5px;
+}
+
+#solution:target .output {
+	border: 4px solid blue;
+}
+
+#solution:target .kata-form,
+#solution:target .explanation
+#solution:target #disqus_thread {
+	display: block;
+}
+
+#solution .kata-form,
+#solution .explanation,
 #disqus_thread {
 	display: none;
 }

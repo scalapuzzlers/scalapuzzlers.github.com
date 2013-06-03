@@ -1,0 +1,48 @@
+---
+layout: puzzler
+title: Private Lives
+author: Dominik Gruntz
+scalaVersion: 2.10.0
+puzzle: |
+  object Lives {
+    class Private {
+      def foo1: Any = new Private.C1
+      def foo2: Any = new Private.C2
+    }
+
+    object Private {
+      class C1 private {}
+      private class C2 {}
+    }
+  }
+possibleSolutions:
+  a: 
+    text: Compiles without error.
+  b:
+    text: The compiler reports an error on the implementation of method <code>foo1</code>.
+  c:
+    text: The compiler reports an error on the implementation of method <code>foo2</code>.
+  d:
+    text: The compiler reports an error on the implementation of both methods <code>foo1</code> and <code>foo2</code>.
+solution: b
+explanation: |
+  <p>
+    Object <code>Private</code> defines two classes <code>C1</code> and <code>C2</code>.
+    <code>C2</code> is a private class which is only accessible in object <code>Private</code> and its companion class, 
+    whereas <code>C1</code> is a public class with a private default constructor, so this class can only be 
+    instantiated within class <code>C1</code>.
+    </p><p>
+    As a consequence, method <code>foo2</code> just compiles fine (as the private class <code>C2</code> is visible in
+    class <code>Private</code>), whereas the implementation of method <code>foo1</code> reports the following compiler error:
+  <pre class="prettyprint lang-scala">
+  error: constructor C1 in class C1 cannot be accessed in class Private
+           def foo1: Any = new Private.C1
+                           ^
+  </pre>
+      </p><p>
+    Note, that the result type of method <code>foo2</code> has to be set to a base type of <code>Private.C2</code>, 
+    otherwise the result type of this method would be a type which is invisible by any caller outside of 
+    class/object <code>Private</code> (the compiler would report that the private class <code>C2</code> escapes its defining scope).
+    For method <code>foo1</code> this is not necessary.
+    </p>
+---

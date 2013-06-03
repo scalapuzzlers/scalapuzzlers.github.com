@@ -1,0 +1,50 @@
+---
+layout: puzzler
+title: Double Take
+author: Andrew Phillips
+sourceName: scala-lang mailing list
+sourceHref: https://groups.google.com/forum/?fromgroups=#!topic/scala-language/fWnULi1SH44
+scalaVersion: 2.10.0
+puzzle: |
+  val doubleOps = implicitly[Numeric[Double]]
+  println(Double.NaN > 1.0)
+  println(doubleOps.gt(Double.NaN, 1.0))
+  println(Double.NaN < 1.0)
+  println(doubleOps.lt(Double.NaN, 1.0))
+possibleSolutions:
+  a: 
+    code: |
+      false
+      true
+      false
+      true
+  b:
+    code: |
+      false
+      true
+      false
+      false
+  c:
+    code: |
+      true
+      false
+      true
+      false
+  d:
+    code: |
+      false
+      false
+      false
+      false
+solution: b
+explanation: |
+  <p>
+    <code>Double</code> extends <code>Ordering</code>, which as a total order requires that a comparison between two values yield either a <a href="https://github.com/scala/scala/blob/master/src/library/scala/math/Ordering.scala#L85" target="_blank">positive, negative or zero result</a>. Since the comparison operations <code>gt</code>, <code>lt</code> and <code>equiv</code> are implemented in terms of this comparison, one of the three must be true, even for comparisons involving <code>NaN</code>.
+  </p>
+  <p>
+    The equivalent primitive operators <code>&gt;</code>, <code>&lt;</code> and <code>==</code> implement the IEEE floating-point specification, under which these three comparisons <code>NaN</code> are false.
+  </p>
+  <p>
+    This behaviour <a href="https://groups.google.com/forum/?fromgroups=#!topic/scala-language/fWnULi1SH44" target="_blank" >was changed in 2.10</a> as part of <a href="https://github.com/scala/scala/commit/460bbc1276fb4ba83b9bcbdc7f7ba475b352b7c6" target="_blank" >the fix</a> for <a href="https://issues.scala-lang.org/browse/SI-5104" target="_blank" >SI-5104</a>. The change &quotretires&quot; this puzzler but results in new, unexpected results in relation to operations that expect <code>Double</code> to adhere to the contract of <code>Ordering</code>, e.g. when sorting sequences of <code>Double</code>s containing <code>NaN</code>.
+  </p>
+---

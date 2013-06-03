@@ -1,0 +1,62 @@
+---
+layout: puzzler
+title: To Map, or Not to Map
+author: Andrew Phillips
+sourceName: Based on a suggestion by Michael Schmitz
+sourceHref: http://wiki.schmitztech.com/
+scalaVersion: 2.10.0
+puzzle: |
+  case class RomanNumeral(value: Int, representation: String) extends Ordered[RomanNumeral] {
+    override def compare(numeral: RomanNumeral) = this.value - numeral.value
+  }
+
+  import collection.immutable.SortedSet
+  val numerals: SortedSet[RomanNumeral] = SortedSet(RomanNumeral(1000, "M"), RomanNumeral(100, "C"), RomanNumeral(1, "I"), RomanNumeral(10, "X"))
+
+  println("1 10 100 1000 in Roman numerals:")
+  numerals.foreach { numeral => print(numeral.representation + " ") }
+  println()
+  numerals.map(_.representation).foreach { representation => print(representation + " ") }
+possibleSolutions:
+  a: 
+    text: Prints
+    code: |
+      I X C M
+      C I M X
+  b:
+    text: Prints
+    code: |
+      M C I X
+      I X C M
+  c:
+    text: Prints
+    code: |
+      I X C M
+      I X C M
+  d:
+    text: Prints
+    code: |
+      M C I X
+      C M I X
+solution: a
+explanation: |
+  <p>
+    Since <tt>RomanNumeral</tt>s are ordered by their values, iterating over the sorted set of <tt>numerals</tt> will return them in that order and result in the representations being printed according to the <strong>value</strong>.
+  </p>
+  <p>
+    Mapping the numerals to their <em>representation</em> will result in a sorted set of <tt>String</tt>s which, naturally enough, will be ordered lexicographically. Iterating over them will thus return them in that order.
+  </p>
+  <p>
+    The potentially unexpected reordering of the items in the iterable could have been prevented by, for example,
+    <pre class="prettyprint lang-scala">
+  numerals.view.map(_.representation).foreach { ... }
+    </pre>
+    or
+    <pre class="prettyprint lang-scala">
+  numerals.toSeq.map(_.representation).foreach { ... }
+    </pre>
+  </p>
+  <p>
+    Note that the initial declaration order of the set does not have any effect on the iteration order. Also, note that, of course, the code sample using <tt>map</tt> inefficiently iterates over <tt>numerals</tt> <strong>twice</strong>.
+  </p>
+---

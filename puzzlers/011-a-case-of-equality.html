@@ -1,0 +1,80 @@
+---
+layout: puzzler
+title: A Case of Equality
+author: Dominik Gruntz
+sourceName: 
+sourceHref:
+scalaVersion: 2.10.0
+puzzle: |
+  trait OverridesEquals {
+    override def equals(x: Any) = super.equals(x)
+  }
+
+  class C extends OverridesEquals
+  case class CC extends OverridesEquals
+
+  val c1 = new C()
+  val c2 = new C()
+  val cc1 = CC()
+  val cc2 = CC()
+
+  println(c1 == c2)
+  println(c1.## == c2.##)
+  println(cc1 == cc2)
+  println(cc1.## == cc2.##)
+possibleSolutions:
+  a: 
+    text: prints
+    code: |
+      false
+      false
+      false
+      false
+  b:
+    text: prints
+    code: |
+      false
+      false
+      false
+      true
+  c:
+    text: prints
+    code: |
+      false
+      false
+      true
+      false
+  d:
+    text: prints
+    code: |
+      false
+      false
+      true
+      true
+solution: b
+explanation: |
+  The first two expressions (<code>c1 == c2</code> and <code>c1.## == c2.##</code>)
+  both return <code>false</code> (as given). The two instances of class <code>C</code>
+  are different, therefore both <code>equals</code> and <code>hashCode</code> return
+  different results.
+  </p><p>
+  For case classes however, the <code>equals</code>, <code>hashCode</code> and
+  <code>toString</code> methods are generated, and for two instances of a case
+  class with the same elements, we could expect that both  <code>equals</code> and
+  <code>hashCode</code> return the same result (i.e. Answer 4).
+  </p><p>
+  According to the SLS (section 5.3.2) however, a case class implicitly
+  overrides the methods <code>equals</code>, <code>hashCode</code> and
+  <code>toString</code> of class <code>scala.AnyRef</code> <em>only</em> if the case class
+  itself does not provide a definition for one of these methods and <em>only</em> if
+  a concrete definition is not given in some base class of the case class
+  (except <code>AnyRef</code>).
+  </p><p>
+  In our example, the base trait <code>OverridesEquals</code> provides an <code>equals</code>
+  method, so the case class does not provide its own definition and the
+  comparison of two different instances returns <code>false</code>.
+  </p><p>
+  For method <code>hashCode</code> however no implementation is provided, neither
+  in class <code>CC</code> nor in some base class, so here the implicitly overridden version
+  is used which returns the same value for equal elements.
+---

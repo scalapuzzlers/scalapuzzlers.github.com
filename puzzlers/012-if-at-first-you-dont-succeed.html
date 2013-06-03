@@ -1,0 +1,30 @@
+---
+layout: puzzler
+title: If At First You Don't Succeed...
+author: Konstantine Golikov
+sourceName: stackoverflow
+sourceHref: http://stackoverflow.com/questions/9449474/def-vs-val-vs-lazy-val-evaluation-in-scala/9450146#9450146
+scalaVersion: 2.10.0
+puzzle: |
+  var x = 0
+  lazy val y = 1/x
+  try {
+    println(y)
+  } catch {
+    case _ : Throwable =>
+      x = 1
+      println(y)
+  }
+possibleSolutions:
+  a: 
+    text: Throws a 'divide by zero' exception
+  b:
+    text: Prints 1
+  c:
+    text: Prints Nan
+  d:
+    text: Prints &lt;lazy&gt;
+solution: b
+explanation: |
+  One of the most interesting things about lazy values (besides that they defer actual computation) is that they will be recomputed on call if there was an exception at the moment of first access, until some definite value is acquired. So you can use this useful pattern in many situations, for example to handle missing files.
+---

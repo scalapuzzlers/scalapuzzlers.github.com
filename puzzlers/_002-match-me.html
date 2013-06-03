@@ -1,0 +1,29 @@
+---
+layout: puzzler
+title: Match Me
+author: Andrew Phillips &amp; Nermin Serifovic
+sourceName: stackoverflow
+sourceHref: http://stackoverflow.com/questions/2727612/scalas-tuple-unwrapping-nuance
+scalaVersion: 2.9.2
+puzzle: |
+  val ij: (Int, Int) = ("3", "4")
+  val (i, j): (Int, Int) = ("3", "4")
+possibleSolutions:
+  a:
+    text: Prints
+    code: |
+      ij: (3, 4)
+      i: 3
+      j: 4
+  b:
+    text: Both fail with compilation exceptions
+  c:
+    text: Both fail with runtime exceptions
+  d:
+    text: The first one fails with a compilation exception and the second one fails with a runtime exception
+solution: c
+explanation: |
+  The former is an assignment of a tuple which is not type correct. 
+  The latter is a pattern match which for which type information is 
+  erased, so it will compile (with a warning) but fail at runtime.
+---

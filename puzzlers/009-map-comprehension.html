@@ -1,0 +1,36 @@
+---
+layout: puzzler
+title: Map Comprehension
+author: Simon Schaefer
+sourceName: stackoverflow
+sourceHref: http://stackoverflow.com/a/4416436/465304
+scalaVersion: 2.10.0
+puzzle: |
+  val xs = Seq(Seq("a", "b", "c"), Seq("d", "e", "f"), Seq("g", "h"), Seq("i", "j", "k"))
+
+  val ys = for (Seq(x, y, z) <- xs) yield x + y + z
+  val zs = xs map { case Seq(x, y, z) => x + y + z }
+
+  println(ys)
+  println(zs)
+possibleSolutions:
+  a: 
+    text: Evaluating <code>ys</code> and <code>zs</code> both result in a <code>MatchError</code>
+  b:
+    text: Both <code>ys</code> and <code>zs</code> evaluate to
+    code: Seq(abc, def, ijk)
+  c:
+    text: <code>ys</code> throws a <code>MatchError</code>, <code>zs</code> evaluates to 
+    code: Seq(abc, def, ijk)
+  d:
+    text: <code>ys</code> evaluates to
+    code: Seq(abc, def, ijk)
+    text2: <code>zs</code> throws a <code>MatchError</code>
+solution: d
+explanation: |
+  Most people think that a for-yield-expression is directly translated to an equivalent call of <code>map</code>, but this is only correct if no pattern-matching is used! If one uses pattern-matching there is also a call of <code>filter</code> generated. In the example above, following code is generated:
+  <pre class="prettyprint lang-scala">
+    xs filter { case Seq(x, y, z) => true case _ => false } map { case Seq(x, y, z) => x + y + z }
+  </pre>
+  Be aware of this silent filter! It can result in nasty bugs.
+---

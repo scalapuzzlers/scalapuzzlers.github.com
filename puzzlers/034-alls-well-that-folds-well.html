@@ -1,0 +1,59 @@
+---
+layout: puzzler
+title: All's Well That Folds Well
+author: Andrew Phillips
+sourceName: scala-lang mailing list
+sourceHref: https://groups.google.com/forum/?fromgroups=#!topic/scala-language/4h52vHuS7Qw
+scalaVersion: 2.10.0
+puzzle: |
+  val ints = List(1, 2, 3)
+  val accumulator: List[Int] = Nil
+
+  val leftReversed = (ints foldLeft accumulator) { (acc, elem) => elem :: acc }
+  val rightReversed = (ints foldRight accumulator) { (elem, acc) => acc :+ elem }
+  println(leftReversed)
+  println(rightReversed)
+
+  // ...and back
+  println((leftReversed /: accumulator) { (acc, elem) => elem :: acc })
+  println((rightReversed :\ accumulator) { (elem, acc) => acc :+ elem })
+possibleSolutions:
+  a: 
+    code: |
+      List(3, 2, 1)
+      List(3, 2, 1)
+      List(1, 2, 3)
+      List(1, 2, 3)
+  b:
+    code: |
+      List(3, 2, 1)
+      List(3, 2, 1)
+      List(3, 2, 1)
+      List(3, 2, 1)
+  c:
+    code: |
+      List(3, 2, 1)
+      List(1, 2, 3)
+      List(1, 2, 3)
+      List(3, 2, 1)
+  d:
+    code: |
+      List(3, 2, 1)
+      List(3, 2, 1)
+      List(3, 2, 1)
+      List(1, 2, 3)
+solution: d
+explanation: |
+  <p>
+    Even though it's tempting to simply replace the &quot;longhand&quot; form of <tt>foldLeft</tt> and <tt>foldRight</tt> with their shorthand equivalents <tt>/:</tt> and <tt>:\</tt>, it's important to remember Scala's <a href="http://books.google.com/books?id=MFjNhTjeQKkC&lpg=PA90&ots=FLrl_NIOpw&dq=scala%20operator%20associativity&pg=PA43#v=onepage&q=scala%20operator%20associativity&f=false" target="_blank">operator associativity rule</a>, which states that operators ending in <tt>:</tt> (such as <tt>foldLeft</tt>'s shorthand form) are <em>right</em> associative.
+  </p>
+  <p>
+    This means that <tt>(leftReversed /: accumulator) { ... }</tt> is actually equivalent to <tt>(accumulator foldLeft leftReversed) { ... }</tt>, not <tt>(leftReversed foldLeft accumulator) { ... }</tt> as intended.
+  </p>
+  <p>
+    <pre class="prettyprint lang-scala">
+  println((accumulator /: leftReversed) { (acc, elem) => elem :: acc })
+    </pre>
+    produces the desired result. Avoiding the potential for confusion by sticking to the longhand form is probably also worth considering.
+  </p>
+---

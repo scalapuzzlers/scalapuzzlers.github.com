@@ -1,0 +1,56 @@
+---
+layout: puzzler
+title: Pick an Int, Any Int!
+author: Andrew Phillips
+sourceName: scala-lang mailing list
+sourceHref: https://groups.google.com/forum/?fromgroups=#!topic/scala-language/H2tvh0O1iqA
+scalaVersion: 2.10.0
+puzzle: |
+  class A {
+    type X // X <: Any
+    var x: X = _
+  }
+  class B extends A {
+    type X = Int
+  }
+  val b = new B
+  println(b.x)
+  val bX = b.x
+  println(bX)
+possibleSolutions:
+  a: 
+    text: The first fails at runtime with a NullPointerException, the second prints 0
+  b:
+    code: |
+      0
+      0
+  c:
+    code: |
+      &lt;lazy&gt;
+      null
+  d:
+    code: |
+      null
+      0
+solution: d
+explanation: |
+  <p>
+    As explained by <a href="https://groups.google.com/d/msg/scala-language/H2tvh0O1iqA/HsphGXLc9foJ" target="_blank">Paul Phillips on scala-lang</a>:
+  </p>
+  <blockquote>
+    <p>
+      The field <tt>x</tt>, at the bytecode level, is an <tt>Object</tt> (it was declared in A and inherited). B specialized its type to <tt>Int</tt>, but the same storage is used. That means &quot;uninitialized Int&quot; behavior (as opposed to &quot;uninitialized reference&quot; behavior) depends on the contents of the field being unboxed into an <tt>Int</tt>.
+    </p>
+    <p>
+      [The unboxing] happens when you call <tt>b.x</tt>, because <tt>x</tt> has type <tt>Int</tt>. That doesn't happen when you <tt>println(b.x)</tt>, because <tt>println</tt> takes an <tt>Any</tt> argument, so the expected type of the expression is <tt>Any</tt>. Scala doesn't understand any need to translate representations, because the expression has been upcast to <tt>Any</tt> already.
+    </p>
+    <p>Compare
+      <pre class="prettyprint lang-scala">
+  scala> println(b.x: Any)
+  null
+  scala> println(b.x: Int)
+  0
+      </pre>
+    </p>
+  </blockquote>
+---

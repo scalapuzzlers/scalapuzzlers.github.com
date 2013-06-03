@@ -1,8 +1,3 @@
-/*.kata-form {
-    height: 200px;
-}
-*/
-
 .kata-vertical-resize-handle {
     margin: 0;
     border: none;
@@ -55,28 +50,4 @@
     clear: both;
     display: block;
     margin: 10px;
-}
-
-label[for="code"], label[for="result"] {
-    transition: opacity 1s;
-    -o-transition: opacity 1s;
-    -moz-transition: opacity 1s;
-    -webkit-transition: opacity 1s;
-}
-
-label[for="code"], label[for="result"] {
-    bottom: 20px;
-    font-size: 50px;
-    opacity: 1;
-    position: absolute;
-    right: 10px;
-    color: #586E75;
-    z-index: 2;
-}
-
-.kata-code-wrap:focus label[for="code"],
-.kata-result-window:focus label[for="result"],
-.kata-code-wrap:hover label[for="code"],
-.kata-result-window:hover label[for="result"] {
-    opacity: 0;
 }

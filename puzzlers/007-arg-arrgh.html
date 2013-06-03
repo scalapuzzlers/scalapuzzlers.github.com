@@ -1,0 +1,41 @@
+---
+layout: puzzler
+title: Arg Arggh!
+author: Andrew Phillips &amp; Nermin Serifovic
+sourceName: stackoverflow
+sourceHref: http://stackoverflow.com/questions/4591781/passing-functions-for-all-applicable-types-around
+scalaVersion: 2.10.0
+puzzle: |
+  def square[T : Numeric](n: T) = implicitly[Numeric[T]].times(n, n)
+
+  def twiceA[T](f: T => T, a: T) = f(f(a))
+  def twiceB[T](f: T => T)(a: T) = f(f(a))
+  def twiceC[T](a: T, f: T => T) = f(f(a))
+  def twiceD[T](a: T)(f: T => T) = f(f(a))
+
+  twiceA(square, 2)
+  twiceB(square)(2)
+  twiceC(2, square)
+  twiceD(2)(square)
+possibleSolutions:
+  a:
+    text: The first, second and third fail with compilation errors, the fourth prints
+    code: Int = 16
+  b:
+    text: All four fail with compilation errors
+  c:
+    text: The second and fourth fail with compilation errors, the first and third print
+    code: |
+      Int = 16
+      Int = 16
+  d:
+    text: Prints
+    code: |
+      Int = 16
+      Int = 16
+      Int = 16
+      Int = 16
+solution: a
+explanation: |
+  For <tt>square</tt> to be applicable as an argument, the compiler has to know that <tt>T</tt> is bound to (a type that can implicitly be converted to) a Numeric. Even though it would appear that 2, as an Int, obviously fulfills this  condition, that information is not available to the compiler in a multi-arg list. Only in the fourth version is <tt>T</tt> bound "sufficiently early" for <tt>square</tt> to be allowed.
+---

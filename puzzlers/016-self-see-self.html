@@ -1,0 +1,73 @@
+---
+layout: puzzler
+title: Self See 'Self'
+author: Dominik Gruntz
+sourceName:
+sourceHref:
+scalaVersion: 2.10.0
+puzzle: |
+  val s1: String = s1
+  val s2: String = s2 + s2
+  println(s1.length)
+  println(s2.length)
+possibleSolutions:
+  a: 
+    text: Prints
+    code: |
+      0
+      0
+  b:
+    text: Both fail at runtime with NullPointerExceptions
+  c:
+    text: The first fails at runtime with a NullPointerException the second prints 8
+  d:
+    test: Both fail with compilation exceptions
+solution: c
+explanation: |
+  <p>
+    The definitions of the values <code>s1</code> and <code>s2</code> are valid and compile without an error. 
+    As the definitions are recursive, 
+    the type of the declared values has to be provided (SLS, section 4.1).
+  </p>
+  <p>
+    In Scala, object fields are preinitialized to their default value, and for the type <code>String</code> 
+    (and all other reference types) the default value is <code>null</code>.
+  </p>
+  <p>
+    This is as in Java.
+    However, such a recursive definition of a field in a Java class body gives an <code>illegal forward reference</code> 
+    compiler error,
+    <pre class="prettyprint lang-java">
+  class Z {
+     String s = s + s;
+  }
+    </pre>
+    but the following compiles fine.
+    <pre class="prettyprint lang-java">
+  class Z {
+     String s = this.s + this.s;
+  }
+    </pre>
+    This demonstrates, that the checking which is done by the Java compiler is quite shallow.
+    The Scala way to accept recursive definitions for all situations is more consistent.   
+  </p>
+  <p>
+    What remains to explain is the result of this puzzler.
+    <ul>
+      <li>
+        Value <code>s1</code> is initialized to <code>null</code>, therefore the expression <code>s1.length</code>
+        ends in a <code>NullPointerException</code> at run-time.
+      </li>  
+      <li>
+        The initialization of the value <code>s2</code> actually gets translated to 
+        byte code equvalent to
+        <pre class="prettyprint lang-java">
+  s2 = (new StringBuilder()).append(s2).append(s2).toString()
+        </pre>
+        where the argument <code>s2</code> has its default value <code>null</code>. According to the
+        <a href="http://docs.oracle.com/javase/specs/jls/se5.0/html/expressions.html#15.18.1.1">JLS, Section 15.18.1.1</a>
+        the reference <code>null</code> is converted to the string <code>"null"</code>, and the value which gets assigned to <code>s2</code>
+        is the string <code>"nullnull"</code> which has length 8.
+    </ul>
+  </p>
+---
