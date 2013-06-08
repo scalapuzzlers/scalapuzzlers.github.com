@@ -34,6 +34,17 @@
     right: 0;
 }
 
+.kata-vertical-resize-handle {
+    margin: 0;
+    border: none;
+    height: 5px;
+    background-color: black;
+}
+
+/*.kata-vertical-resize-handle:hover {
+    cursor: row-resize;
+}*/   
+
 .kata-controls button {
     float: right;
     clear: both;

@@ -20,7 +20,7 @@ window.kataify  = function(){
                 theme: "solarized-dark",
                 mode: "text/x-scala"
             });
-            $(form).submit( function () {
+            function runCode(){
                 var $console, $result;
                 $console = $(form).find(".kata-console");
                 $result = $(form).find(".kata-result")
@@ -60,6 +60,17 @@ window.kataify  = function(){
                     });
 
                 return false;
+            }
+            $(form).keydown(function(e){
+                if( ( e.ctrlKey || e.metaKey ) &&               // command or ctrl +
+                    ( e.keyCode == 13 || e.keyCode == 83 ) ) {  // enter, (s)ave
+                    e.preventDefault();
+                    runCode();
+                }
+            })
+            $(form).submit( function (e) {
+                e.preventDefault();
+                runCode();
             });
         });
     });
