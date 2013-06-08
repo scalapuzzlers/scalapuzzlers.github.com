@@ -36,10 +36,21 @@ window.kataify  = function(){
                             $errorList = $("<ol/>");
                             $result.append($errorList);
                             $.each(data.errors, function(i, error){
+                                error.column -= 1;
                                 var $errorElement, $errorLine, $errorMessage;
                                 $errorElement = $("<li/>");
                                 $errorLine = $("<div>L" + error.line + ":" + error.column + "</div>")
+                                $errorLine.addClass("error");
+                                $errorLine.click(function(){
+                                    var Pos = CodeMirror.Pos;
+                                    mirror.setSelection(
+                                        Pos(error.line,error.column),
+                                        Pos(error.line,Infinity)
+                                    );
+                                    mirror.refresh();
+                                }); 
                                 $errorMessage = $("<pre>" + error.message + "</pre>")
+                                $errorMessage.addClass("error-message")
                                 $errorElement.append($errorLine);
                                 $errorElement.append($errorMessage);
                                 $errorList.append($errorElement);

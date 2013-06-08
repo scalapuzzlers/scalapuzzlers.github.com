@@ -1,0 +1,11 @@
+008-captured-by-closures.html
+	actual
+		java.lang.IndexOutOfBoundsException: 3
+	expected
+		100, 110, 120
+
+010-init-you-init-me.html
+	actual
+		java.lang.StackOverflowError
+	expected
+		Always prints 2

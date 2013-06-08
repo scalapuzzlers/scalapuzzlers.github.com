@@ -19,6 +19,18 @@
     height: 40%;
 }
 
+.kata-result-window .error {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+    padding-right: 10px;
+}
+
+.kata-result-window .error-message,
+.kata-result-window .error {
+    display: inline-block;
+}
+
 .kata-result-wrap {
     height: 100%;
 }
