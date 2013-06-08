@@ -37,20 +37,25 @@ window.kataify  = function(){
                             $result.append($errorList);
                             $.each(data.errors, function(i, error){
                                 error.column -= 1;
-                                var $errorElement, $errorLine, $errorMessage;
+                                var $errorElement, $errorSeverity, $errorLine, $errorMessage;
                                 $errorElement = $("<li/>");
-                                $errorLine = $("<div>L" + error.line + ":" + error.column + "</div>")
-                                $errorLine.addClass("error");
+                                $errorElement.addClass("error");
+                                $errorSeverity = $("<div/>")
+                                $errorSeverity.text(error.severity);
+                                $errorSeverity.addClass("severity");
+                                $errorLine = $("<div/>");
+                                $errorLine.text("L" + error.line + ":" + error.column);
+                                $errorLine.addClass("line");
                                 $errorLine.click(function(){
-                                    var Pos = CodeMirror.Pos;
                                     mirror.setSelection(
-                                        Pos(error.line,error.column),
-                                        Pos(error.line,Infinity)
+                                        CodeMirror.Pos(error.line,error.column),
+                                        CodeMirror.Pos(error.line,Infinity)
                                     );
-                                    mirror.refresh();
                                 }); 
-                                $errorMessage = $("<pre>" + error.message + "</pre>")
-                                $errorMessage.addClass("error-message")
+                                $errorMessage = $("<pre/>");
+                                $errorMessage.text(error.message);
+                                $errorMessage.addClass("message")
+                                $errorElement.append($errorSeverity);
                                 $errorElement.append($errorLine);
                                 $errorElement.append($errorMessage);
                                 $errorList.append($errorElement);

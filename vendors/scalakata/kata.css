@@ -1,38 +1,14 @@
-.kata-code-wrap .CodeMirror {
-    height: 100%;
-}
-
-.kata-code-wrap.with-results{
-    height: 60%;
-}
-
-.kata-code-wrap {
-    height:100%
-}
-
-.kata-result-wrap,
-.CodeMirror {
-    height: 100%;
-}
-
-.kata-result-window {
-    height: 40%;
-}
-
-.kata-result-window .error {
-    color: blue;
-    text-decoration: underline;
-    cursor: pointer;
+.kata-result-window .error .severity,
+.kata-result-window .error .message,
+.kata-result-window .error .line {
     padding-right: 10px;
-}
-
-.kata-result-window .error-message,
-.kata-result-window .error {
     display: inline-block;
 }
 
-.kata-result-wrap {
-    height: 100%;
+.kata-result-window .error .line {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .kata-code-wrap, .kata-result-wrap {
@@ -46,6 +22,13 @@
     right: 0;
 }
 
+.kata-controls button {
+    float: right;
+    clear: both;
+    display: block;
+    margin: 10px;
+}
+
 .kata-vertical-resize-handle {
     margin: 0;
     border: none;
@@ -57,37 +40,21 @@
     cursor: row-resize;
 }*/   
 
-.kata-controls button {
-    float: right;
-    clear: both;
-    display: block;
-    margin: 10px;
-}
-
-/* Code Mirror */
-
-.CodeMirror {
+.kata-form .CodeMirror {
     font-size:16px;
     font-family:'DejaVuSerifBook',Georgia
 }
 
-.CodeMirror-gutter {
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
-}
-
-.CodeMirror-activeline-background {
-    background-color: #073642 !important;
+.kata-form .CodeMirror,
+.kata-form .CodeMirror-scroll {
+    height: auto;
 }
 
 /* No Javascript */
-.CodeMirror-scroll,
+.kata-code-wrap .CodeMirror-scroll,
+.kata-result-wrap .CodeMirror-scroll,
 .kata-form textarea {
-  height: auto;
-  overflow-y: hidden;
-  overflow-x: auto;
-  min-height: 200px;
-  max-height: 400px;
+    max-height: 400px;
 }
 
 .kata-form textarea {
