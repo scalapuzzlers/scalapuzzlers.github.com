@@ -22,7 +22,7 @@ $(function(){
 		}());
 	}
 	$("[href='#solution']").click(showSolution);
-	if( void 0 !== document.location.hash ) { showSolution(); }	
+	if( "" !== document.location.hash ) { showSolution(); }
 
 	// Analytic
 	gaq = gaq || [];

@@ -6,44 +6,44 @@ sourceName: Daily scala
 sourceHref: http://daily-scala.blogspot.com/2010/05/return-value-of-block.html
 scalaVersion: 2.10.0
 puzzle: |
-  List(1, 2).map { i => i + 1 }
-  List(1, 2).map { _ + 1 }
-  List(1, 2).map { i => println("Hi"); i + 1 }
-  List(1, 2).map { println("Hi"); _ + 1 }
+  println( List(1, 2).map { i => i + 1 } )
+  println( List(1, 2).map { _ + 1 } )
+  println( List(1, 2).map { i => println("Hi"); i + 1 } )
+  println( List(1, 2).map { println("Hi"); _ + 1 } )
 possibleSolutions:
   a: 
     code: |
-      List[Int] = List(2, 3)
-      List[Int] = List(2, 3)
+      List(2, 3)
+      List(2, 3)
       Hi
-      List[Int] = List(2, 3)
+      List(2, 3)
       Hi
-      List[Int] = List(2, 3)
+      List(2, 3)
   b:
     code: |
-      List[Int] = List(2, 3)
-      List[Int] = List(2, 3)
+      List(2, 3)
+      List(2, 3)
       Hi
       Hi
-      List[Int] = List(2, 3)
+      List(2, 3)
       Hi
       Hi
-      List[Int] = List(2, 3)
+      List(2, 3)
   c:
     code: |
-      List[Int] = List(2, 3)
-      List[Int] = List(2, 3)
+      List(2, 3)
+      List(2, 3)
       Hi
       Hi
-      List[Int] = List(2, 3)
+      List(2, 3)
       Hi
-      List[Int] = List(2, 3)
+      List(2, 3)
   d:
     code: |
-      List[Int] = List(2, 3)
-      List[Int] = List(2, 3)
-      List[Int] = List(2, 3)
-      List[Int] = List(2, 3)
+      List(2, 3)
+      List(2, 3)
+      List(2, 3)
+      List(2, 3)
 solution: c
 explanation: |
   Even though the _ simplification looks the same, in the second case 

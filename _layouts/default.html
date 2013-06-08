@@ -9,7 +9,6 @@
   <link href="{{site.baseurl}}/vendors/prettify.css" type="text/css" rel="stylesheet">
   <link href="{{site.baseurl}}/vendors/codemirror-3.13/codemirror.css" type="text/css" rel="stylesheet">
   <link href="{{site.baseurl}}/vendors/scalakata/solarized.css" rel="stylesheet" type="text/css">
-  <link href="{{site.baseurl}}/vendors/scalakata/code-mirror.css" rel="stylesheet" type="text/css">
   <link href="{{site.baseurl}}/vendors/scalakata/kata.css" rel="stylesheet" type="text/css">
   <link href="{{site.baseurl}}/css/main.css" rel="stylesheet" type="text/css">
 </head>
@@ -21,7 +20,7 @@
     </a>
     <div class="navbar-inner">
       <div class="container">
-				<a class="brand" href="{{site.baseurl}}">Scala ?uzz<img src="{{site.baseurl}}img/l.png" alt="Scala Logo">ers</a>
+				<a class="brand" href="{{site.baseurl}}">Scala ?uzz<img src="{{site.baseurl}}/img/l.png" alt="Scala Logo">ers</a>
         <div class="nav-collapse collapse">
           <ul class="nav">
             <li><a href="{{site.baseurl}}index.html">Home</a></li>
@@ -41,7 +40,7 @@
           <ul class="nav nav-list">
             {% for puzzle in site.pages %}
               <li {%if page.url == puzzle.url %}class="active"{% endif %}>
-                <a href="{{site.baseurl}}{{puzzle.url}}">{{puzzle.title}}</a>
+                <a href="{{site.baseurl}}{{puzzle.url)}}">{{puzzle.title}}</a>
               </li>
             {% endfor %}
           </ul>

@@ -48,7 +48,7 @@ pre.prettyprint,
 }
 
 #solution:target .kata-form,
-#solution:target .explanation
+#solution:target .explanation,
 #solution:target #disqus_thread {
 	display: block;
 }

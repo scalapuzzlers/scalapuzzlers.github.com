@@ -1,14 +1,3 @@
-.kata-vertical-resize-handle {
-    margin: 0;
-    border: none;
-    height: 5px;
-    background-color: black;
-}
-
-.kata-vertical-resize-handle:hover {
-    cursor: row-resize;
-}
-
 .kata-code-wrap .CodeMirror {
     height: 100%;
 }
@@ -50,4 +39,35 @@
     clear: both;
     display: block;
     margin: 10px;
+}
+
+/* Code Mirror */
+
+.CodeMirror {
+    font-size:16px;
+    font-family:'DejaVuSerifBook',Georgia
+}
+
+.CodeMirror-gutter {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.CodeMirror-activeline-background {
+    background-color: #073642 !important;
+}
+
+/* No Javascript */
+.CodeMirror-scroll,
+.kata-form textarea {
+  height: auto;
+  overflow-y: hidden;
+  overflow-x: auto;
+  min-height: 200px;
+  max-height: 400px;
+}
+
+.kata-form textarea {
+    padding: 0;
+    width: 100%;
 }
