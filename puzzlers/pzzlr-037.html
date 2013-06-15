@@ -1,0 +1,87 @@
+<h1>A View to a Shill</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>A. P. Marki</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://issues.scala-lang.org/browse/SI-7580">Scala Issue</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.10.2</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+val myList = List(1,2,3,4,5)
+val myMap  = Map(1 -> myList)
+val its    = myMap mapValues (_.toIterator)
+its(1).size
+its(1).next
+its(1).next
+</pre>
+  <ol>
+     <li>
+<pre class="prettyprint lang-scala">
+5
+1
+2
+</pre></li>
+     <li>
+<pre class="prettyprint lang-scala">
+1
+non-empty iterator
+non-empty iterator
+</pre></li>
+     <li>
+<pre class="prettyprint lang-scala">
+1
+1
+2
+</pre></li>
+     <li id="correct-answer">
+<pre class="prettyprint lang-scala">
+5
+1
+1
+</pre></li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    A shill is the guy who tells you, "Sure, I use Map Oil all the time, it works great
+    and always gives me the Map I want.  I never use anything but Map Oil."
+  </p>
+  <p>
+    Then you get home and open your bottle of Map Oil and try a bit, only to experience
+    that sinking feeling that the friendly face in the crowd was really in cahoots with
+    the Map Oil people. For some reason, Map Oil seems to work the first time but not
+    after that.
+  </p>
+  <p>
+    If you're lucky, it turns out that you have in your hands a bottle of 80 proof Map Oil,
+    which may have other applications.
+  </p>
+  <p>
+    As explained in <a target="_blank" href="https://issues.scala-lang.org/browse/SI-4776">this ticket</a> and
+    <a target="_blank" href="http://www.scala-lang.org/api/current/index.html#scala.collection.Map">the API</a>,
+    <tt>mapValues</tt> returns
+    "a map view which maps every key of this map to f(this(key)). The resulting map wraps the original map without copying any elements."
+    Each retrieval from the wrapped map results in a new evaluation of the mapping function, and in this case,
+    a new iterator.
+  </p>
+  <p>
+    The prescribed usage when a strict collection is needed is:
+<pre class="prettyprint lang-scala">
+(myMap mapValues (_.toIterator)).view.force
+</pre>
+  </p>
+</div>
+
