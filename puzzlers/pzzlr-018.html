@@ -76,7 +76,7 @@ When the function <tt>two(3)</tt> is called as part of the expression <tt>1 + on
 then the result <tt>3</tt> is returned <em>as the result of method <tt>value</tt></em>.
 </p><p>
 Btw, returning from a nested anonymous function is implemented by throwing and
-catching a <tt>scala.runtime.NonLocalReturnException</tt>.
+catching a <a href="http://www.scala-lang.org/api/current/index.html#scala.runtime.NonLocalReturnControl" target="_blank"><tt>scala.runtime.NonLocalReturnControl</tt></a>.
 </p><p>
 The most common reason you actually would want to return from inside a nested function is to 
 break out of an imperative for-comprehension or resource control block.
