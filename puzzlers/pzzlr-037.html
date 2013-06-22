@@ -20,34 +20,66 @@
 <pre class="prettyprint lang-scala">
 val myList = List(1,2,3,4,5)
 val myMap  = Map(1 -> myList)
-val its    = myMap mapValues (_.toIterator)
-its(1).size
-its(1).next
-its(1).next
+val bits   = myMap map { case (k, v) => (k, v.toIterator) }
+val nits   = myMap mapValues (_.toIterator)
+
+bits(1).next
+bits(1).next
+bits(1).size
+bits(1).next
+
+nits(1).next
+nits(1).next
+nits(1).size
+nits(1).next
 </pre>
   <ol>
      <li>
 <pre class="prettyprint lang-scala">
+1
+2
 5
+3
+
 1
 2
+5
+3
+</pre></li>
+     <li>
+<pre class="prettyprint lang-scala">
+non-empty iterator
+non-empty iterator
+1
+non-empty iterator
+
+non-empty iterator
+non-empty iterator
+1
+non-empty iterator
 </pre></li>
      <li>
 <pre class="prettyprint lang-scala">
 1
-non-empty iterator
-non-empty iterator
-</pre></li>
-     <li>
-<pre class="prettyprint lang-scala">
-1
+2
+3
+java.util.NoSuchElementException: next on empty iterator
+
 1
 2
+3
+3
 </pre></li>
      <li id="correct-answer">
 <pre class="prettyprint lang-scala">
-5
 1
+2
+3
+java.util.NoSuchElementException: next on empty iterator
+
+1
+1
+5
 1
 </pre></li>
   </ol>
@@ -82,6 +114,9 @@ non-empty iterator
 <pre class="prettyprint lang-scala">
 (myMap mapValues (_.toIterator)).view.force
 </pre>
+  </p>
+  <p>
+    A mnemonic for this behavior is that <tt>mapValues</tt> can be spelled <tt>mapV[al]iews</tt>.
   </p>
 </div>
 
