@@ -1,0 +1,100 @@
+<h1>What Were You Expecting?</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>A. P. Marki</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://groups.google.com/d/msg/scala-internals/oWla7oq8k8Q/ht7v2j3KzkAJ">Scala Mailing List</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.10, 2.11</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+import reflect._
+import concurrent._
+import ExecutionContext.Implicits._
+
+class Expect[A: ClassTag](message: String, f: Future[A]) {
+  def announce() = f onSuccess {
+    case what: A => Console println (message format what)
+  }
+}
+
+new Expect("It's a %s!", future("boy")).announce()
+new Expect("1 + 1 = %d", future(1 + 1)).announce()
+</pre>
+  <ol>
+     <li>
+<pre class="prettyprint lang-scala">
+It's a boy!
+1 + 1 = 2
+</pre></li>
+     <li>
+<pre class="prettyprint lang-scala">
+It's a boy!
+java.lang.ClassCastException: java.lang.Integer cannot be cast to java.lang.String
+</pre></li>
+     <li id="correct-answer">
+<pre class="prettyprint lang-scala">
+It's a boy!
+</pre></li>
+     <li>
+<pre class="prettyprint lang-scala">
+It's a boy!
+scala.MatchError: 2 (of class java.lang.Integer)
+</pre></li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+  The pattern matcher will use the available <tt>ClassTag[A]</tt> to assist the
+  match in the function literal; otherwise the compiler would warn that the
+  "abstract type pattern A is unchecked since it is eliminated by erasure".
+  </p>
+  <p>
+  However, because the inferred type parameter is <tt>Int</tt> while the true value
+  of the future is a boxed <tt>java.lang.Integer</tt>, the case does not match.
+  </p>
+  <p>
+  Since <tt>Future.onSuccess</tt> takes a partial function, there is no application
+  and no <tt>MatchError</tt> is thrown.
+  </p>
+  <p>
+  In this case, the type pattern is superfluous and can be deleted.
+  </p>
+  <p>
+  Or, the correct boxed type can be spun:
+<pre class="prettyprint lang-scala">
+  scala> new Expect("1 + 1 = %s", future[Integer](1 + 1)).announce()
+  1 + 1 = 2
+
+  scala> new Expect("1 + 1 = %s", future(1 + 1: Integer)).announce()
+  1 + 1 = 2
+</pre>
+  </p>
+  <p>
+  If the ClassTag context bound is deleted, a warning is emitted but the code works
+  as you might want.
+  </p>
+  <p>
+  Note that in version 2.10.0, an exception thrown by the callback is not
+  printed to the screen in any case, but that is rectified in subsequent versions.
+  </p>
+  <p>
+    There are further ideas for coping with primitives in a ClassTag-assisted
+    pattern match at
+    <a target="_blank" href="http://stackoverflow.com/questions/16825927/classtag-based-pattern-matching-fails-for-primitives">the Stack Overflow question</a>
+    and on the mailing list.
+  </p>
+</div>
+
