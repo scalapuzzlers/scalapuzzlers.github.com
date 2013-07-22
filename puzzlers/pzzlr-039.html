@@ -1,0 +1,108 @@
+<h1>Signs of Trouble</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>A. P. Marki</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.11</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+import scala.math.signum
+import scala.Double.NegativeInfinity
+import scala.Double.PositiveInfinity
+
+val Underflow_+ = +0.0  // 1.0 / PositiveInfinity
+val Underflow_- = -0.0  // 1.0 / NegativeInfinity
+
+def check(d: Double) = signum(d) match {
+  case +1.0        => "positive"
+  case Underflow_+ => "underflow from the right"
+  case Underflow_- => "underflow from the left"
+  case -1.0        => "negative"
+}
+
+check(1.0 / PositiveInfinity)
+check(1.0 / NegativeInfinity)
+
+</pre>
+  <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+underflow from the right
+underflow from the left
+</pre></li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+underflow from the right
+underflow from the right
+</pre></li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+scala.MatchError: -0.0 (of class java.lang.Double)
+</pre></li>
+     <li id="correct-answer">
+Does not compile.
+</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>The example fails to compile, with the error message:
+<pre class="prettyprint lang-scala">
+error: '=>' expected but double literal found.
+</pre>
+  </p>
+  <p>
+  A numeric literal can appear in the pattern of a case statement,
+  but while <tt>-1.0</tt> is a double literal, <tt>+1.0</tt> is not.
+  It is an invocation of <tt>1.0.unary_+</tt>.
+  </p>
+  <p>
+  In this case, the <tt>+</tt> is taken as an identifier. Consider:
+<pre class="prettyprint lang-scala">
+  scala> val + = 7
+  +: Int = 7
+
+  scala> 7 match { case + => true case _ => false }
+  res4: Boolean = true
+  
+  scala> :se -Xprint:parser
+
+  scala> +7
+  [[syntax trees at end of                    parser]] // <console>
+  [snip]
+           val res5 = 7.unary_$plus
+</pre>
+  </p>
+  <p>
+  The remainder of the example code is a pinkish to crimson herring.
+  </p>
+  <p>
+  Recall that <tt>+0.0</tt> compares equal to <tt>-0.0</tt>,
+  so that the match fails to distinguish them. Compare:
+<pre class="prettyprint lang-scala">
+def check0(d: Double) = 1.0 / d match {
+  case NegativeInfinity => "underflow from the left"   // d.toString startsWith "-"
+  case PositiveInfinity => "underflow from the right"
+}
+</pre>
+  <p>
+  This puzzler was inspired by <a target="_blank" href="https://issues.scala-lang.org/browse/SI-4950">this famous ticket</a>
+  and related discussions on the mailing lists.
+  </p>
+  <p>
+  Don't take everything you read literally.
+  </p>
+</div>
