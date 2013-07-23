@@ -7,11 +7,11 @@
     </tr>
     <tr>
       <td><strong>Source</strong></td>
-      <td><a target="_blank" href="https://groups.google.com/d/msg/scala-internals/oWla7oq8k8Q/ht7v2j3KzkAJ">Scala Mailing List</a></td>
+      <td><a target="_blank" href="https://groups.google.com/d/msg/scala-internals/oWla7oq8k8Q/ht7v2j3KzkAJ">scala-internals mailing list</a></td>
     </tr>
     <tr>
       <td><strong>Tested with Scala version</strong></td>
-      <td>2.10, 2.11</td>
+      <td>2.10</td>
     </tr>
   </tbody>
 </table>
@@ -59,14 +59,15 @@ scala.MatchError: 2 (of class java.lang.Integer)
   <p>
   The pattern matcher will use the available <tt>ClassTag[A]</tt> to assist the
   match in the function literal; otherwise the compiler would warn that the
-  "abstract type pattern A is unchecked since it is eliminated by erasure".
+  &quot;abstract type pattern A is unchecked since it is eliminated by erasure&quot;.
   </p>
   <p>
   However, because the inferred type parameter is <tt>Int</tt> while the true value
   of the future is a boxed <tt>java.lang.Integer</tt>, the case does not match.
   </p>
   <p>
-  Since <tt>Future.onSuccess</tt> takes a partial function, there is no application
+  Since <a href="http://www.scala-lang.org/api/current/index.html#scala.concurrent.Future" target="_blank">
+  <tt>Future.onSuccess</tt></a> takes a partial function, there is no application
   and no <tt>MatchError</tt> is thrown.
   </p>
   <p>
@@ -75,11 +76,11 @@ scala.MatchError: 2 (of class java.lang.Integer)
   <p>
   Or, the correct boxed type can be spun:
 <pre class="prettyprint lang-scala">
-  scala> new Expect("1 + 1 = %s", future[Integer](1 + 1)).announce()
-  1 + 1 = 2
+scala> new Expect("1 + 1 = %s", future[Integer](1 + 1)).announce()
+1 + 1 = 2
 
-  scala> new Expect("1 + 1 = %s", future(1 + 1: Integer)).announce()
-  1 + 1 = 2
+scala> new Expect("1 + 1 = %s", future(1 + 1: Integer)).announce()
+1 + 1 = 2
 </pre>
   </p>
   <p>
@@ -91,10 +92,10 @@ scala.MatchError: 2 (of class java.lang.Integer)
   printed to the screen in any case, but that is rectified in subsequent versions.
   </p>
   <p>
-    There are further ideas for coping with primitives in a ClassTag-assisted
-    pattern match at
-    <a target="_blank" href="http://stackoverflow.com/questions/16825927/classtag-based-pattern-matching-fails-for-primitives">the Stack Overflow question</a>
-    and on the mailing list.
+  There are further ideas for coping with primitives in a <tt>ClassTag</tt>-assisted
+  pattern match at
+  <a target="_blank" href="http://stackoverflow.com/questions/16825927/classtag-based-pattern-matching-fails-for-primitives">the Stack Overflow question</a>
+  and on the mailing list.
   </p>
 </div>
 
