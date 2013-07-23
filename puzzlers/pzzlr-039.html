@@ -1,0 +1,115 @@
+<h1>Look on the Positive Side</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>A. P. Marki</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.11</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+val i =  7
+val j = -7
+
+val msg1 = if (i == +7) "You hit the jackpot!" else "Lemons all around."
+
+val msg2 = if (j == -7) "Bzzt! In this game, that is unlucky." else "You escape unscathed."
+
+val msg3 = i match {
+  case +7      => "You hit the jackpot!"
+  case  x: Int => "Lemons all around."
+}
+
+val msg4 = j match {
+  case -7      => "Bzzt! In this game, that is unlucky."
+  case  x: Int => "You escape unscathed."
+}
+</pre>
+  <ol>
+     <li>
+<pre class="prettyprint lang-scala">
+msg1: String = You hit the jackpot!
+msg2: String = Bzzt! In this game, that is unlucky.
+msg3: String = You hit the jackpot!
+msg4: String = Bzzt! In this game, that is unlucky.
+</pre></li>
+     <li>
+<pre class="prettyprint lang-scala">
+error: illegal start of simple expression
+msg2: String = Bzzt! In this game, that is unlucky.
+error: illegal start of definition
+msg4: String = You escape unscathed.
+</pre></li>
+     <li>
+<pre class="prettyprint lang-scala">
+msg1: String = You hit the jackpot!
+msg2: String = Bzzt! In this game, that is unlucky.
+msg3: String = You hit the jackpot!
+scala.MatchError: -7 (of class java.lang.Integer)
+</pre></li>
+     <li id="correct-answer">
+<pre class="prettyprint lang-scala">
+msg1: String = You hit the jackpot!
+msg2: String = Bzzt! In this game, that is unlucky.
+error: '=>' expected but integer literal found.
+msg4: String = Bzzt! In this game, that is unlucky.
+</pre></li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+  An integer literal can appear in the pattern of a case statement,
+  but while <tt>-7</tt> is an integer literal, <tt>+7</tt> is not.
+  It is an invocation of <tt>7.unary_+</tt>.
+  </p>
+  <p>
+  In this case, the <tt>+</tt> is an identifier.
+  </p>
+  <p>
+<pre class="prettyprint lang-scala">
+  scala> val + = 7
+  +: Int = 7
+
+  scala> i match { case + => true case _ => false }
+  res4: Boolean = true
+  
+  scala> :se -Xprint:parser
+
+  scala> +7
+  [[syntax trees at end of                    parser]] // <console>
+  [snip]
+           val res5 = 7.unary_$plus
+</pre>
+  </p>
+  <p>
+  This puzzler was inspired by <a target="_blank" href="https://issues.scala-lang.org/browse/SI-4950">this famous ticket</a>
+  and related discussions on the mailing lists.
+  It is dedicated to the recent memory of Val, in whose honor it seemed a fun thing
+  to design a t-shirt that read:
+  </p>
+  <p>
+<pre class="prettyprint lang-scala">
+  val + 1 = 2
+</pre>
+  </p>
+  <p>
+  I hadn't got as far as a pun on "Rich" Int (sorry, Rich), when I noticed that the compiler
+  takes the expression far too literally, or not literally enough.
+  </p>
+  <p>
+  In any case, Val was known for looking on the positive side.
+  </p>
+</div>
+
