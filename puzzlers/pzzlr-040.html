@@ -1,0 +1,66 @@
+<h1>Set the Record Straight</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andraz Bajt</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.10.2</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+val numbers = List("1", "2").toSet() + "3"
+println(numbers)
+</pre>
+  <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Set(1, 2, 3)
+</pre>
+    </li>
+    <li>Fails with a compilation exception</li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+false3
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+123
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    The <a href="http://www.scala-lang.org/api/current/scala/collection/TraversableOnce.html" target="_blank"><tt>toSet</tt></a> method is parameterless. Adding parentheses means that we call the <tt>apply</tt> method of the returned object!
+  </p>
+  <p>
+    Luckily (or not), the returned <tt>Set</tt> <em>has</em> an <a href="http://www.scala-lang.org/api/current/scala/collection/Set.html" target="_blank"><tt>apply</tt></a> method, which is equivalent to <tt>contains</tt>. But it takes an argument! So what is going on?
+  </p>
+  <p>
+    The compiler tries to make sense of our code by interpreting it as:
+<pre class="prettyprint lang-scala">
+(List("1", "2").toSet apply ()) + "3"
+</pre>
+    taking the parentheses to mean <tt>Unit</tt>. But this still shouldn't work as <tt>Unit</tt> is not a string! <tt>Unit</tt> and <tt>String</tt> have <tt>Any</tt> as a common supertype, though, which <tt>toSet</tt> infers as the type parameter for the returned set.
+  </p>
+  <p>
+    After desugaring, the code looks like this:
+<pre class="prettyprint lang-scala">
+(List("1", "2").toSet[Any] apply ()) + "3"
+</pre>
+    and the observed behaviour follows since Scala converts the result of <tt>apply</tt> into a <tt>String</tt> before concatenating it with <tt>3</tt>.
+  </p>
+</div>
