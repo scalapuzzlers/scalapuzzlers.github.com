@@ -1,0 +1,73 @@
+<h1>The Devil is in the Defaults</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://groups.google.com/forum/#!topic/scala-language/DQ3DWSof6ls">scala-lang mailing list</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.10.2</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+import scala.collection.mutable.Queue
+
+val goodies: Map[String, Queue[String]] = Map().withDefault(_ => Queue("No superheros here. Keep looking."))
+val baddies: Map[String, Queue[String]] = Map().withDefaultValue(Queue("No monsters here. Lucky you."))
+
+println(goodies("kitchen").dequeue)
+println(baddies("in attic").dequeue)
+println(goodies("dining room").dequeue)
+println(baddies("under bed").dequeue)
+</pre>
+  <ol>
+    <li id="correct-answer">The first, second and third statements print:
+<pre class="prettyprint lang-scala">
+No superheros here. Keep looking.
+No monsters here. Lucky you.
+No superheros here. Keep looking.
+</pre>
+the fourth fails with a runtime exception
+    </li>
+    <li>The first and second statements print:
+<pre class="prettyprint lang-scala">
+No superheros here. Keep looking.
+No monsters here. Lucky you.
+</pre>
+the third and fourth fail with a runtime exception
+    </li>
+    <li>All four statements fail with a runtime exception</li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+No superheros here. Keep looking.
+No monsters here. Lucky you.
+No superheros here. Keep looking.
+No monsters here. Lucky you.
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    After seeing <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.immutable.Map" target="_blank"><tt>withDefault</tt></a>, it may be tempting to think that <tt>withDefaultValue</tt> is a &quot;factory&quot; that somehow produces a fresh instance of the given default value on each invocation.
+  </p>
+  <p>
+    What <tt>withDefaultValue</tt> actually does is pretty much what it says: it <a href="https://github.com/scala/scala/blob/master/src/library/scala/collection/immutable/Map.scala#L58" target="_blank">returns the value it was given</a> every time.
+  </p>
+  <p>
+    Consequently, if the default value is <em>mutable</em>, any changes made to it will affect all future callers.
+  </p>
+  <p>
+    The <a target="_blank" href="https://groups.google.com/forum/#!topic/scala-language/DQ3DWSof6ls">mailing list thread</a> <a target="_blank" href="https://groups.google.com/d/msg/scala-language/DQ3DWSof6ls/g7P_OwUZJJkJ">mentions a solution</a> involving overriding the <a target="_blank" href="https://github.com/scala/scala/blob/master/src/library/scala/collection/Map.scala#L53"><tt>default</tt> method in <tt>collection.Map</tt></a>. It seems simpler to me to stick with <tt>withDefault</tt> whenever a fresh value - mutable or immutable - is desired, and to use <tt>withDefaultValue</tt> <em>only</em> when the <u>same instance</u> is required every time.
+  </p>
+</div>
