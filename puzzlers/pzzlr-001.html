@@ -21,16 +21,16 @@
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
 List(1, 2).map { i => i + 1 }
-List(1, 2).map { _ + 1 }
 List(1, 2).map { i => println("Hi"); i + 1 }
+List(1, 2).map { _ + 1 }
 List(1, 2).map { println("Hi"); _ + 1 }
 </pre>
   <ol>  
     <li>Prints:
       <pre class="prettyprint lang-scala">
 List[Int] = List(2, 3)
-List[Int] = List(2, 3)
 Hi
+List[Int] = List(2, 3)
 List[Int] = List(2, 3)
 Hi
 List[Int] = List(2, 3)
@@ -39,9 +39,9 @@ List[Int] = List(2, 3)
     <li>Prints:
       <pre class="prettyprint lang-scala">
 List[Int] = List(2, 3)
+Hi
+Hi
 List[Int] = List(2, 3)
-Hi
-Hi
 List[Int] = List(2, 3)
 Hi
 Hi
@@ -51,9 +51,9 @@ List[Int] = List(2, 3)
     <li id="correct-answer">Prints:
       <pre class="prettyprint lang-scala">
 List[Int] = List(2, 3)
+Hi
+Hi
 List[Int] = List(2, 3)
-Hi
-Hi
 List[Int] = List(2, 3)
 Hi
 List[Int] = List(2, 3)
@@ -73,11 +73,11 @@ List[Int] = List(2, 3)
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-	Even though the _ simplification looks the same, in the second case 
-	it has a very different effect: the println statement is no longer part 
+	Even though the <tt>_</tt> simplification looks the same, in the second case 
+	it has a very different effect: the <tt>println</tt> statement is no longer part 
 	of the function body! 
 	Instead, the expression is evaluated when determining the function 
-	to be passed to map -  as with all compound expressions, the last 
+	to be passed to map - as with all blocks, the last 
 	value is returned.  
   </p>
 </div>
