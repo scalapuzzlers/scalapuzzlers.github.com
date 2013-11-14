@@ -1,0 +1,102 @@
+<h1>Float or Sink?</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://groups.google.com/d/msg/scala-language/F-cP_840dN0/jhUv3ubfw70J">scala-language mailing list</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.11.0-M4</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+class TIndexableRange[T <% Int](start: Int, end: Int) extends Range(start, end, 1) {
+  def apply(t2Int: T => Int)(index: T): Int = apply(t2Int(index))
+}
+implicit def float2IntByRounding(value: Float): Int = value.round
+def float2IntByFloor(value: Float): Int = value.floor.toInt
+
+val floatIndexedRange = new TIndexableRange[Float](0, 10)
+floatIndexedRange(float2IntByFloor _)(2.5f)
+floatIndexedRange.apply(float2IntByFloor _)(2.5f)
+new TIndexableRange[Float](0, 10)(float2IntByFloor _)(2.5f)
+new TIndexableRange[Float](0, 10).apply(float2IntByFloor _)(2.5f)
+</pre>
+    <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+3
+3
+3
+3
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+3
+2
+3
+2
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+2
+2
+3
+3
+</pre>
+    </li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+2
+2
+3
+2
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    We know that Scala treats function invocation as syntactic sugar for a call to the <a href="http://www.scala-lang.org/api/current/index.html#scala.Function1" target="_blank"><tt>apply</tt></a> method. And indeed,
+<pre class="prettyprint lang-scala">
+floatIndexedRange(float2IntByFloor _)(2.5f)
+</pre>
+    is parsed as <tt>floatIndexedRange.apply(...)(...)</tt>, as expected.
+  </p>
+  <p>
+<pre class="prettyprint lang-scala">
+new TIndexableRange[Float](0, 10)(float2IntByFloor _)(2.5f)
+</pre>
+    is a different case, however. The <tt>T &lt;% Int</tt> view bound, evidently intended to ensure <tt>T</tt> can be used as an index into the range, adds an implicit parameter of type <tt>T => Int</tt> to the class:
+<pre class="prettyprint lang-scala">
+scala> new TIndexableRange
+<console>:9: error: not enough arguments for constructor TIndexableRange: (start
+: Int, end: Int)(implicit evidence$1: T => Int)TIndexableRange[T].
+</pre>
+  </p>
+  <p>
+    We don't need to <em>explicitly</em> provide this argument since a suitable implicit, <tt>float2IntByRounding</tt>, is in scope. But in our expression, the compiler interprets the second argument list as an explicit specification of the required <tt>evidence$1</tt>. As a result, the statement is parsed as <tt>new TIndexableRange[Float](0, 10)(...).apply(...)</tt>, which compiles because <tt>float2IntByRounding</tt> is available to convert the <tt>Float</tt> passed to <a href="http://www.scala-lang.org/api/current/#scala.collection.immutable.Range" target="_blank"><tt>apply</tt></a> to the required <tt>Int</tt>.
+  </p>
+  <p>
+    The resulting expression is thus:
+<pre class="prettyprint lang-scala">
+new TIndexableRange[Float](0, 10)(float2IntByFloor _).apply(float2IntByRounding(2.5f))
+</pre>
+    which, unsurprisingly, returns the element at index <tt>3</tt> in the range.
+  </p>
+  <p>
+    View bounds will quite possibly be <a href="https://issues.scala-lang.org/browse/SI-7629" target="_blank">deprecated soon</a>. The suggested alternative syntax, which uses context bounds, similarly results in an "unseen" implicit parameter that can result in the behaviour observed.
+  </p>
+</div>
