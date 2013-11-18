@@ -26,7 +26,7 @@ class TouristMarkup extends Markup {
 }
 def makeLabel(price: Int)(implicit m: Markup) = s"Price: ${m(price)}"
 
-object NewStyleMarket extends App { // "new style" because it extends App ;-)
+object HipNTrendyMarket extends App { // now extends App!
   implicit val normalMarkup = new Markup
   Console println makeLabel(3)
   implicit val touristMarkup = new TouristMarkup
@@ -41,7 +41,7 @@ object OldSkoolMarket {
   }
 }
 
-NewStyleMarket main null
+HipNTrendyMarket main null
 OldSkoolMarket main null
 </pre>
     <ol>
@@ -84,7 +84,7 @@ OldSkoolMarket main null
     The existential dual of every other type is the type itself.
   </p></blockquote>
   <p>
-    In the <tt>NewStyleMarket</tt> both implicits are in scope and <tt>touristMarkup</tt>
+    In the <tt>HipNTrendyMarket</tt> both implicits are in scope and <tt>touristMarkup</tt>
     is more specific, but is not yet initialized when first used in <tt>makeLabel(3)</tt>.
   </p>
   <p>
