@@ -22,53 +22,52 @@
 <pre class="prettyprint lang-scala">
 trait A {
   val foo: Int
-  val bar = 10
-  println("In A: foo: " + foo + ", bar: " + bar)
+  println("In A: foo: " + foo)
 }
 
-class B1 extends A {
-  val foo = 25
-  println("In B1: foo: " + foo + ", bar: " + bar)
+class B1(f: Int = 25) extends A {
+  val foo = f
+  println("In B1: foo: " + foo)
 }
 
 class B2(val foo: Int = 25) extends A {
-  println("In B2: foo: " + foo + ", bar: " + bar)
+  println("In B2: foo: " + foo)
 }
 
-new B1
-new B2
+new B1(42)
+new B2(42)
 </pre>
   <ol>  
     <li>
       <pre class="prettyprint lang-scala">
-In A: foo: 25, bar: 10
-In B1: foo: 25, bar: 10
-In A: foo: 25, bar: 10
-In B2: foo: 25, bar: 10
+In A: foo: 42
+In B1: foo: 42
+In A: foo: 42
+In B2: foo: 42
 </pre>
     </li>
     <li>
       <pre class="prettyprint lang-scala">
-In A: foo: 0, bar: 10
-In B1: foo: 25, bar: 10
-In A: foo: 0, bar: 10
-In B2: foo: 25, bar: 10
+In A: foo: 25
+In B1: foo: 42
+In A: foo: 25
+In B2: foo: 42
 </pre>
     </li>
     <li id="correct-answer">
       <pre class="prettyprint lang-scala">
-In A: foo: 0, bar: 10
-In B1: foo: 25, bar: 10
-In A: foo: 25, bar: 10
-In B2: foo: 25, bar: 10
+In A: foo: 0
+In B1: foo: 42
+In A: foo: 42
+In B2: foo: 42
 </pre>
     </li>
     <li>
       <pre class="prettyprint lang-scala">
-In A: foo: 25, bar: 10
-In B1: foo: 25, bar: 10
-In A: foo: 0, bar: 10
-In B2: foo: 25, bar: 10
+In A: foo: 0
+In B1: foo: 42
+In A: foo: 0
+In B2: foo: 42
 </pre>
     </li>
   </ol>
