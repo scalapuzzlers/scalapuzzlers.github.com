@@ -48,7 +48,7 @@ Seq(abc, def, ijk)</pre>
   <p>
     Most people think that a for-yield-expression is directly translated to an equivalent call of <tt>map</tt>, but this is only correct if no pattern-matching is used! If one uses pattern-matching there is also a call of <tt>filter</tt> generated. In the example above, following code is generated:
     <pre class="prettyprint lang-scala">
-xs filter { case Seq(x, y, z) => true case _ => false } map { case Seq(x, y, z) => x + y + z }
+xs filter { case Seq(x, y, z) => true; case _ => false } map { case Seq(x, y, z) => x + y + z }
     </pre>
     Be aware of this silent filter! It can result in nasty bugs.
   </p>
