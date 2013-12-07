@@ -46,7 +46,7 @@ Seq(abc, def, ijk)</pre>
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    Most people think that a for-yield-expression is directly translated to an equivalent call of <tt>map</tt>, but this is only correct if no pattern-matching is used! If one uses pattern-matching there is also a call of <tt>filter</tt> generated. In the example above, following code is generated:
+    Most people think that a for-yield-expression is directly translated to an equivalent call of <tt>map</tt>, but this is only correct if no pattern-matching is used! If one uses pattern-matching a filter is also applied. In the example above, the following code is generated:
     <pre class="prettyprint lang-scala">
 xs withFilter { case Seq(x, y, z) => true; case _ => false } map { case Seq(x, y, z) => x + y + z }
     </pre>
