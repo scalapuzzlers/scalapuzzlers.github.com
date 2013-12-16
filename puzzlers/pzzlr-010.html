@@ -59,7 +59,7 @@ or
 </li>
 
 <li>
-Fails with a compilation error.
+Fails with a compilation exception
 </li>
 
 </ol>
@@ -71,7 +71,7 @@ Fails with a compilation error.
 <p>
 The recursive definition of the two fields <tt>X.value</tt> and <tt>Y.value</tt> is valid and does compile, but as it is recursive, the type (<tt>Int</tt>) has to be specified for at least <tt>X.value</tt>.
 <p>
-When either object <tt>X</tt> or <tt>Y</tt> is accessed, then its field <tt>value</tt> is initialized (objects are not initialized until they are accessed). If object <tt>X</tt> is initialized first, then the initialization of its field <tt>value</tt> triggers the initialization of object <tt>Y</tt>. In order to initialize the field <tt>Y.value</tt>, the field <tt>X.value</tt> is accessed. The VM takes notice that the initialization of object <tt>X</tt> is already running and returns the current value of <tt>X.value</tt> which is zero (the default value for <tt>Int</tt> fields), so no stack overflow at runtime. As a consequence <tt>Y.value</tt> is set to <tt>0+1=1</tt> and <tt>X.value</tt> to <tt>1+1=2</tt>. However, if object <tt>Y</tt> is initialized first, then <tt>Y.value</tt> is initialized with <tt>2</tt> and <tt>X.value</tt> with <tt>1</tt>.
+When either object <tt>X</tt> or <tt>Y</tt> is accessed, then its field <tt>value</tt> is initialized (objects are not initialized until they are accessed). If object <tt>X</tt> is initialized first, then the initialization of its field <tt>value</tt> triggers the initialization of object <tt>Y</tt>. In order to initialize the field <tt>Y.value</tt>, the field <tt>X.value</tt> is accessed. The VM takes notice that the initialization of object <tt>X</tt> is already running and returns the current value of <tt>X.value</tt> which is zero (the default value for <tt>Int</tt> fields), so no stack overflow at runtime. As a consequence <tt>Y.value</tt> is set to <tt>0 + 1 = 1</tt> and <tt>X.value</tt> to <tt>1 + 1 = 2</tt>. However, if object <tt>Y</tt> is initialized first, then <tt>Y.value</tt> is initialized with <tt>2</tt> and <tt>X.value</tt> with <tt>1</tt>.
 <p>
 In the <tt>if</tt>-statement we either access <tt>X.value</tt> or <tt>Y.value</tt> and force the initialization of either <tt>X</tt> or <tt>Y</tt>. But as we have seen above, which ever object is accessed first, its field <tt>value</tt> is initialized to <tt>2</tt>, therefore the result of the conditional statement is <em>always</em> <tt>2</tt>.
 </p>
