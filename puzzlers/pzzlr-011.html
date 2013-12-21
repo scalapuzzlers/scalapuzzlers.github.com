@@ -25,7 +25,7 @@ trait OverridesEquals {
 }
 
 class C extends OverridesEquals
-case class CC extends OverridesEquals
+case class CC() extends OverridesEquals
 
 val c1 = new C()
 val c2 = new C()
