@@ -20,38 +20,42 @@
 <div class="code-snippet">
 <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
-trait OverridesEquals {
-  override def equals(x: Any) = super.equals(x)
+trait SpyOnEquals {
+  override def equals(x: Any) = { println("DEBUG: In equals"); super.equals(x) }
 }
 
-class C extends OverridesEquals
-case class CC() extends OverridesEquals
+case class CC()
+case class CCSpy() extends SpyOnEquals
 
-val c1 = new C()
-val c2 = new C()
-val cc1 = CC()
-val cc2 = CC()
+val cc1 = new CC() with SpyOnEquals
+val cc2 = new CC() with SpyOnEquals
+val ccspy1 = CCSpy()
+val ccspy2 = CCSpy()
 
-println(c1 == c2)
-println(c1.## == c2.##)
 println(cc1 == cc2)
 println(cc1.## == cc2.##)
+println(ccspy1 == ccspy2)
+println(ccspy1.## == ccspy2.##)
 </pre>
 
 <ol>
 <li>Prints:
 <pre class="prettyprint lang-scala">
-false
-false
-false
-false
+DEBUG: In equals
+true
+true
+DEBUG: In equals
+true
+true
 </pre>
 </li>
 
 <li id="correct-answer">Prints:
 <pre class="prettyprint lang-scala">
-false
-false
+DEBUG: In equals
+true
+true
+DEBUG: In equals
 false
 true
 </pre>
@@ -59,17 +63,21 @@ true
 
 <li>Prints:
 <pre class="prettyprint lang-scala">
-false
+DEBUG: In equals
 false
 true
+DEBUG: In equals
 false
+true
 </pre>
 </li>
 
 <li>Prints:
 <pre class="prettyprint lang-scala">
+DEBUG: In equals
 false
 false
+DEBUG: In equals
 true
 true
 </pre>
@@ -81,15 +89,10 @@ true
 <div id="explanation" class="explanation" style="display:none">
 <h3>Explanation</h3>
 <p>
-The first two expressions (<tt>c1 == c2</tt> and <tt>c1.## == c2.##</tt>)
-both return <tt>false</tt> (as given). The two instances of class <tt>C</tt>
-are different, therefore both <tt>equals</tt> and <tt>hashCode</tt> return
-different results.
-</p><p>
-For case classes however, the <tt>equals</tt>, <tt>hashCode</tt> and
+For case classes, the <tt>equals</tt>, <tt>hashCode</tt> and
 <tt>toString</tt> methods are generated, and for two instances of a case
-class with the same elements, we could expect that both  <tt>equals</tt> and
-<tt>hashCode</tt> return the same result (i.e. Answer 4).
+class with the same elements, we could expect that both <tt>equals</tt> and
+<tt>hashCode</tt> return the same result (i.e. answers 1 and 4).
 </p><p>
 According to the SLS (section 5.3.2) however, a case class implicitly
 overrides the methods <tt>equals</tt>, <tt>hashCode</tt> and
@@ -98,13 +101,18 @@ itself does not provide a definition for one of these methods and <em>only</em> 
 a concrete definition is not given in some base class of the case class
 (except <tt>AnyRef</tt>).
 </p><p>
-In our example, the base trait <tt>OverridesEquals</tt> provides an <tt>equals</tt>
+In our example, the base trait <tt>SpyOnEquals</tt> of <tt>CCSpy</tt>provides an <tt>equals</tt>
 method, so the case class does not provide its own definition and the
 comparison of two different instances returns <tt>false</tt>.
 </p><p>
 For method <tt>hashCode</tt> however no implementation is provided, neither
-in class <tt>CC</tt> nor in some base class, so here the implicitly overridden version
+in class <tt>CCSpy</tt> nor in some base class, so here the implicitly overridden version
 is used which returns the same value for equal elements.
+</p>
+<p>
+For case class <tt>CC</tt>, no definition of either <tt>equals</tt> or <tt>hashCode</tt> is provided,
+so the implicitly overridden versions are used for both methods. Mixing in <tt>SpyOnEquals</tt> when
+creating <em>instances</em> of the case classes does not affect this.
 </p>
 </div>
 
