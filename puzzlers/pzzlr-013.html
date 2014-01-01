@@ -20,16 +20,17 @@
 <div class="code-snippet">
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
-case class RomanNumeral(value: Int, representation: String) extends Ordered[RomanNumeral] {
-  override def compare(numeral: RomanNumeral) = this.value - numeral.value
+case class RomanNumeral(value: Int, representation: String)
+implicit object RomanOrdering extends Ordering[RomanNumeral] {
+  def compare(a: RomanNumeral, b: RomanNumeral) = a.value compare b.value
 }
 
 import collection.immutable.SortedSet
-val numerals: SortedSet[RomanNumeral] = SortedSet(RomanNumeral(1000, "M"), RomanNumeral(100, "C"), RomanNumeral(1, "I"), RomanNumeral(10, "X"))
+val numerals = SortedSet(RomanNumeral(1000, "M"), RomanNumeral(100, "C"), RomanNumeral(1, "I"), RomanNumeral(10, "X"))
 
 println("1 10 100 1000 in Roman numerals:")
-numerals.foreach { numeral => print(numeral.representation + " ") }
-numerals.map(_.representation).foreach { representation => print(representation + " ") }
+for (num <- numerals; rep <- num.representation) { print(s"${rep} ") }
+numerals map { _.representation } foreach { rep => print(s"${rep} ") }
 </pre>
   <ol>  
     <li id="correct-answer">Prints:
@@ -70,14 +71,18 @@ C M I X
   <p>
     The potentially unexpected reordering of the items in the iterable could have been prevented by, for example,
 <pre class="prettyprint lang-scala">
-numerals.view.map(_.representation).foreach { ... }
+numerals.view map { _.representation } foreach { ... }
 </pre>
 or
 <pre class="prettyprint lang-scala">
-numerals.toSeq.map(_.representation).foreach { ... }
+numerals.toSeq map { _.representation } foreach { ... }
 </pre>
   </p>
   <p>
-    Note that the initial declaration order of the set does not have any effect on the iteration order. Also, note that, of course, the code sample using <tt>map</tt> inefficiently iterates over <tt>numerals</tt> <strong>twice</strong>.
+    Note that the initial declaration order of the set does not have any effect on the iteration order. Also, note, of course, that the code sample using <tt>map</tt> inefficiently iterates over <tt>numerals</tt> <strong>twice</strong>:
+<pre class="prettyprint lang-scala">
+numerals foreach { num => print(s"${num.representation} ") }
+</pre>
+    is more efficient <em>and</em> prints the values in the expected order <tt>I X C M</tt>.
   </p>
 </div>
