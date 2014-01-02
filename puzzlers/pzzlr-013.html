@@ -26,7 +26,7 @@ implicit object RomanOrdering extends Ordering[RomanNumeral] {
 }
 
 import collection.immutable.SortedSet
-val numerals = SortedSet(RomanNumeral("M", 1000), RomanNumeral("D", 500), RomanNumeral("C", 100), RomanNumeral("L", 50), RomanNumeral("X", 10), RomanNumeral("V", 5), RomanNumeral("I", 1))
+val numerals = SortedSet(RomanNumeral("M", 1000), RomanNumeral("C", 100), RomanNumeral("X", 10), RomanNumeral("I", 1), RomanNumeral("D", 500), RomanNumeral("L", 50),  RomanNumeral("V", 5))
 
 println("Roman numeral symbols for 1 5 10 50 100 500 1000:")
 for (num <- numerals; sym = num.symbol) { print(s"${sym} ") }
@@ -41,8 +41,8 @@ C D I L M V X
     </li>
     <li>Prints:
 <pre class="prettyprint lang-scala">
-M D C L X V I
-M D C L X V I
+M C X I D L V
+M C X I D L V
 </pre>
     </li>
     <li>Prints:
