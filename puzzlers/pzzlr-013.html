@@ -20,40 +20,41 @@
 <div class="code-snippet">
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
-case class RomanNumeral(value: Int, representation: String) extends Ordered[RomanNumeral] {
-  override def compare(numeral: RomanNumeral) = this.value - numeral.value
+case class RomanNumeral(symbol: String, value: Int)
+implicit object RomanOrdering extends Ordering[RomanNumeral] {
+  def compare(a: RomanNumeral, b: RomanNumeral) = a.value compare b.value
 }
 
 import collection.immutable.SortedSet
-val numerals: SortedSet[RomanNumeral] = SortedSet(RomanNumeral(1000, "M"), RomanNumeral(100, "C"), RomanNumeral(1, "I"), RomanNumeral(10, "X"))
+val numerals = SortedSet(RomanNumeral("M", 1000), RomanNumeral("C", 100), RomanNumeral("X", 10), RomanNumeral("I", 1), RomanNumeral("D", 500), RomanNumeral("L", 50),  RomanNumeral("V", 5))
 
-println("1 10 100 1000 in Roman numerals:")
-numerals.foreach { numeral => print(numeral.representation + " ") }
-numerals.map(_.representation).foreach { representation => print(representation + " ") }
+println("Roman numeral symbols for 1 5 10 50 100 500 1000:")
+for (num <- numerals; sym = num.symbol) { print(s"${sym} ") }
+numerals map { _.symbol } foreach { sym => print(s"${sym} ") }
 </pre>
   <ol>  
     <li id="correct-answer">Prints:
 <pre class="prettyprint lang-scala">
-I X C M
-C I M X
+I V X L C D M
+C D I L M V X
 </pre>
     </li>
     <li>Prints:
 <pre class="prettyprint lang-scala">
-M C I X
-I X C M
+M C X I D L V
+M C X I D L V
 </pre>
     </li>
     <li>Prints:
 <pre class="prettyprint lang-scala">
-I X C M
-I X C M
+I V X L C D M
+I V X L C D M
 </pre>
     </li>
     <li>Prints:
 <pre class="prettyprint lang-scala">
-M C I X
-C M I X
+C D I L M V X
+I V X L C D M
 </pre>
     </li>
   </ol>
@@ -65,19 +66,23 @@ C M I X
     Since <tt>RomanNumeral</tt>s are ordered by their values, iterating over the sorted set of <tt>numerals</tt> will return them in that order and result in the representations being printed according to the <strong>value</strong>.
   </p>
   <p>
-    Mapping the numerals to their <em>representation</em> will result in a sorted set of <tt>String</tt>s which, naturally enough, will be ordered lexicographically. Iterating over them will thus return them in that order.
+    Mapping the numerals to their <em>symbols</em> will result in a sorted set of <tt>String</tt>s which, naturally enough, will be ordered lexicographically. Iterating over them will thus return them in that order.
   </p>
   <p>
     The potentially unexpected reordering of the items in the iterable could have been prevented by, for example,
 <pre class="prettyprint lang-scala">
-numerals.view.map(_.representation).foreach { ... }
+numerals.view map { _.symbol } foreach { ... }
 </pre>
 or
 <pre class="prettyprint lang-scala">
-numerals.toSeq.map(_.representation).foreach { ... }
+numerals.toSeq map { _.symbol } foreach { ... }
 </pre>
   </p>
   <p>
-    Note that the initial declaration order of the set does not have any effect on the iteration order. Also, note that, of course, the code sample using <tt>map</tt> inefficiently iterates over <tt>numerals</tt> <strong>twice</strong>.
+    Note that the initial declaration order of the set does not have any effect on the iteration order. Also, note, of course, that the code sample using <tt>map</tt> inefficiently iterates over <tt>numerals</tt> <strong>twice</strong>:
+<pre class="prettyprint lang-scala">
+numerals foreach { num => print(s"${num.symbol} ") }
+</pre>
+    is more efficient <em>and</em> prints the values in the expected order <tt>I V X L C D M</tt>.
   </p>
 </div>
