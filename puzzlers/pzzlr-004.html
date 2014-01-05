@@ -1,5 +1,5 @@
 <div id="title">
-  <h1>The Trouble With Traits</h1>
+  <h1>Location, Location, Location</h1>
 </div>
 <table class="table meta-table table-condensed">
   <tbody>
@@ -21,53 +21,53 @@
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
 trait A {
-  val foo: Int
-  println("In A: foo: " + foo)
+  val audience: String
+  println("Hello " + audience)
 }
 
-class B1(f: Int = 25) extends A {
-  val foo = f
-  println("In B1: foo: " + foo)
+class BMember(a: String = "World") extends A {
+  val audience = a
+  println("I repeat: Hello " + audience)
 }
 
-class B2(val foo: Int = 25) extends A {
-  println("In B2: foo: " + foo)
+class BConstructor(val audience: String = "World") extends A {
+  println("I repeat: Hello " + audience)
 }
 
-new B1(42)
-new B2(42)
+new BMember("Readers")
+new BConstructor("Readers")
 </pre>
   <ol>  
     <li>Prints:
       <pre class="prettyprint lang-scala">
-In A: foo: 42
-In B1: foo: 42
-In A: foo: 42
-In B2: foo: 42
+Hello Readers
+I repeat: Hello Readers
+Hello Readers
+I repeat: Hello Readers
 </pre>
     </li>
     <li>Prints:
       <pre class="prettyprint lang-scala">
-In A: foo: 25
-In B1: foo: 42
-In A: foo: 25
-In B2: foo: 42
+Hello World
+I repeat: Hello Readers
+Hello World
+I repeat: Hello Readers
 </pre>
     </li>Prints:
     <li id="correct-answer">
       <pre class="prettyprint lang-scala">
-In A: foo: 0
-In B1: foo: 42
-In A: foo: 42
-In B2: foo: 42
+Hello null
+I repeat: Hello Readers
+Hello Readers
+I repeat: Hello Readers
 </pre>
     </li>
     <li>Prints:
       <pre class="prettyprint lang-scala">
-In A: foo: 0
-In B1: foo: 42
-In A: foo: 0
-In B2: foo: 42
+Hello null
+I repeat: Hello Readers
+Hello null
+I repeat: Hello Readers
 </pre>
     </li>
   </ol>
