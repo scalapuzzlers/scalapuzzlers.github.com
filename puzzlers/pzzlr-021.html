@@ -18,10 +18,11 @@
 <div class="code-snippet">
 <h3>What is the result of executing the following code?</h3>
 
-<em>Note: This example cannot <a href="https://issues.scala-lang.org/browse/SI-5299">currently</a> be run from the REPL (as it contains a package definition).
+<em>Note: This example cannot be run from versions of the REPL<a href="https://issues.scala-lang.org/browse/SI-5299">prior to</a> 2.11.0-M7 (as it contains a package definition).
 Copy the sample into a file and compile with <tt>scalac</tt>.</em>
 
 <pre class="prettyprint lang-scala">
+// use :paste -raw in a 2.11.0-M7 or newer REPL
 object base {
   class X { val context = "object base" }
 }
@@ -34,10 +35,11 @@ object Main extends App {
   println((new base.X).context)
   println((new base.Y).context)
 }
+// ctrl-D to end :paste mode
 </pre>
 
 <ol>
-<li>Fails with the compile-time error
+<li>Fails with the compilation exception:
 <pre class="prettyprint lang-scala">
 error: base is already defined as object base
 package base {
@@ -45,7 +47,7 @@ package base {
 </pre>
 </li>
 
-<li>Fails with the compile-time error
+<li>Fails with the compilation exception:
 <pre class="prettyprint lang-scala">
 error: type X is not a member of package base
   println((new base.X).context)
@@ -53,7 +55,7 @@ error: type X is not a member of package base
 </pre>
 </li>
 
-<li id="correct-answer">Prints:
+<li id="correct-answer">Fails with the compilation exception:
 <pre class="prettyprint lang-scala">
 error: type Y is not a member of object base
   println((new base.Y).context)
