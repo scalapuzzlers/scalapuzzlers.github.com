@@ -57,7 +57,7 @@ printSorted(Array(1.1, Double.NaN, 1.0))
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    <tt>Double</tt> extends <tt>Ordering</tt>, which as a total order requires that a comparison between two values yield either a <a href="https://github.com/scala/scala/blob/master/src/library/scala/math/Ordering.scala#L85" target="_blank">positive, negative or zero result</a>. However, <a href="https://github.com/scala/scala/commit/460bbc1276fb4ba83b9bcbdc7f7ba475b352b7c6" target="_blank">since 2.10.0</a> the comparison operations <tt>gt</tt>, <tt>lt</tt> and <tt>equiv</tt> for <tt>Double</tt> are implemented the primitive operators <tt>&gt;</tt>, <tt>&lt;</tt> and <tt>==</tt>, which are compliant with the IEEE floating-point specification, so all comparisons with <tt>NaN</tt> are false.
+    <tt>Double</tt> extends <tt>Ordering</tt>, which as a total order requires that a comparison between two values yield either a <a href="https://github.com/scala/scala/blob/master/src/library/scala/math/Ordering.scala#L85" target="_blank">positive, negative or zero result</a>. However, <a href="https://github.com/scala/scala/commit/460bbc1276fb4ba83b9bcbdc7f7ba475b352b7c6" target="_blank">since 2.10.0</a> the comparison operations <tt>gt</tt>, <tt>lt</tt> and <tt>equiv</tt> for <tt>Double</tt> are implemented by the primitive operators <tt>&gt;</tt>, <tt>&lt;</tt> and <tt>==</tt>. These are compliant with the IEEE floating-point specification, so all comparisons with <tt>NaN</tt> are false.
   </p>
   <p>
     This violates the <a href="https://github.com/scala/scala/blob/master/src/library/scala/util/Sorting.scala#L48" target="_blank">requirements of the ordering function</a> for <tt>stableSort</tt>. In the first case, it concludes (while sorting the front half of the array) that <tt>Double.NaN</tt> is <a href="https://github.com/scala/scala/blob/master/src/library/scala/util/Sorting.scala#L510" target="_blank">not smaller than</a> <tt>1.0</tt>, and then that <tt>1.1</tt> is not smaller than <tt>1.0</tt> or <tt>Double.NaN</tt>, so <tt>1.0</tt> and <tt>Double.NaN</tt> are left in place.
@@ -66,6 +66,6 @@ printSorted(Array(1.1, Double.NaN, 1.0))
     In the second case, <tt>stableSort</tt> concludes first that <tt>Double.NaN</tt> is not smaller than <tt>1.1</tt>, then that <tt>1.0</tt> <strong>is</strong> smaller than <tt>1.1</tt>. So <tt>1.0</tt> is inserted into the result array <em>first</em>, followed by <tt>1.1</tt> and <tt>Double.NaN</tt>, the elements from the front half of the array.
   </p>
   <p>
-    So in the first example, <tt>stableSort</tt> concludes by direct comparison that <tt>Double.NaN</tt> is <strong>not</strong> smaller than <tt>1.0</tt>. In the second case, it concludes by transitivity that <tt>1.0</tt> <em>is</em> smaller than <tt>Double.NaN</tt>, since <tt>1.0 &lt; 1.1</tt> and <tt>!(Double.NaN &lt; 1.1)</tt>, i.e. <tt>1.1 &lt;= Double.NaN</tt>.
+    Thus, in the first example, <tt>stableSort</tt> concludes by direct comparison that <tt>Double.NaN</tt> is <strong>not</strong> smaller than <tt>1.0</tt>. In the second case, it concludes by transitivity that <tt>1.0</tt> <em>is</em> smaller than <tt>Double.NaN</tt>, since <tt>1.0 &lt; 1.1</tt> and <tt>(Double.NaN &lt; 1.1) == false</tt>, i.e. <tt>1.1 &lt;= Double.NaN</tt>.
   </p>
 </div>
