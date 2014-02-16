@@ -69,6 +69,6 @@ false
     The equivalent primitive operators <tt>&gt;</tt>, <tt>&lt;</tt> and <tt>==</tt> implement the IEEE floating-point specification, under which these three comparisons <tt>NaN</tt> are false.
   </p>
   <p>
-    This behaviour <a href="https://groups.google.com/forum/?fromgroups=#!topic/scala-language/fWnULi1SH44" target="_blank" >was changed in 2.10</a> as part of <a href="https://github.com/scala/scala/commit/460bbc1276fb4ba83b9bcbdc7f7ba475b352b7c6" target="_blank" >the fix</a> for <a href="https://issues.scala-lang.org/browse/SI-5104" target="_blank" >SI-5104</a>. The change &quotretires&quot; this puzzler but results in new, unexpected results in relation to operations that expect <tt>Double</tt> to adhere to the contract of <tt>Ordering</tt>, e.g. when sorting sequences of <tt>Double</tt>s containing <tt>NaN</tt>.
+    This behaviour <a href="https://groups.google.com/d/msg/scala-language/fWnULi1SH44/sw4rpoW66gAJ" target="_blank" >was changed in 2.10</a> as part of <a href="https://github.com/scala/scala/commit/460bbc1276fb4ba83b9bcbdc7f7ba475b352b7c6" target="_blank" >the fix</a> for <a href="https://issues.scala-lang.org/browse/SI-5104" target="_blank" >SI-5104</a>. The change &quotretires&quot; this puzzler but results in new, unexpected results in relation to operations that expect <tt>Double</tt> to adhere to the contract of <tt>Ordering</tt>, e.g. when sorting sequences of <tt>Double</tt>s containing <tt>NaN</tt>.
   </p>
 </div>
