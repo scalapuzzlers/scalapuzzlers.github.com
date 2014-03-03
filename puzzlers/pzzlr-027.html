@@ -119,8 +119,8 @@ println("U go now." padTo (20, '*'))                     // the expected String
 println(new StringBuilder("U go now.") padTo (20, '*'))  // ArrayBuffer(U,  , g, o,  , n, o, w, ...
 
 // One can build Strings from a StringBuilder, can't one?
-import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable.Builder
+import collection.generic.CanBuildFrom
+import collection.mutable.Builder
 implicit def cbf = new CanBuildFrom[StringBuilder, Char, String] {
   def apply(): Builder[Char, String] = new StringBuilder
   def apply(from: StringBuilder): Builder[Char, String] = new StringBuilder(from.length)
