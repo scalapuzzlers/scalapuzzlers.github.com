@@ -1,0 +1,107 @@
+<h1>Catch Me If You Can</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>A. P. Marki</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://groups.google.com/d/msg/scala-internals/F-gmQlyBF-s/YVylYp3i5WsJ">scala-internals mailing list</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.11.0-RC1</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+/** Top-level component for welp.com domain.
+ *  Therefore, must never throw an exception.
+ */
+object Welp {
+  /** Start serving welp pages. */
+  def f(a: Int, b: Int, c: String) { throw new IllegalArgumentException }
+
+  def fail(e: Throwable) = throw new RuntimeException(s"""${"*" * 30}
+    |Dan, I hope you see this in the log file,
+    |because the server just crashed.
+    |
+    |Dan, wake up!
+    |${e.getMessage}
+    |${"*" * 30}
+    |""".stripMargin)
+ 
+  def main(args: Array[String]): Unit = args map {
+    try f(1, 2, _)
+    catch {
+      case e: Throwable => Console.err println "Failing..." ; fail(e)
+    }
+  }
+}
+</pre>
+    <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Failing...
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Failing...
+</pre>
+and wakes Dan at 3 a.m. when someone notices the server is down.
+    </li>
+    <li>Prints nothing and fails to exit.
+    </li>
+    <li id="correct-answer">Prints nothing but throws an exception at runtime.
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+The use of underscore to create an anonymous function is a source of frequent confusion
+because it is not always obvious what, in the program source, is captured in the function body.
+  </p>
+  <p>
+The parsing rule is actually simple: if the underscore is enclosed by a certain <tt>Expr</tt>
+expression, then the function has the form <tt>x => Expr(x)</tt>.  A familiarity with which
+productions in the Scala grammar are <tt>Exprs</tt> is helpful.  That includes if/else blocks,
+for expressions and other simple expressions like function calls.  Oh, and it also includes
+try expressions.
+  </p>
+  <p>
+Compiling with <tt>-Xprint:typer</tt> shows that the example compiles to:
+<pre class="prettyprint lang-scala">
+          def main(args: Array[String]): Unit = {
+            scala.this.Predef.refArrayOps[String](args).map[Unit, Any](try {
+              ((x$1: String) => Welp.this.f(1, 2, x$1))
+            } catch {
+              case (e @ (_: Throwable)) => {
+                scala.Console.err.println("Failing...");
+                Welp.this.fail(e)
+              }
+            })(scala.this.Array.canBuildFrom[Unit]((ClassTag.Unit: scala.reflect.ClassTag[Unit])));
+            ()
+          }
+</pre>
+It's clear that the result of the try expression is the function literal,
+which is applied in the map operation outside of the try/catch.
+  </p>
+  <p>
+The placeholder parameter does not "escape" the try/catch because the try is an <tt>Expr</tt>.
+  </p>
+  <p>
+In other words, the underscore does not float up through enclosing contexts until it finds an
+expected type that is a function that typechecks.  (That is what we do in expecting the
+underscore in the example to bind to the parameter to the map function.)
+  </p>
+  <p>
+It's worth noting that the usual syntax, <tt>f(_)</tt> works because an arg list is not an <tt>Expr</tt>.
+So at the syntax level, the underscore does not bind to enclosing parens, as is sometimes suggested.
+  </p>
+</div>
