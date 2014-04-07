@@ -20,11 +20,9 @@
 <pre class="prettyprint lang-scala">
   import collection.mutable
   def howManyItems(lunchBox: mutable.Set[String]): Int = (lunchBox + "apple").size
-
   println(howManyItems(mutable.Set("chocolate bar", "orange juice", "sandwich")))
 
   def howManyItemsRefac(lunchBox: mutable.Iterable[String]): Int = (lunchBox + "apple").size
-
   println(howManyItemsRefac(mutable.Set("chocolate bar", "orange juice", "sandwich")))
 </pre>
     <ol>
