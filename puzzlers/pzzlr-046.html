@@ -1,0 +1,81 @@
+<h1>Size It Up</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://twitter.com/extempore2/status/430102522880348160">Paul Phillips</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.11.0-RC3</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+  import collection.mutable
+  def howManyItems(lunchbox: mutable.Set[String], itemToAdd: String): Int =
+    (lunchbox + itemToAdd).size
+  def howManyItemsRefac(lunchbox: mutable.Iterable[String], itemToAdd: String): Int = 
+    (lunchbox + itemToAdd).size
+
+  val lunchbox = mutable.Set("chocolate bar", "orange juice", "sandwich")
+  println(howManyItems(lunchbox, "apple"))
+  println(howManyItemsRefac(lunchbox, "apple"))
+  println(lunchbox.size)
+</pre>
+    <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+4
+5
+5
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+4
+4
+3
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+4
+4
+4
+</pre>
+    </li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+4
+47
+3
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    The <tt>+</tt> operator is defined for <a href="http://www.scala-lang.org/api/current/#scala.collection.Set" target="_blank">immutable</a> and <a href="http://www.scala-lang.org/api/current/#scala.collection.mutable.Set" target="_blank">mutable Sets</a>, with the effect of creating a <em>new</em> set consisting of the provided argument and all the items in the original set. It does <strong>not</strong> change the original set, so neither the call to <tt>howManyItems</tt>, nor to <tt>howManyItemsRefac</tt>, actually modify the lunchbox.
+  </p>
+  <p>
+    Whilst <tt>+</tt> is defined for sets, it is not defined for collections in general, however. But <tt>+</tt> is also Scala's string concatenation operator! And since Scala by default provides an implicit conversion from <tt>Any</tt> to <tt>String</tt>, the compiler can make <tt>lunchbox + "apple"</tt> compile also in the case of <tt>howManyItemsRefac</tt>. Rather than adding the apple to the lunchbox, though, the statement ends up computing the concatenation <tt>lunchbox.toString + "apple"</tt> and returning the length of the resulting string.
+  </p>
+  <p>
+    The implicit view that enables the <tt>Any</tt> to <tt>String</tt> conversion, <a href="http://www.scala-lang.org/api/current/index.html#scala.Predef$" target="_blank"><tt>Predef.any2stringadd</tt></a>, is provided for interoperability with Java. Due to its ability to cause unexpected effects such as this one, it continues to provoke <a href="https://groups.google.com/d/topic/scala-user/Mbtp_Cq6zKI/discussion" target="_blank">lively</a> <a href="https://issues.scala-lang.org/browse/SI-194" target="_blank">debate</a>. For example, it is one of the default &quot;warts&quot; flagged by <a href="https://github.com/typelevel/wartremover" target="_blank">WartRemover</a>, a Scala code analysis tool.
+  </p>
+  <p>
+    In compiled classes, as well is in the REPL when using <tt>:paste -raw</tt>, you can disable this view &ndash; or any other implicit, for that matter &ndash; by adding the following import as the first (yes, it <a href="https://groups.google.com/d/msg/scala-user/VtkpIZAu18g/-QxY2JyQyUUJ" target="_blank">must be</a> <a href="http://stackoverflow.com/questions/7634015/scala-predef-unimport#comment34150585_7634858" target="_blank">the first</a>) line of your program:
+<pre class="prettyprint lang-scala">
+import Predef.{any2stringadd => _, _}
+</pre>
+  </p>
+</div>
