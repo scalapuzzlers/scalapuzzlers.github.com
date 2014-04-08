@@ -19,10 +19,10 @@
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
   import collection.mutable
-  def howManyItems(lunchBox: mutable.Set[String]): Int = (lunchBox + "apple").size
+  def howManyItems(lunchbox: mutable.Set[String]): Int = (lunchbox + "apple").size
   println(howManyItems(mutable.Set("chocolate bar", "orange juice", "sandwich")))
 
-  def howManyItemsRefac(lunchBox: mutable.Iterable[String]): Int = (lunchBox + "apple").size
+  def howManyItemsRefac(lunchbox: mutable.Iterable[String]): Int = (lunchbox + "apple").size
   println(howManyItemsRefac(mutable.Set("chocolate bar", "orange juice", "sandwich")))
 </pre>
     <ol>
@@ -59,7 +59,7 @@
     Whilst the <tt>+</tt> operator is defined for <a href="http://www.scala-lang.org/api/current/#scala.collection.Set" target="_blank">Sets</a>, with the effect of adding the provided argument to the set, it is not defined for collections in general.
   </p>
   <p>
-    <tt>+</tt> is <em>also</em> Scala's string concatenation operator, however! And since Scala by default provides an implicit conversion from <tt>Any</tt> to <tt>String</tt>, the compiler can make <tt>lunchBox + "apple"</tt> compile also in the case of <tt>howManyItemsRefac</tt>. Rather than adding the apple to the lunchbox, however, the statement ends up computing the concatenation <tt>lunchBox.toString + "apple"</tt> and returning the length of the resulting string.
+    <tt>+</tt> is <em>also</em> Scala's string concatenation operator, however! And since Scala by default provides an implicit conversion from <tt>Any</tt> to <tt>String</tt>, the compiler can make <tt>lunchbox + "apple"</tt> compile also in the case of <tt>howManyItemsRefac</tt>. Rather than adding the apple to the lunchbox, however, the statement ends up computing the concatenation <tt>lunchbox.toString + "apple"</tt> and returning the length of the resulting string.
   </p>
   <p>
     The implicit view that enables the <tt>Any</tt> to <tt>String</tt> conversion, <a href="http://www.scala-lang.org/api/current/index.html#scala.Predef$" target="_blank"><tt>Predef.any2stringadd</tt></a>, is provided for interoperability with Java. Due to its ability to cause unexpected effects such as this one, it continues to provoke <a href="https://groups.google.com/d/topic/scala-user/Mbtp_Cq6zKI/discussion" target="_blank">lively</a> <a href="https://issues.scala-lang.org/browse/SI-194" target="_blank">debate</a>.
