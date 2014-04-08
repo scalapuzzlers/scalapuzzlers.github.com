@@ -53,7 +53,7 @@
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
-<div id="explanation" class="explanation" >
+<div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
     Whilst the <tt>+</tt> operator is defined for <a href="http://www.scala-lang.org/api/current/#scala.collection.Set" target="_blank">Sets</a>, with the effect of adding the provided argument to the set, it is not defined for collections in general.
@@ -63,5 +63,11 @@
   </p>
   <p>
     The implicit view that enables the <tt>Any</tt> to <tt>String</tt> conversion, <a href="http://www.scala-lang.org/api/current/index.html#scala.Predef$" target="_blank"><tt>Predef.any2stringadd</tt></a>, is provided for interoperability with Java. Due to its ability to cause unexpected effects such as this one, it continues to provoke <a href="https://groups.google.com/d/topic/scala-user/Mbtp_Cq6zKI/discussion" target="_blank">lively</a> <a href="https://issues.scala-lang.org/browse/SI-194" target="_blank">debate</a>.
+  </p>
+  <p>
+    In compiled classes, as well is in the REPL when using the <tt>:paste -raw</tt> mode, you can <em>disable</em> this (or any other implicit, for that matter), by starting adding the following import to the beginning of your program:
+<pre class="prettyprint lang-scala">
+import Predef.{any2stringadd => _}
+</pre>
   </p>
 </div>
