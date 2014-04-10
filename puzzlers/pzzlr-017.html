@@ -62,12 +62,12 @@ true
 <div id="explanation" class="explanation" style="display:none">
 <h3>Explanation</h3>
 <p>
-According to the SLS (section 4.1), a value definition <tt>val p1, . . . , pn : T = e</tt> is a shorthand for 
+According to the SLS (&sect;4.1), a value definition <tt>val p1, . . . , pn : T = e</tt> is a shorthand for 
 the sequence of value definitions <tt>val p1 : T = e; ...; val pn : T = e</tt>. 
 This means that in our example the expression <tt>new C</tt> is evaluated twice
 and therefore <tt>x1 == x2</tt> is <tt>false</tt>.
 </p><p>
-The second value definition is a pattern binder which is defined in section 8.1.3 of the SLS.
+The second value definition is a pattern binder which is defined in SLS &sect;8.1.3.
 A pattern binder <tt>x@p</tt> consists of a pattern variable <tt>x</tt> and a pattern <tt>p</tt>.
 In our case the pattern <tt>p</tt> is a variable pattern which matches any value and binds
 the variable name (in our case <tt>y2</tt>) to that value. The pattern binder binds that 
