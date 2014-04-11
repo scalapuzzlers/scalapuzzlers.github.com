@@ -1,0 +1,84 @@
+<h1>Float or Sink?</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="http://stackoverflow.com/a/17642409/217013">A. P. Marki</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.11.0-RC3</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+type Dollar = Int
+final val Dollar: Dollar = 1
+val a: List[Dollar] = List(1, 2, 3)
+
+println(a map { a: Int => Dollar })
+println(a.map(a: Int => Dollar))
+</pre>
+    <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+List(1, 2, 3)
+List(1, 2, 3)
+</pre>
+    </li>
+    <li id="correct-answer">The first statement prints:
+<pre class="prettyprint lang-scala">
+List(1, 1, 1)
+</pre>
+and the second fails with a runtime exception
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+List(1, 1, 1)
+List(1, 1, 1)
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+List(1, 1, 1)
+List(1, 2, 3)
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    Even though it is often assumed that curly braces and parentheses are interchangable in expressions such as <tt>a.map(...)</tt> and <tt>a map { ... }</tt>, the two expressions are, in fact, parsed differently.
+  </p>
+  <p>
+    Specifically, curly braces delimit a &quot;Block&quot;, which in our case consists of the single &quot;ResultExpr&quot; <tt>a: Int => Dollar</tt>. When enclosed by parentheses, the same fragment <tt>a: Int => Dollar</tt> is parsed as an &quot;Expr&quot;, not a &quot;ResultExpr&quot;.
+  </p>
+  <p>
+    What is the difference between the two? According to the SLS (&sect;6), a &quot;ResultExpr&quot; may have the form <tt>arg: type => expr</tt>, i.e. an anonymous function with an explicit type declaration for the function argument. This is <em>not</em> allowed for an &quot;Expr&quot;, which requires the type of any argument to be enclosed in parentheses: <tt>(arg: type) => expr</tt>.
+  </p>
+  <p>
+    A type declaration in an &quot;Expr&quot; that is <em>not</em> enclosed in parentheses, as in our case, is treated as a type ascription to the <em>entire expression</em>. In order words:
+    <ul>
+      <li><tt>{ a: Int => Dollar }</tt> is parsed as <tt>{ (a: Int) => Dollar }</tt>, with <tt>Int</tt> being the type of <tt>a</tt> and <tt>Dollar</tt> the constant value 1</li>
+      <li><tt>(a: Int => Dollar)</tt> is parsed as <tt>(a: (Int => Dollar)}</tt>, with <tt>a</tt> being a function of type <tt>Int => Dollar</tt> and <tt>Dollar</tt> a type alias for <tt>Int</tt></li>
+    </ul>
+    The latter is possible because <tt>a</tt>, as a <tt><a href="" target="_blank">List</a>[Dollar]</tt>, is <em>also</em> a function from <tt>Int</tt> (the indices into the list) to <tt>Dollar</tt> (the values in the list).
+  </p>
+  <p>
+    The first statement, therefore, maps every element in the list to the constant value 1. The second statment uses each value in the list <em>as an index into the same list</em>, i.e. we are trying to turn <tt>List(1, 2, 3)</tt> into <tt>List(a(1), a(2), a(3))</tt>. This works until we get the last value, <tt>a(3)</tt>, which throws an <tt>IndexOutOfBoundException</tt> because <tt>a</tt> only has three elements.
+  </p>
+  <p>
+    To achieve the same result with parentheses as with curly braces, we need to write:
+<pre class="prettyprint lang-scala">
+println(a.map((a: Int) => Dollar)) // prints List(1, 1, 1)
+</pre>
+  </p>
+</div>
