@@ -9,7 +9,7 @@
     </tr>
     <tr>
       <td><strong>Source</strong></td>
-      <td>paulp / scala-faq</td>
+      <td>Paul Phillips' scala-faq</td>
     </tr>
     <tr>
       <td><strong>Tested with Scala version</strong></td>
@@ -73,10 +73,10 @@ In C: foo: 25, bar: 99
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-	Notice that bar is a val that is overridden in C. The Scala compiler 
-	will only initialize vals once, so since bar will be initialized in C it is 
-	not initialized before that time and appears as its default value (0, 
-	in this case) during the construction of the superclass.  
+	Notice that <tt>bar</tt> is a <tt>val</tt> that is overridden in <tt>C</tt>. The Scala 
+	compiler will only initialize <tt>val</tt>s once, so since <tt>bar</tt> will be 
+	initialized in <tt>C</tt> it is <em>not</em> initialized before that time and 
+	appears as its default value (0, in this case) during the construction of the superclass.  
 </p>
 </div>
 
