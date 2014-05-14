@@ -1,0 +1,85 @@
+<h1 xmlns="http://www.w3.org/1999/html">Double Ternary Operator</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Marcin Kubala</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.10</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+implicit class TernaryOps(cond: => Boolean) {
+
+  def ??(thenBlock: => Unit) = new {
+    def ::(elseBlock: => Unit) {
+      if (cond) thenBlock
+      else elseBlock
+    }
+  }
+
+}
+
+(1.1 + 0.9 == 2) ?? println("1.1 + 0.9 = 2") :: println("1.1 + 0.9 is not equal to 2")</pre>
+  <ol>
+    <li>
+      Prints:
+      <pre class="prettyprint lang-scala">
+1.1 + 0.9 = 2</pre>
+    </li>
+    <li>
+      Prints:
+      <pre class="prettyprint lang-scala">
+1.1 + 0.9 is not equal to 2</pre>
+    </li>
+    <li id="correct-answer">
+      Fails with compilation error
+    </li>
+    <li>
+      Fails with runtime exception
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    While developing own internal DSL it's easy to forgot about some naming rules, especially that one about the Infix Types associativity (see SLS &sect;3.2.8, my emphasis):
+    <blockquote>
+The associativity (&sect;6.12) of a type operator is determined as for term operators: <strong>type operators ending in a colon ‘:’ are right-associative;</strong> all other operators are left-associative.
+    </blockquote>
+    Because '::' ends in a colon, it will be performed on the right operand with its left operand passed as an argument.<br/>
+    This means that this line:
+    <pre class="prettyprint lang-scala">
+(1.1 + 0.9 == 2) ?? println("1.1 + 0.9 = 2") :: println("1.1 + 0.9 is not equal to 2")</pre>
+    is equal to:
+    <pre class="prettyprint lang-scala">
+println("1.1 + 0.9 is not equal to 2").::((1.1 + 0.9 == 2).??(println("1.1 + 0.9 = 2")))</pre>
+    Effectively, we are trying to call '::' method on Unit, not anonymous object returned by 'cond ?? thenBlock' as we might expect.<br/>
+    And because Unit hasn't any member named '::' and there is no applicable implicit conversion in scope, we end up with following error:
+    <pre class="prettyprint lang-scala">
+&lt;console&gt;:20: error: value :: is not a member of Unit
+    (1.1 + 0.9 == 2) ?? println("1.1 + 0.9 = 2") :: println("1.1 + 0.9 is not equal to 2")
+                                                 ^</pre>
+
+    This problem sometimes doesn't result in a compilation failure - consider following example:
+    <pre class="prettyprint lang-scala">
+implicit class WeirdCompareOps(leftOperand: Int) {
+  def &lt;&lt;:(rightOperand: Int) = {
+    leftOperand < rightOperand
+  }
+}
+
+1 &lt;&lt;: 100 // false</pre>
+    Therefore, always remember to cover your code with unit tests.
+  </p>
+</div>
