@@ -67,7 +67,7 @@ and the second fails with a runtime exception
     This second option is available only in <tt>B</tt> because the type of <tt>stringToInt</tt> is already declared. In <tt>A</tt>, the type signature of <tt>stringToInt</tt> is not yet known &ndash; after all, the compiler is just in the process of figuring out how to compile the code &ndash; and so <tt>stringToInt</tt> is not applicable during the compiler's search for implicits.
   </p>
   <p>
-    According to Scala's rules for determining implicits, the compiler chooses <tt>stringToInt</tt> over <tt>Predef.augmentString</tt>, since it is accessible without a prefix (SLS 7.2). Invoking <tt>A</tt>'s constructor then leads to the expected endless loop.
+    According to Scala's rules for determining implicits, the compiler chooses <tt>stringToInt</tt> over <tt>Predef.augmentString</tt>, since it is accessible without a prefix (SLS 7.2). Invoking <tt>B</tt>'s constructor then leads to the expected endless loop.
   </p>
   <p>
     It goes pretty much without saying that implicit conversions between base types such as <tt>String</tt> and <tt>Int</tt> are A Bad Idea and should be avoided wherever possible. As Miles Sabin <a href="https://groups.google.com/d/msg/scala-language/RejIFN5bLrA/-R8BSO3foWYJ" target="_blank">points out:</a>
