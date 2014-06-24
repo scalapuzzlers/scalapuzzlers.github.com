@@ -1,0 +1,80 @@
+<h1>Try Finally Overshadowed</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Dominik Gruntz</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="http://www.scaladays.org/">Erik Meijer (ScalaDays 2014 Keynote)</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.11.0</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+def v1: Int = try { 1        } finally { 2 }
+def v2: Int = try { return 1 } finally { 2 }
+def v3: Int = try { 1        } finally { return 2 }
+def v4: Int = try { return 1 } finally { return 2 }
+println(v1, v2, v3, v4)
+</pre>
+    <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+(1,1,1,1)
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+(1,1,2,1)
+</pre>
+    </li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+(1,1,2,2)
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+(2,2,2,2)
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    The semantics of the try expression is described in the SLS in chapter 6.22:
+	A try expression <tt>try { b } finally e</tt> evaluates the block <tt>b</tt>
+	and then, independent of how this block completed, expression <tt>e</tt> is evaluated. 
+	If no exception is thrown during evaluation of <tt>e</tt>, the
+    result of <tt>b</tt> is returned as the result of the try expression. This explains 
+	the result of the first two definitions which both return <tt>1</tt>. The compiler actually
+	shows a warning that the expression <tt>2</tt> does nothing in statement position
+	(which is an indication that the finally expression could be omitted).
+  </p>
+  <p>
+    If however during the evaluation of <tt>e</tt> a return statement is executed (or an exception is thrown), then 
+    this is the result of the try expression (actually, this behavior is not really defined by the SLS).
+	As a consequence methods <tt>v3</tt> and <tt>v4</tt> both return <tt>2</tt>.
+	Inspection of the generated Java bytecode shows, that methods <tt>v3</tt> and <tt>v4,/tt> are
+	both translated into the same code, and this also holds for methods <tt>v1</tt> and <tt>v2</tt>.
+  </p>
+  <p>
+    A <tt>return</tt> statement inside a finally block will hide any value and any exception
+	thrown in the try block, and this is never what you want. Avoid such situations by never exiting
+    a finally block with a <tt>return</tt> statement.
+  </p>
+  <p>
+    In C# this problem has been fixed as the language does not allow to leave the control flow of a 
+	finally block with a return, break, continue or goto statement. Hopefully, Scala will evolve
+	in this direction as well.
+  </p>
+</div>
