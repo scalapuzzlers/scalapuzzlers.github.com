@@ -1,0 +1,72 @@
+<h1>Oddly Enough</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>Aleksandar Prokopec</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.11.0-RC3</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+var mkEven: Int => Int = _
+def initMkEven(): Unit = {
+  mkEven = (n: Int) => if (n % 2 == 0) n else return n + 1
+}
+initMkEven()
+
+println(mkEven(2))
+println(mkEven(3))
+</pre>
+    <ol>
+    <li id="correct-answer">The first statement prints:
+<pre class="prettyprint lang-scala">
+2
+</pre>
+and the second throws a runtime exception
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+2
+4
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+2
+3
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+3
+4
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    According to the SLS (&sect;6.20), a return expression must occur &quot;inside the body of some enclosing named method or function&quot; and causes the innermost such method or function to return the given value.
+  </p>
+  <p>
+    If the return expression occurs inside an anonymous function, as in this case, the Scala compiler cannot translate it into a simple JVM return instruction. That would return from the <tt>apply</tt> method that is generated for the function body, rather than jumping to the innermost enclosing named method or function in the program.
+  </p>
+  <p>
+    Returning from a nested anonymous function is therefore implemented instead by throwing a <a href="http://www.scala-lang.org/api/current/index.html#scala.runtime.NonLocalReturnControl" target="_blank"><tt>scala.runtime.NonLocalReturnControl</tt></a> at the point of the return expression and catching it around the enclosing method or function.
+  </p>
+  <p>
+    In this case, the enclosing named method in question is <tt>initMkEven</tt>, and the compiler inserts the appropriate <tt>catch</tt> clause around it. However, the return statement, which effectively becomes <tt>throw new NonLocalReturnControl</tt>, is executed <em>after</em> we have returned from <tt>initMkEven</tt>. Without a &quot;safety net&quot; to catch and handle it, the runtime exception occurs when we invoke <tt>mkEven(3)</tt>.
+  </p>
+</div>
