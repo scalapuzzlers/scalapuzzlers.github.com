@@ -58,15 +58,28 @@ and the second throws a runtime exception
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    According to the SLS (&sect;6.20), a return expression must occur &quot;inside the body of some enclosing named method or function&quot; and causes the innermost such method or function to return the given value.
+    According to the SLS (&sect;6.20), a return expression must occur &quot;inside
+    the body of some enclosing named method or function&quot; and causes the
+    innermost such method or function to return the given value.
   </p>
   <p>
-    If the return expression occurs inside an anonymous function, as in this case, the Scala compiler cannot translate it into a simple JVM return instruction. That would return from the <tt>apply</tt> method that is generated for the function body, rather than jumping to the innermost enclosing named method or function in the program.
+    If the return expression occurs inside an anonymous function, as in this case, 
+    the Scala compiler cannot translate it into a simple JVM return instruction.
+    That would return from the <tt>apply</tt> method that is generated for the
+    function body, rather than jumping to the innermost enclosing named method or
+    function in the program.
   </p>
   <p>
-    Returning from a nested anonymous function is therefore implemented instead by throwing a <a href="http://www.scala-lang.org/api/current/index.html#scala.runtime.NonLocalReturnControl" target="_blank"><tt>scala.runtime.NonLocalReturnControl</tt></a> at the point of the return expression and catching it around the enclosing method or function.
+    Returning from a nested anonymous function is therefore implemented instead by 
+    throwing a <a href="http://www.scala-lang.org/api/current/index.html#scala.runtime.NonLocalReturnControl" target="_blank"><tt>scala.runtime.NonLocalReturnControl</tt></a> at the point
+    of the return expression and catching it around the enclosing method or function.
   </p>
   <p>
-    In this case, the enclosing named method in question is <tt>initMkEven</tt>, and the compiler inserts the appropriate <tt>catch</tt> clause around it. However, the return statement, which effectively becomes <tt>throw new NonLocalReturnControl</tt>, is executed <em>after</em> we have returned from <tt>initMkEven</tt>. Without a &quot;safety net&quot; to catch and handle it, the runtime exception occurs when we invoke <tt>mkEven(3)</tt>.
+    In this case, the enclosing named method in question is <tt>initMkEven</tt>, 
+    and the compiler inserts the appropriate <tt>catch</tt> clause around it.
+    However, the return statement, which effectively becomes <tt>throw new
+    NonLocalReturnControl</tt>, is executed <em>after</em> we have returned from
+    <tt>initMkEven</tt>. Without a &quot;safety net&quot; to catch and handle it,
+    the runtime exception occurs when we invoke <tt>mkEven(3)</tt>.
   </p>
 </div>
