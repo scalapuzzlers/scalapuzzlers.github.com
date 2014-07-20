@@ -23,6 +23,7 @@
 import collection.mutable.Buffer
 val funcs1 = Buffer[() => Int]()
 val funcs2 = Buffer[() => Int]()
+
 {
   val values = Seq(100, 110, 120)
   var j = 0
@@ -85,6 +86,7 @@ funcs2 foreach { f2 => println(f2()) }
 import collection.mutable.Buffer
 val funcs1 = Buffer[() => Int]()
 val funcs2 = Buffer[() => Int]()
+
 {
   val values = Seq(100, 110, 120)
   var j = 0
