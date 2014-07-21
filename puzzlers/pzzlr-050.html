@@ -1,0 +1,51 @@
+<h1>Map ++</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Nimrod007</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <!--
+        If no source (your puzzler is not mentioned anywhere on the web), just say N/A
+      --> 
+      <td><a target="_blank" href="http://www.nimrodstech.com/">nimrods tech blog</a></td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.10</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the the value of allTogether and allTogether2 ?</h3>
+<pre class="prettyprint lang-scala">
+//each map has names and number of names.
+val names = Map("Sidney" -> 1 , "Paul" -> 1 , "Jacob" -> 7, "Bob" -> 12)
+val moreNames = Map("Sidney" -> 1 , "Paul" -> 5 , "Nick" -> 2)
+
+val allTogether = names ++ moreNames
+val allTogether2 = moreNames ++ names
+</pre>
+  <ol>
+    <!--
+      The correct answer should have id for corresponding li element equal to "correct-answer".
+      When placing code snippets wrap them with pre tag:
+      <pre class="prettyprint lang-scala">
+        ...
+      </pre>
+     -->
+    <li>allTogether = Map(Bob -> 12, Sidney -> 2, Nick -> 2, Jacob -> 7, Paul -> 6)<br>allTogether2 = Map(Bob -> 12, Sidney -> 2, Nick -> 2, Jacob -> 7, Paul -> 6)</li>
+    <li>allTogether = Map("Sidney" -> 2 , "Paul" -> 6 , "Jacob" -> 7, "Bob" -> 12)<br>allTogether2 = Map("Sidney" -> 2 , "Paul" -> 6 , "Nick" -> 2)</li>
+    <li id="correct-answer">allTogether = Map(Bob -> 12, Sidney -> 1, Nick -> 2, Jacob -> 7, Paul -> 5)<br>allTogether2 = Map(Bob -> 12, Sidney -> 1, Nick -> 2, Jacob -> 7, Paul -> 1)</li>
+    <li>Error : Cannot resolve symbol ++</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    Map1 ++ Map2 replaces any (k,v) from the Map1 with (k,v) from Map2. if key isnt in Map2 will leave Map1 as is.
+  </p>
+</div>
