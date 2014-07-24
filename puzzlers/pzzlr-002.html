@@ -44,5 +44,24 @@ j: 4
 	The latter is a pattern match which for which type information is 
 	erased, so it will compile (with a warning) but fail at runtime.
   </p>
+  <p>
+  Using a typed pattern (SLS &sect;8.1.2) instead of a variable pattern
+  results in the expected compilation error:
+<pre class="prettyprint lang-scala">
+scala> val (i: Int, j: Int) = ("3", "4")
+&lt;console&gt;:7: error: scrutinee is incompatible with pattern type;
+ found   : Int
+ required: java.lang.String
+       val (i: Int, j: Int) = ("3", "4")
+               ^
+...
+&lt;console&gt;:7: error: scrutinee is incompatible with pattern type;
+ found   : Int
+ required: java.lang.String
+       val (i: Int, j: Int) = ("3", "4")
+                       ^
+...
+</pre>
+  </p>
 </div>
 
