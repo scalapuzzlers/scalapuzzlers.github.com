@@ -1,0 +1,108 @@
+<h1>Trial and Error</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://groups.google.com/d/topic/scala-language/OLPBn1q5Dr0/discussion">scala-language mailing list</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.1</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+import scala.util.{Try, Success, Failure}
+
+def divideThenSqrt(n: Int, d: Int) =
+  Try(n / d) map {
+    value => if (value < 0)
+      Failure(new ArithmeticException(
+        "square root of negative number"))
+      else Success(math.sqrt(value))
+  } map {
+    value => s"sqrt(${n} / ${d}) = ${value}"
+  }
+
+println(divideThenSqrt(18, 2))
+println(divideThenSqrt(18, -2))
+</pre>
+    <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Success(sqrt(18 / 2) = 3.0)
+Success(java.lang.ArithmeticException: square root of negative number)
+</pre>
+    </li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+Success(sqrt(18 / 2) = Success(3.0))
+Success(sqrt(18 / -2) = Failure(java.lang.ArithmeticException: square root of negative number))
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Success(sqrt(18 / 2) = 3.0)
+Failure(java.lang.ArithmeticException: square root of negative number)
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Success(sqrt(18 / 2) = 3.0)
+Success(sqrt(18 / -2) = java.lang.ArithmeticException: square root of negative number)
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    Chaining operations on a <tt>Try</tt> so that an intermediate <tt>Failure</tt>
+    skips the remaining operations requires <tt>flatMap</tt> for all but the last
+    operation.
+  </p>
+  <p>
+    Here the intermediate operation that calculates the square root is chained 
+    using <tt>map</tt> instead of <tt>flatMap</tt>. As a result, the
+    <tt>Failure(java.lang.ArithmeticException: square root of negative number)</tt>
+    that is returned by the first <tt>map</tt> when evaluating
+    <tt>divideThenSqrt(18, -2)</tt> does <em>not</em> cause the chain to return a
+    <tt>Failure</tt>, as expected.
+  </p>
+  <p>
+    Instead, whatever is returned from the first <tt>map</tt> invocation &ndash;
+    <tt>Success</tt> or <tt>Failure</tt> &ndash; is always passed to the second
+    <tt>map</tt>. The value &quot;inside&quot; the <tt>Success</tt> or
+    <tt>Failure</tt> is also not &quot;extracted&quot; before being passed to the second <tt>map</tt>.
+  <p>
+    Using <tt>flatMap</tt> instead of <tt>map</tt> for the first chained operation
+    works as intended:
+<pre class="prettyprint lang-scala">
+def divideThenSqrt(n: Int, d: Int) =
+  Try(n / d) flatMap {
+    value => if (value < 0)
+      Failure(new ArithmeticException(
+        "square root of negative number"))
+      else Success(math.sqrt(value))
+  } map {
+    value => s"sqrt(${n} / ${d}) = ${value}"
+  }
+
+scala> println(divideThenSqrt(18, 2))
+Success(sqrt(18 / 2) = 3.0)
+
+scala> println(divideThenSqrt(18, -2))
+Failure(java.lang.ArithmeticException: square root of negative number)
+
+scala> println(divideThenSqrt(18, 0))
+Failure(java.lang.ArithmeticException: / by zero)
+</pre>
+  </p>
+</div>
