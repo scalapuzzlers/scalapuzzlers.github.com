@@ -1,0 +1,76 @@
+<h1>Extract or Fail?</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://groups.google.com/d/topic/scala-language/_IAaYPUUL1s/discussion">scala-language mailing list</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.1</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+val n = null
+val nObj: Object = null
+
+println(n match { case Symbol(x) => x; case _ => "Not a symbol" })
+println(nObj match { case Symbol(x) => x; case _ => "Not a symbol" })
+</pre>
+    <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Not a symbol
+Not a symbol
+</pre>
+    </li>
+    <li>Both statements throw a <tt>NullPointerException</tt></li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+null
+Not a symbol
+</pre>
+    </li>
+    <li id="correct-answer">The first statement throws a <tt>NullPointerException</tt> and the second prints:
+<pre class="prettyprint lang-scala">
+Not a symbol
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    In order to apply the <a href="http://www.scala-lang.org/api/current/index.html#scala.Symbol" target="_blank">
+    <tt>Symbol</tt></a>'s <tt>unapply</tt> method as part of the pattern match,
+    the compiler needs to assign the variable being matched to the argument type
+    for the method.
+  </p>
+  <p>
+    <tt>Symbol.unapply</tt> takes a <tt>Symbol</tt>, which inherits from 
+    <tt>AnyRef</tt>, as its argument. In the first case, the variable <tt>n</tt>
+    is of type <tt>Null</tt>, which can be assigned to all <tt>AnyRef</tt>s,
+    so the compiler can call <tt>Symbol.unapply(n)</tt> directly. This method is
+    not null-safe, however, and so throws a <tt>NullPointerException</tt>.
+  </p>
+  <p>
+    In the case of <tt>nObj</tt>, the compiler can<strong>not</strong> deduce from
+    the types whether the variable can be assigned to a <tt>Symbol</tt> or not.
+    So it inserts an <tt>nObj.isInstanceOf[Symbol]</tt> and check and, if that     
+    passes, explicitly converts <tt>nObj</tt> to a <tt>Symbol</tt> using <tt>
+    nObj.asInstanceOf[Symbol]</tt>before calling <tt>Symbol.unapply</tt>.
+  </p>
+  <p>
+    However, since <tt>null.isInstanceOf[T]</tt> is false for any <tt>T</tt>,
+    <tt>Symbol.unapply</tt> is not called and the pattern match falls through to
+    the default case.
+  </p>
+</div>
