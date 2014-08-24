@@ -31,33 +31,29 @@ addTo1(2)(3)
 </pre>
 
 <ol>
-<li>Prints:
+  <li>Prints:
 <pre class="prettyprint lang-scala">
 5
 6
 </pre>
-</li>
-
-<li>Prints:
+  </li>
+  <li>Prints:
 <pre class="prettyprint lang-scala">
 6
 6
 </pre>
-</li>
-
-<li id="correct-answer">The first invocation of <tt>f</tt> prints:
+  </li>
+  <li id="correct-answer">The first invocation of <tt>f</tt> prints:
 <pre class="prettyprint lang-scala">
 5
 </pre>
-and the second fails with a compilation exception
-</li>
-
-<li>The first invocation of <tt>f</tt> fails with a compilation exception, and the second prints:
+and the second fails to compile
+  </li>
+  <li>The first invocation of <tt>f</tt> fails to compile and the second prints:
 <pre class="prettyprint lang-scala">
 6
 </pre>
-</li>
-
+  </li>
 </ol>
 
 </div>
@@ -87,7 +83,7 @@ addTo1And3: Int => Int = <function1>
 </pre>
 </p><p>
 This explains the result, i.e. the invocation of <tt>addTo1(2)</tt> returns <tt>5</tt> (<tt>1</tt> + <em>&lt;param&gt;</em> + <tt>2</tt>) and
-<tt>addTo1(2)(3)</tt> fails with a compilation error as on the object <tt>5</tt> (result of <tt>addTo1(2)</tt>) no method <tt>apply</tt> is defined.
+<tt>addTo1(2)(3)</tt> fails to compile as on the object <tt>5</tt> (result of <tt>addTo1(2)</tt>) no method <tt>apply</tt> is defined.
 <pre class="prettyprint lang-scala">
 scala> addTo1(2)(3)
 <console>:10: error: Int does not take parameters

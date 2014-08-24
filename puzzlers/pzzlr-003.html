@@ -31,22 +31,18 @@ I: Int = 3
 J: Int = 4
 </pre>
     </li>
-    <li>
-	Both fail with compilation exceptions
-    </li>
-    <li id="correct-answer">
- The first one succeeds and prints: 
- <pre class="prettyprint lang-scala">
+    <li>Both statements fail to compile</li>
+    <li id="correct-answer">The first statement prints: 
+<pre class="prettyprint lang-scala">
 IJ: (Int, Int) = (3, 4)
 </pre>
-and the second one fails with a compilation exception
+and the second fails to compile
     </li>
-    <li>
-	The first one succeeds and prints:
-      <pre class="prettyprint lang-scala">
+    <li>The first statement prints:
+<pre class="prettyprint lang-scala">
 IJ: (Int, Int) = (3, 4)
 </pre>
-	and the second one fails with a runtime exception
+and the second one throws a runtime exception
     </li>
   </ol>
 </div>

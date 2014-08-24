@@ -50,7 +50,7 @@ funcs2 foreach { f2 => println(f2()) }
 110
 120
 </pre>
-      and the second fails with an <tt>IndexOutOfBoundsException</tt>
+and the second throws an <tt>IndexOutOfBoundsException</tt> at runtime
     </li>
     <li>Both statements print:
 <pre class="prettyprint lang-scala">
@@ -59,7 +59,7 @@ funcs2 foreach { f2 => println(f2()) }
 120
 </pre>
     </li>
-    <li>Both statements fail with a compilation exception <tt>error: not found: value values</tt>
+    <li>Both statements fail to compile with: <tt>error: not found: value values</tt>
     </li>
     <li>Both statements print:
 <pre class="prettyprint lang-scala">

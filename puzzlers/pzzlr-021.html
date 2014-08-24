@@ -39,38 +39,33 @@ object Main extends App {
 </pre>
 
 <ol>
-<li>Fails with the compilation exception:
+  <li>Fails to compile with:
 <pre class="prettyprint lang-scala">
 error: base is already defined as object base
 package base {
         ^
 </pre>
-</li>
-
-<li>Fails with the compilation exception:
+  </li>
+  <li>Fails to compile with:
 <pre class="prettyprint lang-scala">
 error: type X is not a member of package base
   println((new base.X).context)
                     ^
 </pre>
-</li>
-
-<li id="correct-answer">Fails with the compilation exception:
+  </li>
+  <li id="correct-answer">Fails to compile with:
 <pre class="prettyprint lang-scala">
 error: type Y is not a member of object base
   println((new base.Y).context)
                     ^
 </pre>
-</li>
-
-<li>Prints:
+  </li>
+  <li>Prints:
 <pre class="prettyprint lang-scala">
 object base
 package base
 </pre>
-</li>
-
-
+  </li>
 </ol>
 
 </div>

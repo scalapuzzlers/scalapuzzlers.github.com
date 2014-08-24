@@ -31,9 +31,9 @@ i: 3
 j: 4
 </pre>
     </li>
-    <li>Both fail with compilation exceptions</li>
-    <li>Both fail with runtime exceptions</li>
-    <li id="correct-answer">The first one fails with a compilation exception and the second one fails with a runtime exception</li>
+    <li>Both statements fail to compile</li>
+    <li>Both statements throw runtime exceptions</li>
+    <li id="correct-answer">The first statement fails to compile and the second throws a runtime exception</li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
@@ -46,7 +46,7 @@ j: 4
   </p>
   <p>
   Using a typed pattern (SLS &sect;8.1.2) instead of a variable pattern
-  results in the expected compilation error:
+  results in the expected compiler error:
 <pre class="prettyprint lang-scala">
 scala> val (i: Int, j: Int) = ("3", "4")
 &lt;console&gt;:7: error: scrutinee is incompatible with pattern type;
