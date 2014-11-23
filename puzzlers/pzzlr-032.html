@@ -99,17 +99,4 @@ val (num, name): (Int, String) = Some((7, "seven")) getOrElse Pair("eight", 8)
                                                                                    ^
 </pre>
   </p>
-  <p>
-    Or using a method that eliminates the inferred type:
-<pre class="prettyprint lang-scala">
-implicit class OptionSafe[A](val opt: Option[A]) {
-  def getOrElseSafe(default: => A): A = opt getOrElse default
-}
-val (num, name) = Some((7, "seven")) getOrElseSafe Pair("eight", 8)
-<console>:16: error: type mismatch;
- found   : String("eight")
- required: Int
-         val (num, name) = Some((7, "seven")) getOrElseSafe Pair("eight", 8)
-                                                                 ^
-</pre>
 </div>
