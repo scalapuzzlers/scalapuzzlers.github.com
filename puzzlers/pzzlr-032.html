@@ -84,7 +84,7 @@ howToPronounce(None)
     And that's why we have code coverage tools.
   </p>
   <p>
-    Ways to avoid this issue include:
+    A way to avoid this issue is to specify the desired type explicitly:
 <pre class="prettyprint lang-scala">
 val (num, name): (Int, String) = Some((7, "seven")) getOrElse Pair("eight", 8)
 <console>:10: error: type mismatch;
