@@ -12,241 +12,255 @@
 </head>
 
 <body data-spy="scroll" data-target=".subnav" data-offset="50">
-  <!-- Navbar
-   ================================================== -->
-    <div class="navbar navbar-fixed-top">
-      <a target="_blank" href="https://github.com/scalapuzzlers/scalapuzzlers.github.com">
-        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"                       alt="Fork me on GitHub">
-      </a>
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
+  <!-- Navbar -->
+  <div class="navbar navbar-fixed-top">
+    <a target="_blank" href="https://github.com/scalapuzzlers/scalapuzzlers.github.com">
+      <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"                       alt="Fork me on GitHub">
+    </a>
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
 
-          <a class="brand" href="/">Scala ?uzz<img src="img/l.png" alt="l" style="padding-bottom:10px;padding-left:2px;padding-right:2px"/>ers</a>
+        <a class="brand" href="/">Scala ?uzz<img src="img/l.png" alt="l" style="padding-bottom:10px;padding-left:2px;padding-right:2px"/>ers</a>
 
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li>
-                <a id="navbar-home" href="index.html">Home</a>
-              </li>
-              <li>
-                <a id="navbar-archive" href="archive.html">Archive</a>
-              </li>
-              <li>
-                <a id="navbar-contribute" href="contribute.html">How to Contribute</a>
-              </li>
-              <li>
-                <a id="navbar-contact" href="contact.html">Contact</a>
-              </li>
-              <li>
-                <a id="navbar-about" href="about.html">About</a>
-              </li>
-            </ul>
-          </div>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li>
+              <a id="navbar-home" href="index.html">Home</a>
+            </li>
+            <li>
+              <a id="navbar-archive" href="archive.html">Archive</a>
+            </li>
+            <li>
+              <a id="navbar-contribute" href="contribute.html">How to Contribute</a>
+            </li>
+            <li>
+              <a id="navbar-contact" href="contact.html">Contact</a>
+            </li>
+            <li>
+              <a id="navbar-about" href="about.html">About</a>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
+  </div>
 
-    <script type="text/javascript">
-      String.prototype.endsWith = function(suffix) {
-        return this.indexOf(suffix, this.length - suffix.length) !== -1;
-      };
+  <script type="text/javascript">
+    String.prototype.endsWith = function(suffix) {
+      return this.indexOf(suffix, this.length - suffix.length) !== -1;
+    };
 
-      var pathToID = {
-        "/"              : '#navbar-home',
-        "index.html"     : '#navbar-home',
-        "archive.html"   : '#navbar-archive',
-        "contribute.html": '#navbar-contribute',
-        "contact.html"   : '#navbar-contact',
-        "about.html"     : '#navbar-about'
-      };
+    var pathToID = {
+      "/"              : '#navbar-home',
+      "index.html"     : '#navbar-home',
+      "archive.html"   : '#navbar-archive',
+      "contribute.html": '#navbar-contribute',
+      "contact.html"   : '#navbar-contact',
+      "about.html"     : '#navbar-about'
+    };
 
-      $(document).ready(function() {
-        function mapPathToID(path) {
-          var key;
-          var id = null;
-          for (key in pathToID) {
-            if (path === key) {
-              id = pathToID[key];
-              break;
-            }
+    $(document).ready(function() {
+      function mapPathToID(path) {
+        var key;
+        var id = null;
+        for (key in pathToID) {
+          if (path === key) {
+            id = pathToID[key];
+            break;
           }
-
-          return id;
-        };
-
-        var id = mapPathToID(window.location.pathname);
-        if (id != null) {
-          $(id).addClass("active");
         }
-      });
 
-      /* * * DISQUS CONFIGURATION VARIABLES * * */
-      var disqus_shortname = 'scalapuzzlers'; // required: replace example with your forum shortname
-      var disqus_identifier = 'elem.id';
-      var disqus_url = 'http://scalapuzzlers.com/!#/' + 'elem.id';
-      var disqus_title = $('#title').find("h1").text();
+        return id;
+      };
 
-      /* * * DON'T EDIT BELOW THIS LINE * * */
-      (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-       })(); 
-    </script>
+      var id = mapPathToID(window.location.pathname);
+      if (id != null) {
+        $(id).addClass("active");
+      }
+    });
 
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span3">
-          <div class="well sidebar-nav">
-            <ul class="nav nav-list">
-              <li class="nav-header">Puzzlers</li>
-              <li><a href="#" id="pzzlr-001">Hi There!</a></li>
-              <li><a href="#" id="pzzlr-003">UPSTAIRS downstairs</a></li> 
-              <li><a href="#" id="pzzlr-004">Location, Location, Location</a></li>
-              <li><a href="#" id="pzzlr-005">Now You See Me, Now You Don't</a></li>
-              <li><a href="#" id="pzzlr-006">The Missing List</a></li>  
-              <li><a href="#" id="pzzlr-007">Arg Arrgh!</a></li>
-              <li><a href="#" id="pzzlr-008">Captured by Closures</a></li>
-              <li><a href="#" id="pzzlr-009">Map Comprehension</a></li>
-              <li><a href="#" id="pzzlr-010">Init You, Init Me</a></li>
-              <li><a href="#" id="pzzlr-011">A Case of Equality</a></li>
-              <li><a href="#" id="pzzlr-012">If At First You Don't Succeed...</a></li>
-              <li><a href="#" id="pzzlr-013">To Map, or Not to Map</a></li>
-              <li><a href="#" id="pzzlr-015">Private Lives</a></li>
-              <li><a href="#" id="pzzlr-016">Self: See 'Self'</a></li>
-              <li><a href="#" id="pzzlr-017">One Egg or Two..?</a></li>
-              <li><a href="#" id="pzzlr-018">Return to Me!</a></li>
-              <li><a href="#" id="pzzlr-019">Implicitly Surprising</a></li>
-              <li><a href="#" id="pzzlr-020">One Bound, Two to Go</a></li>
-              <li><a href="#" id="pzzlr-021">Views From the Top</a></li>
-              <li><a href="#" id="pzzlr-022">Count Me Now, Count Me Later</a></li>
-              <li><a href="#" id="pzzlr-023">Information Overload</a></li>
-              <li><a href="#" id="pzzlr-024">What's in a Name?</a></li>
-              <li><a href="#" id="pzzlr-025">$!.*% Iterators!</a></li>
-              <!-- 26 'reserved' for Scalaz - suggestion by A.P. Marki -->
-              <li><a href="#" id="pzzlr-027">I Can Has Padding?</a></li>
-              <li><a href="#" id="pzzlr-028">Cast Away</a></li>
-              <li><a href="#" id="pzzlr-029">Pick an Int, Any Int!</a></li>
-              <li><a href="#" id="pzzlr-030">Double Trouble</a></li>
-              <li><a href="#" id="pzzlr-032">Type Extortion</a></li>
-              <li><a href="#" id="pzzlr-033">Implicit Kryptonite</a></li>
-              <li><a href="#" id="pzzlr-034">All's Well That Folds Well</a></li>
-              <li><a href="#" id="pzzlr-035">A Case of Strings</a></li>
-              <li><a href="#" id="pzzlr-036">Adaptive Reasoning</a></li>
-              <li><a href="#" id="pzzlr-037">A View to a Shill</a></li>
-              <li><a href="#" id="pzzlr-039">Accepts Any Args</a></li>
-              <li><a href="#" id="pzzlr-040">Set the Record Straight</a></li>
-              <li><a href="#" id="pzzlr-041">Signs of Trouble</a></li>
-              <li><a href="#" id="pzzlr-042">The Devil Is in the Defaults</a></li>
-              <li><a href="#" id="pzzlr-043">Market Precedence</a></li>
-              <li><a href="#" id="pzzlr-044">Float or Sink?</a></li>
-              <li><a href="#" id="pzzlr-045">Stringy Conversions</a></li>
-              <li><a href="#" id="pzzlr-046">Size It Up</a></li>
-              <li><a href="#" id="pzzlr-047">A Listful of Dollars</a></li>
-              <li><a href="#" id="pzzlr-048">One, Two, Skip a Few</a></li>
-              <li><a href="#" id="pzzlr-049">Oddly Enough</a></li>
-              <li class="divider"></li>
-            </ul>
-          </div><!--/.well -->
-        </div><!--/span3-->
+    /* * * DISQUS CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'scalapuzzlers'; // required: replace example with your forum shortname
+    var disqus_identifier = 'elem.id';
+    var disqus_url = 'http://scalapuzzlers.com/!#/' + 'elem.id';
+    var disqus_title = $('#title').find("h1").text();
 
-        <script type="text/javascript"> 
-          var activeElem = null;
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+     })(); 
+  </script>
 
-          $('a[id|="pzzlr"]').each(function(index, elem) {
-            $(elem).click(function() {
-              $('#disqus_thread').hide();
-              $('#prime-space').html("");
-              $('#prime-space').load('puzzlers/' + elem.id + '.html', function() {
-                prettyPrint();
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span3">
+        <div class="well sidebar-nav">
+          <ul class="nav nav-list">
+            <li class="nav-header">Puzzlers</li>
+            <li><a href="#" id="pzzlr-001">Hi There!</a></li>
+            <li><a href="#" id="pzzlr-003">UPSTAIRS downstairs</a></li> 
+            <li><a href="#" id="pzzlr-004">Location, Location, Location</a></li>
+            <li><a href="#" id="pzzlr-005">Now You See Me, Now You Don't</a></li>
+            <li><a href="#" id="pzzlr-006">The Missing List</a></li>  
+            <li><a href="#" id="pzzlr-007">Arg Arrgh!</a></li>
+            <li><a href="#" id="pzzlr-008">Captured by Closures</a></li>
+            <li><a href="#" id="pzzlr-009">Map Comprehension</a></li>
+            <li><a href="#" id="pzzlr-010">Init You, Init Me</a></li>
+            <li><a href="#" id="pzzlr-011">A Case of Equality</a></li>
+            <li><a href="#" id="pzzlr-012">If At First You Don't Succeed...</a></li>
+            <li><a href="#" id="pzzlr-013">To Map, or Not to Map</a></li>
+            <li><a href="#" id="pzzlr-015">Private Lives</a></li>
+            <li><a href="#" id="pzzlr-016">Self: See 'Self'</a></li>
+            <li><a href="#" id="pzzlr-017">One Egg or Two..?</a></li>
+            <li><a href="#" id="pzzlr-018">Return to Me!</a></li>
+            <li><a href="#" id="pzzlr-019">Implicitly Surprising</a></li>
+            <li><a href="#" id="pzzlr-020">One Bound, Two to Go</a></li>
+            <li><a href="#" id="pzzlr-021">Views From the Top</a></li>
+            <li><a href="#" id="pzzlr-022">Count Me Now, Count Me Later</a></li>
+            <li><a href="#" id="pzzlr-023">Information Overload</a></li>
+            <li><a href="#" id="pzzlr-024">What's in a Name?</a></li>
+            <li><a href="#" id="pzzlr-025">$!.*% Iterators!</a></li>
+            <!-- 26 'reserved' for Scalaz - suggestion by A.P. Marki -->
+            <li><a href="#" id="pzzlr-027">I Can Has Padding?</a></li>
+            <li><a href="#" id="pzzlr-028">Cast Away</a></li>
+            <li><a href="#" id="pzzlr-029">Pick an Int, Any Int!</a></li>
+            <li><a href="#" id="pzzlr-030">Double Trouble</a></li>
+            <li><a href="#" id="pzzlr-032">Type Extortion</a></li>
+            <li><a href="#" id="pzzlr-033">Implicit Kryptonite</a></li>
+            <li><a href="#" id="pzzlr-034">All's Well That Folds Well</a></li>
+            <li><a href="#" id="pzzlr-035">A Case of Strings</a></li>
+            <li><a href="#" id="pzzlr-036">Adaptive Reasoning</a></li>
+            <li><a href="#" id="pzzlr-037">A View to a Shill</a></li>
+            <li><a href="#" id="pzzlr-039">Accepts Any Args</a></li>
+            <li><a href="#" id="pzzlr-040">Set the Record Straight</a></li>
+            <li><a href="#" id="pzzlr-041">Signs of Trouble</a></li>
+            <li><a href="#" id="pzzlr-042">The Devil Is in the Defaults</a></li>
+            <li><a href="#" id="pzzlr-043">Market Precedence</a></li>
+            <li><a href="#" id="pzzlr-044">Float or Sink?</a></li>
+            <li><a href="#" id="pzzlr-045">Stringy Conversions</a></li>
+            <li><a href="#" id="pzzlr-046">Size It Up</a></li>
+            <li><a href="#" id="pzzlr-047">A Listful of Dollars</a></li>
+            <li><a href="#" id="pzzlr-048">One, Two, Skip a Few</a></li>
+            <li><a href="#" id="pzzlr-049">Oddly Enough</a></li>
+            <li class="divider"></li>
+          </ul>
+        </div><!--/.well -->
+      </div><!--/span3-->
 
-                document.location.hash = elem.id;
-                window.scrollTo(0, 0);
-                $('#show-and-tell').click(function() {
-                  $('#show-and-tell').addClass("disabled");
-                  $('#correct-answer').addClass("correct-answer");
-                  $('#explanation').show('slow', function () {
-                    DISQUS.reset({
-                      reload: true,
-                      config: function () {
-                        this.page.identifier = elem.id;
-                        this.page.url = 'http://scalapuzzlers.com/#!/' + elem.id;
-                        this.page.title = $('#title').find("h1").text();
-                      }
-                    });
-                    $('#disqus_thread').show();
-                    $('html,body').animate({scrollTop:$('#correct-answer').offset().top - $('.navbar').height() - 2}, 900);
+      <script type="text/javascript"> 
+        var activeElem = null;
+
+        $('a[id|="pzzlr"]').each(function(index, elem) {
+          $(elem).click(function() {
+            $('#disqus_thread').hide();
+            $('#prime-space').html("");
+            $('#prime-space').load('puzzlers/' + elem.id + '.html', function() {
+              prettyPrint();
+
+              document.location.hash = elem.id;
+              window.scrollTo(0, 0);
+              $('#show-and-tell').click(function() {
+                $('#show-and-tell').addClass("disabled");
+                $('#correct-answer').addClass("correct-answer");
+                $('#explanation').show('slow', function () {
+                  DISQUS.reset({
+                    reload: true,
+                    config: function () {
+                      this.page.identifier = elem.id;
+                      this.page.url = 'http://scalapuzzlers.com/#!/' + elem.id;
+                      this.page.title = $('#title').find("h1").text();
+                    }
                   });
+                  $('#disqus_thread').show();
+                  $('html,body').animate({scrollTop:$('#correct-answer').offset().top - $('.navbar').height() - 2}, 900);
                 });
               });
-
-              if (activeElem != null) {
-                $(activeElem).removeClass("active");
-              }
-
-              activeElem = $(elem).parent();
-              $(activeElem).addClass("active");
             });
+
+            if (activeElem != null) {
+              $(activeElem).removeClass("active");
+            }
+
+            activeElem = $(elem).parent();
+            $(activeElem).addClass("active");
           });
-        </script> 
-        <div class="span9">
-          <div id="prime-space">
-            <div id="welcome-content" style="display:none">
-              <div class="headline">
-                <h1>A fun way to learn more about
-                  <img src="img/scala-logo.png" alt="Scala" style="padding-bottom:15px;padding-left:10px"/>
-                </h1>
+        });
+      </script> 
+      <div class="span9">
+        <div id="prime-space">
+          <div id="welcome-content" style="display:none">
+            <div class="headline">
+              <h1>A fun way to learn more about
+                <img src="img/scala-logo.png" alt="Scala" style="padding-bottom:15px;padding-left:10px"/>
+              </h1>
+              <p>
+                Welcome to Scala Puzzlers, the collection of <i>Traps, Pitfalls
+                and Corner Cases</i> in the Scala language.</br></br>
+              </p>
+            
+              <div class="row-fluid">
+                <div class="span8 headline-unit yellow-background">
+                  <p>
+                    Prepare to be surprised, entertained and...well, puzzled!<br/>
+                    What is presented here is a selection of seemingly simple examples
+                    which demonstrate that there's plenty of head-scratching left in
+                    Scala.<br/> Let your mind be challenged by unexpected and non-intuitive
+                    behaviour and results and learn something in the process.
+                  </p>
+                  <p>
+                    What is a puzzler? It should be:
+                    <ul>
+                      <li>an intentional language feature (so no bugs)</li>
+                      <li>not just weird because the reader doesn't know Scala</li>
+                      <li>&quot;surprising&quot; or &quot;non-intuitive&quot; to a 
+                      reasonably skilled Scala developer</li>
+                    </ul>
+                  </p>
+                  <p>
+                    Choose a puzzler from the left-hand list to get started!
+                  </p>
+                </div>
+                <div class="span4 headline-unit book-teaser">
+                  <h2><a href="http://www.artima.com/shop/scala_puzzlers">Get the book!</a></h2>
+                  <a href="http://www.artima.com/shop/scala_puzzlers">
+                    <img class="book-cover" src="img/scala-puzzlers-book.jpeg" height="220" width="166" alt="Scala Puzzlers book">
+                  </a>
+                  <p>
+                    In-depth explanations, workarounds and more...
+                  </p>            
+                </div>          
+              </div>
+            </div><!--/headline-->
+            
+            <div class="row-fluid">
+              <div class="span6 headline-unit">
+                <h2>Your contributions are welcomed</h2>
                 <p>
-                  Welcome to Scala Puzzlers, the collection of <i>Traps, Pitfalls
-                  and Corner Cases</i> in the Scala language.
-                </p>
-                <p><br/>
-                  Prepare to be surprised, entertained and...well, puzzled! What
-                  is presented here is a selection of seemingly simple examples
-                  which demonstrate that there's plenty of head-scratching left in
-                  Scala. Let your mind be challenged by unexpected and non-intuitive
-                  behaviour and results and learn something in the process.
-                </p>
-                <p><br/>
-                  What is a puzzler? It should be:
-                  <ul>
-                    <li>an intentional language feature (so no bugs)</li>
-                    <li>not just weird because the reader doesn't know Scala</li>
-                    <li>&quot;surprising&quot; or &quot;non-intuitive&quot; to a 
-                    reasonably skilled Scala developer</li>
-                  </ul>
-                </p>
-                <p><br/>
-                  Choose a puzzler from the left-hand list to get started!
+                  Scala Puzzlers is a community effort! Have a puzzler you would like to share with the rest of the Scala community?  Please follow <a href="/contribute.html">these instructions</a> to submit your puzzler. 
+                  And don't worry, you will be properly credited for your contribution!
                 </p>
               </div>
-              <div class="row-fluid">
-                <div class="span6 headline-unit">
-                  <h2>Your contributions are welcomed</h2>
-                  <p>
-                    Scala Puzzlers is a community effort! Have a puzzler you would like to share with the rest of the Scala community?  Please follow <a href="/contribute.html">these instructions</a> to submit your puzzler. 
-                    And don't worry, you will be properly credited for your contribution!
-                  </p>
-                </div>
-                <div class="span6 headline-unit">
-                  <h2>We would love to hear from you</h2>
-                  <p>
-                    Any kind of feedback is appreciated, about the website but also about the puzzlers themselves. If there is something you would like to let us know, please <a href="/contact.html">contact us</a>.
-                  </p>
-                </div>
-              </div><!--/row-fluid-->
-              <footer class="footer">
-                Copyright &copy; 2013, Andrew Phillips and Nermin Serifovic
-              </footer>
-            </div><!--/welcome-->
-          </div><!--/prime-space-->
-          <div id="disqus_thread" class="comments"></div>
-        </div><!--/span9-->
+              <div class="span6 headline-unit">
+                <h2>We would love to hear from you</h2>
+                <p>
+                  Any kind of feedback is appreciated, about the website but also about the puzzlers themselves. If there is something you would like to let us know, please <a href="/contact.html">contact us</a>.
+                </p>
+              </div>
+            </div><!--/row-fluid-->
+            <footer class="footer">
+              Copyright &copy; 2013, Andrew Phillips and Nermin Serifovic
+            </footer>
+          </div><!--/welcome-->
+        </div><!--/prime-space-->
+        <div id="disqus_thread" class="comments"></div>
+      </div><!--/span9-->
       </div><!--/raw-fluid-->
     </div><!--/container-fluid-->
     <script type="text/javascript">
