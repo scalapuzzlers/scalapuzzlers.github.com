@@ -1,0 +1,70 @@
+<div id="title">
+  <h1>Selfie: Take Two</h1>
+</div>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>A. P. Marki</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>SI-9109</td>
+    </tr>
+    <tr>
+      <td><strong>Tested with Scala version</strong></td>
+      <td>2.11.5</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+<h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+     implicit val is: Seq[String] = Seq(0)
+
+lazy implicit val js: Seq[String] = Seq(0)
+
+Console println is
+Console println js
+</pre>
+
+<ol>
+
+<li>Prints:
+<pre class="prettyprint lang-scala">
+List(0)
+List(0)
+</pre>
+</li>
+
+<li>Both fail at runtime with <tt>NullPointerException</tt>s</li>
+
+<li id="correct-answer">The first fails at runtime with a <tt>NullPointerException</tt>,
+the second fails with a <tt>StackOverflowError</tt>.
+</li>
+
+<li>Both fail with compilation exceptions</li>
+</ol>
+
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+<h3>Explanation</h3>
+<p>
+This is another case of recursive definitions which are not disallowed
+but which may not be meaningful.
+</p><p>
+"Why does this even compile?"
+</p><p>
+Because the <tt>Seq</tt> is a function <tt>Int => String</tt>, it can be used to upgrade the zero
+to the expected String, as shown under -Xprint:typer.
+<pre class="prettyprint lang-scala">
+val is: Seq[String] = collection.this.Seq.apply[String](this.is.apply(0));
+</pre>
+</p><p>
+The difference between the two forms is that the lazy val invokes itself without end,
+its initialization forever deferred.
+</p><p>
+</p>
+</div>
+
