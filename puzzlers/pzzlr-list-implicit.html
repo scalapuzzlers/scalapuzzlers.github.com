@@ -1,0 +1,64 @@
+<h1>Think of 1 Card</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>Based on a suggestion by <a target="_blank" href="https://github.com/Alefas">Alexander Podkhalyuzin</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.2</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+import scala.language.implicitConversions
+
+case class Card(number: Int, suit: String = "clubs") {
+  val value = (number % 13) + 1 // ace = 1, king = 13
+  def isInDeck(implicit deck: List[Card]) = deck contains this
+}
+implicit val deck = List(Card(1, "spades"))
+implicit def intToCard(n: Int) = Card(n)
+
+println(1.isInDeck)
+</pre>
+    <ol>
+    <li id="correct-answer">Throws a runtime exception</li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+false
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+true
+</pre>
+    </li>
+    <li>Fails to compile</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    In order to be able to compile <tt>1.isInDeck</tt>, the compiler needs to find
+    an implicit conversion from <tt>Int</tt> to <tt>Card</tt>. While it may appear
+    that only one candidate, <tt>intToCard</tt>, is in scope, there are
+    actually <em>two</em> options available to the compiler: <tt>deck</tt>, as a
+    <tt>List[Card]</tt>, is <em>also</em> a function <tt>Int => Card</tt>.
+  </p>
+  <p>
+    Surprisingly, the fact that there are two available options does not cause an 
+    &quot;ambiguous implicits&quot; error: the compiler prefers implicit 
+    <tt>val</tt>s of function type to implicit <tt>def</tt>s. As explained by Jason
+    Zaugg, this behaviour is <a href="https://groups.google.com/d/msg/scala-language/fed6fSKEfS8/WN_DjQ8c59IJ"
+    target="_blank">not covered by the language specification</a>.
+  </p>
+</div>
