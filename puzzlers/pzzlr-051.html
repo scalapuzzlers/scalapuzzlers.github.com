@@ -18,9 +18,13 @@
 <div class="code-snippet">
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
-case class Toy(squeezeMsg: String = this.toString) {
-  override def toString = squeezeMsg
+object Playroom {
+  case class Toy(squeezeMsg: String = this.toString) {
+    override def toString = squeezeMsg
+  }
 }
+
+import Playroom._
 println(Toy("My name is Fido!") == new Toy("My name is Fido!"))
 println(Toy() == new Toy())
 </pre>
@@ -63,15 +67,15 @@ and the second throws a runtime exception
     in which <tt>Toy</tt>'s constructor is defined.
   </p>
   <p>
-    When running the example in the REPL, the class or object invoking the
-    constructor <tt>new Toy()</tt> directly is a generated &quot;script object&quot;:
+    When invoking the constructor <tt>new Toy()</tt> directly, the class or
+    object in question is the <tt>Playroom</tt> object:
 <pre class="prettyprint lang-scala">
 scala> println(new Toy())
-$line46.$read$$iw$$iw$@7335aa7c
+$line13.$read$$iw$$iw$Playroom$@2588015b
 </pre>
     When creating a new <tt>Toy</tt> instance using the standard factory method
-    generated for case classes, however, the class or object invoking <tt>Toy</tt>'s
-    constructor is actually the companion object <tt>Toy</tt>:
+    generated for case classes, however, the class or object in which <tt>Toy</tt>'s
+    constructor is defined is actually the companion object <tt>Toy</tt>:
 <pre class="prettyprint lang-scala">
 scala> println(Toy())
 Toy
