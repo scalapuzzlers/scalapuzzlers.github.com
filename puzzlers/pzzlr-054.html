@@ -24,7 +24,7 @@ case class Card(number: Int, suit: String = "clubs") {
   val value = (number % 13) + 1 // ace = 1, king = 13
   def isInDeck(implicit deck: List[Card]) = deck contains this
 }
-implicit val deck = List(Card(1, "spades"))
+implicit val deck = List(Card(1, "clubs"))
 implicit def intToCard(n: Int) = Card(n)
 
 println(1.isInDeck)
