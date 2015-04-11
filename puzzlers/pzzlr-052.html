@@ -29,7 +29,7 @@ val isOdd = PartialFunction[Int, String] {
 println(Seq(0, 2) map (isEven orElse isOdd))
 println(Seq(0, 1, 2) map (isEven orElse isOdd))
 </pre>
-    <ol>
+  <ol>
     <li>Prints:
 <pre class="prettyprint lang-scala">
 List(Even, Even)

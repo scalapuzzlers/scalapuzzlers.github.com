@@ -43,7 +43,7 @@ println(map("key") == 0)
 true
 true
 </pre></li>
-    <li>Both fail with a NullPointerException</li>
+    <li>Both statements throw a <tt>NullPointerException</tt></li>
     <li>Prints:
 <pre class="prettyprint lang-scala">
 true
@@ -81,7 +81,7 @@ public static int unboxToInt(Object i) {
 </pre>
   </p>
   <p>
-This logic, which treats <tt>null</tt> as <tt>0</tt>, differs from both Java <tt>Integer</tt>-to-<tt>int</tt> unboxing and <a href="https://github.com/scala/scala/blob/v2.10.0-RC1/src/library/scala/Int.scala" target="_new"><tt>scala.Int.unbox</tt></a>, both of which fail with a <tt>NullPointerException</tt> for <tt>null</tt>.
+This logic, which treats <tt>null</tt> as <tt>0</tt>, differs from both Java <tt>Integer</tt>-to-<tt>int</tt> unboxing and <a href="https://github.com/scala/scala/blob/v2.10.0-RC1/src/library/scala/Int.scala" target="_new"><tt>scala.Int.unbox</tt></a>, both of which throw a <tt>NullPointerException</tt> for <tt>null</tt>.
   </p>
   <p>
 As Daniel Sobral commented: "Whenever you cast, you lie, and <em>anything</em> can come out of it." Strange things can happen when you "know better" than the compiler! ;-)
