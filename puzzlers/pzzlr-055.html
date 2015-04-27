@@ -1,0 +1,96 @@
+<h1>Splitting Headache</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>Based on a suggestion by <a target="_blank" href="https://twitter.com/extempore2/status/543851869265596416">Paul Phillips</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.6</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+def validDna(maybeDna: String) = {
+  def containsOnly(s: String, chars: Array[Char]) =
+    s.split(chars).isEmpty
+
+  containsOnly(maybeDna, Array('A', 'C', 'G', 'T'))
+}
+
+println(validDna("SAT"))
+println(validDna("AT"))
+println(validDna("A"))
+println(validDna(""))
+</pre>
+  <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+true
+true
+true
+true
+</pre>
+    </li>
+    <li>The first three statements print:
+<pre class="prettyprint lang-scala">
+false
+true
+true
+</pre>
+and the fourth throws a runtime exception</li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+false
+true
+true
+true
+</pre>
+    </li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+false
+true
+true
+false
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    The <tt>split(separators: Array[Char])</tt> method is provided by 
+    <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.immutable.StringOps" target="_blank">StringOps</a>
+    and splits a string around occurrences of a given array of characters. It would
+    thus seem like a good candidate for checking whether <em>other</em> characters are
+    present in a string: if the input string consists only of the separator 
+    characters, there should be no substrings &quot;between&quot; them, and the array 
+    of such substrings returned by <tt>split</tt> should be empty. If other characters
+    are present, they should show up in the result array.
+  </p>
+  <p>
+    This works except in the case of the empty string. In that case, none of the
+    separator characters match any part of the input string and, as per the 
+    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html#split(java.lang.String,%20int)" target="_blank">Javadoc</a>
+    of the underlying method on <tt>java.lang.String</tt>, the resulting array
+    contains the input string, i.e. the empty string, as its single element.
+  </p>
+  <p>
+    This treatment of the empty string in the result array differs from the other
+    examples in which the input string consists of a non-zero number of consecutive
+    separator characters. In these cases, the substrings between separators are also
+    empty. However, these empty strings do <strong>not</strong> appear in the 
+    array that is returned because the underlying <tt>split</tt> method on <tt>java.lang.String</tt> 
+    removes trailing empty string entries from the result...<em>if</em> at least
+    one separator appears in the input string.
+  </p>
+</div>
