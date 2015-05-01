@@ -1,0 +1,91 @@
+<h1>Unary Quandary</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="http://stackoverflow.com/q/29815264/1296806">A. P. Marki</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.6</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+class Clock(val hour: Int) extends AnyVal {
+  def unary_+ = new Clock((hour + 1) % 24)
+  def unary_-() = new Clock((hour + 23) % 24)
+}
+
+def printHour(clockfun: () => Clock) { println(clockfun().hour) }
+val clock = new Clock(0)
+
+printHour(-clock)
+printHour(+clock)
+</pre>
+  <ol>
+    <li id="correct-answer">The first statement prints:
+<pre class="prettyprint lang-scala">
+24
+</pre>
+and the second fails to compile
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+23
+1
+</pre>
+    </li>
+    <li>Both statements fail to compile</li>
+    <li>The first statement fails to compile and the second prints:
+<pre class="prettyprint lang-scala">
+1
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    Method <tt>printHour</tt> requires an argument of function type &ndash;
+    specifically, a <tt>Function0</tt> &ndash; which is not the type of
+    either <tt>-clock</tt> or <tt>+clock</tt>. As specified in SLS &sect;6.26,
+    this causes the Scala compiler to attempt to apply a sequence of method
+    conversions (SLS &sect;6.26.2) to get the types to match.
+  </p>
+  <p>
+    The first such conversion that is applicable to <tt>unary_-</tt>, which is a
+    method with an empty parameter list, is eta expansion. Since
+    <tt>unary_-</tt> does not declare any parameters, it is eta expanded to a
+    <tt>Function0</tt>. This is the required type for <tt>printHour</tt>, so
+    the statement compiles.
+  </p>
+  <p>
+    In the case of <tt>unary_+</tt>, which is a parameterless method
+    (<strong>not</strong> a method with an empty parameter list), the first
+    applicable conversion is a different one - the first method conversion that
+    the language specification specifies, in fact. This conversion, called
+    &quot;evaluation&quot;, is defined as follows:
+  </p>
+  <blockquote><p style="font-size: 1.0em;">
+    Evaluation. A parameterless method m of type => T is always converted to
+    type T by evaluating the expression to which m is bound.
+  </p></blockquote>
+  <p>
+    This conversion is <em>always</em> applied if applicable. So the type of
+    <tt>+clock</tt> after method conversion is <tt>Clock</tt>, which does not
+    match the required type <tt>() => Clock</tt>.
+  </p>
+  <p>
+    Changing the language specification so that eta expansion is only attempted
+    as the last possible method conversion is currently under discussion; see
+    <a href="https://issues.scala-lang.org/browse/SI-7187" target="_blank">SI-7187</a>.
+  </p>
+</div>
