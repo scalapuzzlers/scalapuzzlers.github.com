@@ -1,0 +1,86 @@
+<h1>A Result, Finally!</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>Based on a suggestion by <a target="_blank" href="https://github.com/dgruntz">Dominik Gruntz</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.6</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+var errCount = 0;
+def incErrs() = { errCount += 1; errCount }
+
+def tryEval(expr: => Double) = {
+   var res = Double.NaN
+   try {
+     res = expr
+   } catch {
+     case _: Exception => incErrs()
+   } finally {
+     res
+   }
+}
+
+println(tryEval(10 / 4))
+println(tryEval(10 / 0))
+</pre>
+  <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+1
+NaN
+</pre>
+    </li>
+    <li>Fails to compile</li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+()
+1
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+2.5
+Infinity
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    In Scala, if a function does not exit via an explicit <tt>return</tt>
+    expression, the value returned by the function is the value of the last
+    expression in the function body to be executed.
+  </p>
+  <p>
+    However, statements in a <tt>finally</tt> block are not considered
+    &quot;separate&quot; expressions in the function body in this respect.
+    The last expression in the body of function <tt>tryEval</tt> is the
+    entire <tt>try...finally</tt> expression, not the simple expression
+    <tt>res</tt>.
+  </p>
+  <p>
+    As per &sect;6.22 of the Scala Language Specification, the value returned
+    from a <tt>try...finally</tt> expression is either the last successfully
+    computed value in the <tt>try</tt> block or, if an exception is thrown, the
+    value returned by the first matching case in the exception handler.
+  </p>
+  <p>
+    In this case, the values returned from <tt>tryEval</tt> are thus <tt>()</tt>
+    (since assignments in Scala do not return a value) and <tt>1</tt> (the result
+    of incrementing the error count for the first time), respectively.
+  </p>
+</div>
