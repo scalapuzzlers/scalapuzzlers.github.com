@@ -1,0 +1,83 @@
+<h1>The Branch Not Taken</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>Based on a suggestion by <a target="_blank" href="https://twitter.com/extempore2/status/604375244648800256">Paul Phillips</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.6</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+final val useFloats = false
+println(if (useFloats) 5.0f else '5')
+println((if (useFloats) 5.0f else '5').toString)
+</pre>
+  <ol>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+5
+53.0
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+5
+5
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+5.0
+5.0
+</pre>
+    </li>
+    <li>The first statement prints:
+<pre class="prettyprint lang-scala">
+5
+</pre>
+and the second fails to compile</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    According to the SLS (&sect;6.16), &quot;the type of a conditional
+    expression is the weak least upper bound&quot; of the types of its two
+    branches. This is true even if only one of the branches can ever be chosen.
+    In general, the weak least upper bound is the least common supertype of
+    the types of the two branches, but if both branches return <em>numeric</em>
+    types, as here, a different relationship is used to determine the overall
+    type.
+  </p>
+  <p>
+    This relationship is defined by &quot;weak conformance&quot;
+    (SLS &sect;3.5.3), Scala's definition of the ranking of the primitive
+    number types. These have a hierarchy, even though they are not sub- or
+    supertypes of each other. In this hierarchy, <tt>Float</tt> ranks higher
+    than <tt>Char</tt> (also a numeric type), so the overall type of
+    the <tt>if</tt> statement is <tt>Float</tt>. The value of the character
+    '5' is the value of its ASCII representation, 53, or 53.0 as a
+    <tt>Float</tt>.
+  </p>
+  <p>
+    However, '5' is only treated as a <tt>Float</tt> in the <em>second</em>
+    <tt>println</tt> statement, since the compiler needs to know the type of
+    the conditional expression in order to compile the subsequent call to
+    method <tt>toString</tt>. In the case of the first <tt>println</tt>
+    statement, the compiler never needs to determine the type of the
+    <tt>if</tt> statement, because <tt>println</tt> takes an argument of type
+    <tt>Any</tt>. So it can &quot; blindly&quot; pass on the value returned
+    by the <tt>else</tt> branch, i.e. the character '5'.
+  </p>
+</div>
