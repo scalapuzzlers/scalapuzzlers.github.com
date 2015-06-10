@@ -1,0 +1,94 @@
+<h1>Applied Values</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>A. P. Marki</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.6</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+object TheAnswer extends (() => Any) {
+  override val apply = () => 42
+}
+object TheVariableAnswer extends (() => Any) {
+  override val apply = () => 42
+  def apply(n: Int) = 42 * n
+}
+TheAnswer()
+TheVariableAnswer()
+</pre>
+  <ol>
+    <li>Both object declarations fail to compile</li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+42
+42
+</pre>
+    </li>
+    <li id="correct-answer">The invocation <tt>TheAnswer()</tt> fails to compile, the invocation <tt>TheVariableAnswer()</tt> prints:
+<pre class="prettyprint lang-scala">
+42
+</pre>
+    </li>
+    <li>The invocation <tt>TheAnswer()</tt> fails to compile, the invocation <tt>TheVariableAnswer()</tt> prints:
+<pre class="prettyprint lang-scala">
+0
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    Object <tt>TheAnswer</tt> and object <tt>TheVariableAnswer</tt> both
+    extend trait <tt>Function0[Any]</tt>, so both need to implement
+    <tt>Function0</tt>'s <tt>apply</tt> method. Since <tt>Function0.apply</tt>
+    is a method with an empty parameter list, it can be overriden by a
+    <tt>val</tt> of the appropriate type &ndash; type <tt>Any</tt>, in this
+    case. Since <tt>TheAnswer.apply</tt> and <tt>TheVariableAnswer.apply</tt>
+    are of type <tt>Any</tt>, both object declarations indeed compile.
+  </p>
+  <p>
+    When we try to <em>invoke</em> <tt>TheAnswer</tt> in the expression
+    <tt>TheAnswer()</tt>, however, the fact that object <tt>TheAnswer</tt> is
+    a &quot;valid&quot; <tt>Function0</tt> implementation is irrelevant. As
+    per the SLS (&sect;6.6), &quot;the application [<tt>TheAnswer()</tt>] is
+    taken to be equivalent to [...]  the application of an <tt>apply</tt>
+    method defined by [<tt>TheAnswer</tt>]&quot;. Since object 
+    <tt>TheAnswer</tt> defines no such <em>method</em>, the expression does not
+    compile.
+  </p>
+  <p>
+    In the case of <tt>TheVariableAnswer</tt>, which also does not define an
+    <tt>apply</tt> method with an empty parameter list, we are &quot;helped
+    out&quot; by a compiler optimization: instead of checking for the
+    existence of an <tt>apply</tt> method <em>with the appropriate number of
+    arguments</em>, the compiler simply checks for the presence an <em>an</em>
+    <tt>apply</tt> method, which object <tt>TheVariableAnswer</tt> indeed
+    defines.
+  </p>
+  <p>
+    The compiler then uses the standard Overloading Resolution algorithm
+    (&sect;6.26.3) to determine the appropriate <tt>apply</tt> member for the
+    given number of arguments. Since no arguments are provided, the only
+    applicable candidate is <tt>val apply</tt>, which is chosen.
+  </p>
+  <p>
+    Value <tt>TheVariableAnswer.apply</tt> is a function, so invoking it in
+    turn calls <em>its</em> <tt>apply</tt> method. The expression
+    <tt>TheVariableAnswer()</tt> actually expands to
+    <tt>TheVariableAnswer.apply.apply()</tt> and compiles and runs successfully.
+  </p>
+</div>
