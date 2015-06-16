@@ -1,0 +1,42 @@
+<h1>Get Classy</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Marconi Lanna</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.6</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+class A
+
+case class B()
+
+val a = A.getClass.toString
+
+val b = B.getClass.toString
+</pre>
+  <ol>
+    <li><code>a</code> is <code>"class A"</code> and <code>b</code> is <code>"class B"</code></li>
+    <li><code>a</code> throws <code>java.lang.InternalError: Malformed class name</code> and <code>b</code> is <code>"class B"</code></li>
+    <li id="correct-answer"><code>a</code> fails to compile and <code>b</code> is <code>"class B$"</code></li>
+    <li>Both fail to compile</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p><code>java.lang.Object#getClass</code> is an instance method. To retrieve the <code>Class</code> object representing a given class <code>T</code>, use <code>classOf[T]</code> in Scala or <code>T.class</code> in Java.</p>
+  <p>However, the case class <code>B</code> defines a companion object <code>B</code> on which <code>getClass</code> is defined. The companion object type is not the type of the case class, but its own type <code>B$</code>.</p>
+  <p>A few idiosyncrasies: <code>B.getClass.getSimpleName</code>, and therefore <code>B.getClass.getCanonicalName</code>, throws <code>java.lang.InternalError: Malformed class name</code>. <code>println(B.getClass)</code> prints <code>class $line118.$read$$iw$$iw$B$</code></p>
+</div>
