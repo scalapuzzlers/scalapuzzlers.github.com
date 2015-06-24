@@ -1,0 +1,77 @@
+<h1>What's in a box</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Tim van Heugten</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.4</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+  case class Box(i: Int)
+
+  object Box {
+    def ->(i: Int) = Box(i)
+  }
+
+  val myBox = new Box(5)
+  val yourBox = 5 -> Box
+  val hisBox = Box -> 5
+
+  if (myBox == yourBox)
+    println("I know what's in your box!")
+  else
+    println("What's in your box?")
+
+  if (myBox == hisBox)
+    println("I know what's in his box!")
+  else
+    println("What's in his box?")
+</pre>
+  <ol>
+    <li id="correct-answer">Prints:
+    <pre class="prettyprint lang-scala">
+What's in your box?
+I know what's in his box!
+    </pre>
+    </li>
+
+    <li>Prints:
+    <pre class="prettyprint lang-scala">
+I know what's in your box!
+What's in his box?
+    </pre>
+    </li>
+	
+    <li>Prints:
+    <pre class="prettyprint lang-scala">
+I know what's in your box!
+I know what's in his box!
+    </pre>
+    </li>
+
+    <li>Does not compile.
+    </li>
+
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    The usual case class implements an equals based on the arguments. Therefore, <tt>myBox</tt> and <tt>hisBox</tt> are equal as expected. But what is that syntax of <tt>yourBox</tt> assignment?
+  </p>
+  <p>
+    There is no right-associativity going on, as it would suggest. But there is <a href="http://www.scala-lang.org/api/current/scala/Predef%24%24ArrowAssoc.html">ArrowAssoc</a> that defines an implicit conversion for invocation of the <tt>-&gt;</tt> method. As a result, <tt>yourBox</tt> is a <tt>Tuple</tt> of <tt>(5, Box)</tt>. That obviously cannot be equal to <tt>myBox</tt>.
+  </p>
+</div>
