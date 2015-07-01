@@ -1,0 +1,54 @@
+<h1>Exceptional Errors</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andy Wortman</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="#">N/A</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.4</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.Failure
+
+val oops = Future.failed(new java.lang.Error("bad things!"))
+  .recoverWith { case e: Exception => Future.successful("tis but a flesh wound")}
+
+Thread.sleep(100)
+
+val Some(Failure(error)) = oops.value
+
+println(error)
+</pre>
+  <ol>
+    <!--
+      The correct answer should have id for corresponding li element equal to "correct-answer".
+      When placing code snippets wrap them with pre tag:
+      <pre class="prettyprint lang-scala">
+        ...
+      </pre>
+     -->
+    <li>Fails to compile</li>
+    <li>Prints out "java.lang.Error: bad things!"</li>
+    <li>Throws a runtime java.lang.Error("bad things!")</li>
+    <li id="correct-answer">Throws a runtime scala.MatchError: Some(Success("tis but a flesh wound"))</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    scala.concurrent.Future attempts to catch and box Errors thrown from a Future's computation, turning our initial Future.failed(java.lang.Error("bad things")) into a Future.failed(java.util.concurrent.ExecutionException("Boxed Error", java.lang.Error("bad things"))). ExecutionException, to no surprise, an Exception, so recoverWith's partial function matches and recovers to a Future.successful. Then, Scala tries to match the result against Some(Failure(_)), fails because oops.value is really Some(Success("tis but a flesh wound")), and throws scala.MatchError: Some(Success(tis but a flesh wound)) (of class scala.Some).
+  </p>
+</div>
