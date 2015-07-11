@@ -1,0 +1,70 @@
+<h1>An Exceptional Future</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andy Wortman</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.4</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Failure, Success}
+
+val f = Future { throw new Error("fatal!") } recoverWith {
+  case err: Error => Future.successful("Ignoring error: " + err.getMessage)
+}
+f onComplete {
+  case Success(res) => println("Yay: " + res)
+  case Failure(e) => println("Oops: " + e.getMessage)
+}
+</pre>
+  <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Yay: Ignoring error: fatal!
+</pre>
+    </li>
+    <li>Throws an error</li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Oops: fatal!
+</pre>
+    </li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+Oops: Boxed Error
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    When a <tt>Future</tt>'s computation fails due to an <tt>Error</tt>, the
+    <tt>Future</tt> stores a <tt>java.util.concurrent.ExecutionException</tt>
+    with the actual <tt>Error</tt> as its cause.
+  </p>
+  <p>
+    <tt>ExecutionException</tt> is <em>not</em> an <tt>Error</tt>, so the
+    <tt>recoverWith</tt> expression does not match, and the result of the
+    <tt>Future</tt> is effectively <tt>Failure(new ExecutionException("Boxed Error",
+    new Error("fatal!")))</tt>.
+  </p>
+  <p>
+    See the <a href="http://docs.scala-lang.org/overviews/core/futures.html#exceptions" target="_blank">Futures and Promises documentation</a>
+    for details.
+  </p>
+</div>
