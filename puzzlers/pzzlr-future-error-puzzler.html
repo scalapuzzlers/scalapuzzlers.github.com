@@ -7,7 +7,7 @@
     </tr>
     <tr>
       <td><strong>Source</strong></td>
-      <td><a target="_blank" href="#">N/A</a></td>
+      <td>N/A</td>
     </tr>
     <tr>
       <td><strong>First tested with Scala version</strong></td>
@@ -22,8 +22,8 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
 
-val f = Future({ throw new Error("bang!") }) recoverWith { 
-  case ex: Exception => Future.successful("Not so bad: " + ex.getMessage)
+val f = Future { throw new Error("fatal!") } recoverWith {
+  case err: Error => Future.successful("Ignoring error: " + err.getMessage)
 }
 f onComplete {
   case Success(res) => println("Yay: " + res)
@@ -33,18 +33,18 @@ f onComplete {
   <ol>
     <li>Prints:
 <pre class="prettyprint lang-scala">
-Yay: Not so bad: bang!
+Yay: Ignoring error: fatal!
 </pre>
     </li>
-    <li>Throws an exception</li>
+    <li>Throws an error</li>
     <li>Prints:
 <pre class="prettyprint lang-scala">
-Oops: bang!
+Oops: fatal!
 </pre>
     </li>
     <li id="correct-answer">Prints:
 <pre class="prettyprint lang-scala">
-Yay: Not so bad: Boxed Error
+Oops: Boxed Error
 </pre>
     </li>
   </ol>
@@ -53,12 +53,20 @@ Yay: Not so bad: Boxed Error
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    scala.concurrent.Future attempts to catch and box Errors thrown from a Future's computation,
-    turning our initial Future.failed(java.lang.Error("bad things")) into a
-    Future.failed(java.util.concurrent.ExecutionException("Boxed Error", java.lang.Error("bad things"))).
-
-    ExecutionException, to no surprise, is an Exception, so recoverWith's partial function matches and recovers to a Future.successful.
-    Then, when Scala tries to match the result against Some(Failure(_)), it fails because oops.value is really Some(Success("tis but a flesh wound")).
-    So in the end, Scala throws scala.MatchError: Some(Success(tis but a flesh wound)) (of class scala.Some).
+    As described inthe documetation for Futures and Promises</a>
+    When a <tt>Future</tt>'s computation fails due to an <tt>Error</tt>, the
+    <tt>Future</tt> stores a <tt>java.util.concurrent.ExecutionException</tt>
+    with the actual <tt>Error</tt> as its cause.
+  </p>
+  <p>
+    <tt>ExecutionException</tt> is <em>not</em> an <tt>Error</tt>, so the
+    <tt>recoverWith</tt> expression does not match, and the result of the
+    <tt>Future</tt> is effectively <tt>Failure(new ExecutionException("Boxed Error",
+    new Error("fatal!")))</tt>. The original <tt>Error</tt> is rethrown in the thread that executed the
+    body of the <tt>Future</tt>.
+  </p>
+  <p>
+    See the <a href="http://docs.scala-lang.org/overviews/core/futures.html#exceptions" target="_blank">Futures and Promises documentation</a>
+    for details.
   </p>
 </div>
