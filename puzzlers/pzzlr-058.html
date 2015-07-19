@@ -53,12 +53,12 @@ and the second fails to compile</li>
   <h3>Explanation</h3>
   <p>
     According to the SLS (&sect;6.16), &quot;the type of a conditional
-    expression is the weak least upper bound&quot; of the types of its two
-    branches. This is true even if only one of the branches can ever be chosen.
-    In general, the weak least upper bound is the least common supertype of
-    the types of the two branches, but if both branches return <em>numeric</em>
-    types, as here, a different relationship is used to determine the overall
-    type.
+    expression is the weak least upper bound of the types of [its two
+    branches]&quot;. This is true even if only one of the branches can ever be
+    chosen. In general, the weak least upper bound is the least common
+    supertype of the types of the two branches, but if both branches return
+    <em>numeric</em> types, as here, a different relationship is used to
+    determine the overall type.
   </p>
   <p>
     This relationship is defined by &quot;weak conformance&quot;
