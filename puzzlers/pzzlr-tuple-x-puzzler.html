@@ -25,29 +25,67 @@ object TwoD {
   }
 }
 
-val origin = TwoD.Point -> 0 -> 0
-val zeroone = TwoD.Point -> 0 -> 1
-println(origin.x == zeroone.x)
+val originMethod = TwoD.Point.->(0.->(0))
+val zerooneMethod = TwoD.Point.->(0.->(1))
+val originInfix = TwoD.Point -> 0 -> 0
+val zerooneInfix = TwoD.Point -> 0 -> 1
+
+println(originMethod.x == zerooneMethod.x)
+println(originInfix.x == zerooneInfix.x)
 </pre>
   <ol>
     <li>Prints:
 <pre class="prettyprint lang-scala">
 true
+true
 </pre>
     </li>
     <li id="correct-answer">Prints:
 <pre class="prettyprint lang-scala">
+true
 false
 </pre>
     </li>
-    <li>Fails to compile</li>
-    <li>Throws an exception</li>
+    <li>Both <tt>println</tt> statements fail to compile</li>
+    <li>The first <tt>println</tt> statement prints:
+<pre class="prettyprint lang-scala">
+true
+</pre>
+and the second fails to compile
+    </li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    TODO
+    Since method <tt>-></tt> is a single-argument method, it can be invoked
+    using <a href="http://docs.scala-lang.org/style/method-invocation.html" target="blank">
+    infix notation</a> <tt>A -> B</tt>, as well as via the &quot;standard&quot;
+    Java convention <tt>A.->(B)</tt>. In common with other Scala operators not
+    ending in a colon <tt>':'</tt> character, it is left-associative (SLS
+    &sect;6.12.3).
+  </p>
+  <p>
+    As a result, the definitions of <tt>originInfix</tt> and <tt>zerooneInfix
+    </tt> are parsed as <tt>(TwoD.Point -> 0) -> 0</tt> and
+    <tt>(TwoD.Point -> 0) -> 1</tt>, respectively. Both values are tuples:
+    <tt>originInfix</tt> becomes <tt>((TwoD.Point, 0), 0)</tt>;
+    <tt>zerooneInfix</tt> becomes <tt>((TwoD.Point, 0), 1)</tt>.
+  </p>
+  <p>
+    The expression <tt>originInfix.x == zerooneInfix.x</tt> still compiles,
+    however, because a value <tt>x</tt> actually is defined (via an implicit
+    conversion) on <a href="http://www.scala-lang.org/api/current/index.html#scala.Tuple2" target="blank">
+    <tt>Tuple2</tt></a>. This value is the tuple itself, so <tt>originInfix.x
+    == zerooneInfix.x</tt> returns false.
+  </p>
+  <p>
+    In the definitions of values <tt>originMethod</tt> and 
+    <tt>zerooneMethod</tt>, the parentheses requires by the standard
+    &quot;Java-style&quot; method invocation mean that expressions are
+    parsed as <tt>TwoD.Point -> (0 -> 0)</tt> and <tt>TwoD.Point -> 
+    (0 -> 1)</tt>. The two resulting <tt>Point</tt> instances have the same
+    x-coordinate, so <tt>originMethod.x == zerooneMethod.x</tt> returns true.
   </p>
 </div>
