@@ -19,39 +19,55 @@
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
 for {
-  c <- 'Z' to 'a' if c.isLetter
-  _ = println(s"DEBUG: " + c)
-} println(c: Int)
+    x <- 1 to 2
+    _ <- { println("DEBUG 1: x: " + x); 1 to 1 }
+    y <- x to 1
+} println(x + y)
+
+for {
+    x <- 1 to 2
+    _ = println("DEBUG 2: x: " + x)
+    y <- x to 1
+} println(x + y)
 </pre>
   <ol>
     <li>Prints:
 <pre class="prettyprint lang-scala">
-DEBUG: Z
-90
-DEBUG: a
-97
+DEBUG 1: x: 1
+2
+DEBUG 1: x: 2
+DEBUG 2: x: 1
+2
+DEBUG 2: x: 2
 </pre>
     </li>
     <li>Prints:
 <pre class="prettyprint lang-scala">
-90
-DEBUG: Z
-97
-DEBUG: a
+DEBUG 1: x: 1
+2
+DEBUG 2: x: 1
+2
+DEBUG 2: x: 2
 </pre>
     </li>
     <li id="correct-answer">Prints:
 <pre class="prettyprint lang-scala">
-DEBUG: Z
-DEBUG: a
-90
-97
+DEBUG 1: x: 1
+2
+DEBUG 1: x: 2
+DEBUG 2: x: 1
+DEBUG 2: x: 2
+2
 </pre>
     </li>
     <li>Prints:
 <pre class="prettyprint lang-scala">
-90
-97
+DEBUG 1: x: 1
+DEBUG 1: x: 2
+2
+DEBUG 2: x: 1
+DEBUG 2: x: 2
+2
 </pre>
     </li>
   </ol>
@@ -60,6 +76,54 @@ DEBUG: a
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    TODO
+    Multiple generators in for comprehensions and for loops result in nested
+    invocations of <tt>flatMap</tt> (SLS &sect;6.19):
+<pre class="prettyprint lang-scala">
+for { 
+    a <- expr1
+    b <- expr2
+    ...
+}
+</pre>
+    is desugared to code equivalent to:
+<pre class="prettyprint lang-scala">
+expr1 flatMap { a => expr2 flatMap ... }
+</pre>
+  </p>
+  <p>
+    This means that the statements of the second generator &ndash;
+    in the first example, <tt>println("DEBUG 1: x: " + x); 1 to 1</tt>
+    &ndash; are executed whenever the first generator moves on to the next
+    element. This happens only <em>after</em> the current element has been
+    passed &quot;all the way through&quot; the for expression. In the case of
+    the first example, this means that the debugging statement when
+    <tt>x</tt> has the value 2 is printed only after the statement
+    <tt>println(x + y)</tt> has been executed for <tt>x == 1</tt>.
+  </p>
+  <p>
+    Value definitions, on the other hand, effectively result in a 
+    &quot;transformation&quot; of the generator to which they are associated 
+    (SLS &sect;6.19):
+<pre class="prettyprint lang-scala">
+for { 
+    a <- expr1
+    v = vexpr
+    b <- expr2
+    ...
+}
+</pre>
+  is desugared to code equivalent to:
+<pre class="prettyprint lang-scala">
+expr1 map { a => (a, vexpr) } flatMap { case (a, v) => expr2 flatMap ... }
+</pre>
+  </p>
+  <p>
+    The the right-hand side expression of the value definition is executed
+    for each element of the first generator <em>before</em> the elements of
+    the generator are passed through to the remainder of the for expression.
+    In the second example, this means that the debugging statements are
+    executed for each element of the expression <tt>1 to 2</tt> before the
+    first execution (i.e. when <tt>x</tt> has the value 1) of the statement
+    <tt>println(x + y)</tt>.
   </p>
 </div>
