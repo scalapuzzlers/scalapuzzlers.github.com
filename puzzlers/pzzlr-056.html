@@ -25,6 +25,7 @@ import scala.util.{Failure, Success}
 val f = Future { throw new Error("fatal!") } recoverWith {
   case err: Error => Future.successful("Ignoring error: " + err.getMessage)
 }
+
 f onComplete {
   case Success(res) => println("Yay: " + res)
   case Failure(e) => println("Oops: " + e.getMessage)
