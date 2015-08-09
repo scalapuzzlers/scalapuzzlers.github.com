@@ -3,11 +3,11 @@
   <tbody>
     <tr>
       <td class="header-column"><strong>Contributed by</strong></td>
-      <td>Marconi Lanna</td>
+      <td>Andrew Phillips</td>
     </tr>
     <tr>
       <td><strong>Source</strong></td>
-      <td>N/A</td>
+      <td>Based on a suggestion by Marconi Lanna</td>
     </tr>
     <tr>
       <td><strong>First tested with Scala version</strong></td>
@@ -20,8 +20,7 @@
 <pre class="prettyprint lang-scala">
 for {
     x <- 1 to 2
-    _ <- { println("DEBUG 1: x: " + x); 1 to 1 }
-    y <- x to 1
+    y <- { println("DEBUG 1: x: " + x); x to 1 }
 } println(x + y)
 
 for {
@@ -92,7 +91,7 @@ expr1 flatMap { a => expr2 flatMap ... }
   </p>
   <p>
     This means that the statements of the second generator &ndash;
-    in the first example, <tt>println("DEBUG 1: x: " + x); 1 to 1</tt>
+    in the first example, <tt>println("DEBUG 1: x: " + x); x to 1</tt>
     &ndash; are executed whenever the first generator moves on to the next
     element. This happens only <em>after</em> the current element has been
     passed &quot;all the way through&quot; the for expression. In the case of
