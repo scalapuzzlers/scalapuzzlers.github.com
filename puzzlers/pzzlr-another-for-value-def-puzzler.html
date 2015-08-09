@@ -1,0 +1,134 @@
+<h1>For Each Step...</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Marconi Lanna</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.6</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+def sumsTo1Traversable(numbers: TraversableOnce[Int]) = 
+  for {
+      x <- numbers
+      _ = println("DEBUG 1: x: " + x)
+      y <- x to 1
+  } println(x + y)
+
+def sumsTo1Iterable(numbers: Iterable[Int]) = 
+  for {
+      x <- numbers
+      _ = println("DEBUG 1: x: " + x)
+      y <- x to 1
+  } println(x + y)
+
+sumsTo1Traversable(1 to 2)
+sumsTo1Iterable(1 to 2)
+</pre>
+  <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+DEBUG 1: x: 1
+2
+DEBUG 1: x: 2
+DEBUG 2: x: 1
+2
+DEBUG 2: x: 2
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+DEBUG 1: x: 1
+2
+DEBUG 2: x: 1
+2
+DEBUG 2: x: 2
+</pre>
+    </li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+DEBUG 1: x: 1
+2
+DEBUG 1: x: 2
+DEBUG 2: x: 1
+DEBUG 2: x: 2
+2
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+DEBUG 1: x: 1
+DEBUG 1: x: 2
+2
+DEBUG 2: x: 1
+DEBUG 2: x: 2
+2
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    Multiple generators in for comprehensions and for loops result in nested
+    invocations of <tt>flatMap</tt> (SLS &sect;6.19):
+<pre class="prettyprint lang-scala">
+for { 
+    a <- expr1
+    b <- expr2
+    ...
+}
+</pre>
+    is desugared to code equivalent to:
+<pre class="prettyprint lang-scala">
+expr1 flatMap { a => expr2 flatMap ... }
+</pre>
+  </p>
+  <p>
+    This means that the statements of the second generator &ndash;
+    in the first example, <tt>println("DEBUG 1: x: " + x); 1 to 1</tt>
+    &ndash; are executed whenever the first generator moves on to the next
+    element. This happens only <em>after</em> the current element has been
+    passed &quot;all the way through&quot; the for expression. In the case of
+    the first example, this means that the debugging statement when
+    <tt>x</tt> has the value 2 is printed only after the statement
+    <tt>println(x + y)</tt> has been executed for <tt>x == 1</tt>.
+  </p>
+  <p>
+    Value definitions, on the other hand, effectively result in a 
+    &quot;transformation&quot; of the generator to which they are associated 
+    (SLS &sect;6.19):
+<pre class="prettyprint lang-scala">
+for { 
+    a <- expr1
+    v = vexpr
+    b <- expr2
+    ...
+}
+</pre>
+  is desugared to code equivalent to:
+<pre class="prettyprint lang-scala">
+expr1 map { a => (a, vexpr) } flatMap { case (a, v) => expr2 flatMap ... }
+</pre>
+  </p>
+  <p>
+    The the right-hand side expression of the value definition is executed
+    for each element of the first generator <em>before</em> the elements of
+    the generator are passed through to the remainder of the for expression.
+    In the second example, this means that the debugging statements are
+    executed for each element of the expression <tt>1 to 2</tt> before the
+    first execution (i.e. when <tt>x</tt> has the value 1) of the statement
+    <tt>println(x + y)</tt>.
+  </p>
+</div>
