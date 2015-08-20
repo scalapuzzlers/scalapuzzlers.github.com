@@ -61,7 +61,7 @@ List(42, 17)
     In order to resolve the type mismatch, the compiler tries to find an
     implicit conversion that it can apply to some part of the expression to
     produce the required type. In the first two cases, the compiler is able to
-    find a suitable implicit conversion, <a href="http://www.scala-lang.org/api/current/index.html#scala.Option$"
+    find a suitable implicit conversion, <a href="http://www.scala-lang.org/api/current/index.html#scala.Option$@option2Iterable[A](xo:Option[A]):Iterable[A]"
     target="_blank" /><tt>Option.option2Iterable</tt></a>. It applies this
     conversion to transform the statements to code equivalent to
     <tt>someNumbers flatMap { x => option2Iterable(x) }</tt> and
