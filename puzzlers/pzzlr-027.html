@@ -60,7 +60,7 @@ Does not compile
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-Recall that Scala has a <tt>StringBuilder</tt> that <a href="http://www.artima.com/pins1ed/working-with-lists.html#footnote16-5">shadows <tt>java.lang.StringBuilder</tt></a> and that it has an <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.mutable.StringBuilder"><tt>apply</tt></a> method.
+Recall that Scala has a <tt>StringBuilder</tt> that <a href="http://www.artima.com/pins1ed/working-with-lists.html#footnote16-5">shadows <tt>java.lang.StringBuilder</tt></a> and that it has an <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.mutable.StringBuilder@apply(index:Int):Char"><tt>apply</tt></a> method.
   </p>
   <p>
 The <tt>foreach</tt> takes a function with an Int parameter. <tt>StringBuilder.append</tt> returns a <tt>StringBuilder</tt>, and <tt>StringBuilder</tt> extends <tt>Function1</tt>, so the compiler can just use the returned value as the argument to the <tt>foreach</tt> call. Each iteration invokes <tt>StringBuilder.apply</tt>, which is an alias for <tt>StringBuilder.charAt</tt>.

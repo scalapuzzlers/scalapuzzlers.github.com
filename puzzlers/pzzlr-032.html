@@ -49,7 +49,7 @@ Found ()
   </p>
   </blockquote>
   <p>
-    In Scala, the "or else" idioms, such as <a href="http://www.scala-lang.org/api/current/index.html#scala.Option" target="_blank"><tt>Option.orElse</tt></a>, <tt>Option.getOrElse</tt>, <a href="http://www.scala-lang.org/api/current/index.html#scala.util.Try" target="_blank"><tt>Try.recover</tt></a> and <a href="http://www.scala-lang.org/api/current/index.html#scala.concurrent.Future" target="_blank"><tt>Future.recover</tt></a>, are defined to accept a wider type than you start with:
+    In Scala, the "or else" idioms, such as <a href="http://www.scala-lang.org/api/current/index.html#scala.Option@orElse[B>:A](alternative:=>Option[B]):Option[B]" target="_blank"><tt>Option.orElse</tt></a>, <tt>Option.getOrElse</tt>, <a href="http://www.scala-lang.org/api/current/index.html#scala.util.Try@recover[U>:T](f:PartialFunction[Throwable,U]):scala.util.Try[U]" target="_blank"><tt>Try.recover</tt></a> and <a href="http://www.scala-lang.org/api/current/index.html#scala.concurrent.Future@recover[U>:T](pf:PartialFunction[Throwable,U])(implicitexecutor:scala.concurrent.ExecutionContext):scala.concurrent.Future[U]" target="_blank"><tt>Future.recover</tt></a>, are defined to accept a wider type than you start with:
   </p>
   <p>
 <pre class="prettyprint lang-scala">

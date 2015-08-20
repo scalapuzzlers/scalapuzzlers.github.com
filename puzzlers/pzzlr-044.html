@@ -69,7 +69,7 @@ new TIndexableRange[Float](0, 10).apply(float2IntByFloor _)(2.5f)
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    We know that Scala treats function invocation as syntactic sugar for a call to the <a href="http://www.scala-lang.org/api/current/index.html#scala.Function1" target="_blank"><tt>apply</tt></a> method. And indeed,
+    We know that Scala treats function invocation as syntactic sugar for a call to the <a href="http://www.scala-lang.org/api/current/index.html#scala.Function1@apply(v1:T1):R" target="_blank"><tt>apply</tt></a> method. And indeed,
 <pre class="prettyprint lang-scala">
 floatIndexedRange(float2IntByFloor _)(2.5f)
 </pre>
@@ -87,7 +87,7 @@ scala> new TIndexableRange
 </pre>
   </p>
   <p>
-    We don't need to <em>explicitly</em> provide this argument since a suitable implicit, <tt>float2IntByRounding</tt>, is in scope. But in our expression, the compiler interprets the second argument list as an explicit specification of the required <tt>evidence$1</tt>. As a result, the statement is parsed as <tt>new TIndexableRange[Float](0, 10)(...).apply(...)</tt>, which compiles because <tt>float2IntByRounding</tt> is available to convert the <tt>Float</tt> passed to <a href="http://www.scala-lang.org/api/current/#scala.collection.immutable.Range" target="_blank"><tt>apply</tt></a> to the required <tt>Int</tt>.
+    We don't need to <em>explicitly</em> provide this argument since a suitable implicit, <tt>float2IntByRounding</tt>, is in scope. But in our expression, the compiler interprets the second argument list as an explicit specification of the required <tt>evidence$1</tt>. As a result, the statement is parsed as <tt>new TIndexableRange[Float](0, 10)(...).apply(...)</tt>, which compiles because <tt>float2IntByRounding</tt> is available to convert the <tt>Float</tt> passed to <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.immutable.Range@apply(idx:Int):Int" target="_blank"><tt>apply</tt></a> to the required <tt>Int</tt>.
   </p>
   <p>
     The resulting expression is thus:

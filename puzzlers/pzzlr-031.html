@@ -67,7 +67,7 @@ false
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    <tt>Double</tt> extends <tt>Ordering</tt>, which as a total order requires that a comparison between two values yield either a <a href="https://github.com/scala/scala/blob/master/src/library/scala/math/Ordering.scala#L85" target="_blank">positive, negative or zero result</a>. Since the comparison operations <tt>gt</tt>, <tt>lt</tt> and <tt>equiv</tt> are implemented in terms of this comparison, one of the three must be true, even for comparisons involving <tt>NaN</tt>.
+    <tt>Double</tt> extends <tt>Ordering</tt>, which as a total order requires that a comparison between two values yield either a <a href="https://github.com/scala/scala/blob/2.12.x/src/library/scala/math/Ordering.scala#L77-L85" target="_blank">positive, negative or zero result</a>. Since the comparison operations <tt>gt</tt>, <tt>lt</tt> and <tt>equiv</tt> are implemented in terms of this comparison, one of the three must be true, even for comparisons involving <tt>NaN</tt>.
   </p>
   <p>
     The equivalent primitive operators <tt>&gt;</tt>, <tt>&lt;</tt> and <tt>==</tt> implement the IEEE floating-point specification, under which these three comparisons <tt>NaN</tt> are false.

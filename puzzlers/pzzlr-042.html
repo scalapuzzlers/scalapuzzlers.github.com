@@ -59,15 +59,15 @@ No monsters here. Lucky you.
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    After seeing <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.immutable.Map" target="_blank"><tt>withDefault</tt></a>, it may be tempting to think that <tt>withDefaultValue</tt> is a &quot;factory&quot; that somehow produces a fresh instance of the given default value on each invocation.
+    After seeing <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.immutable.Map@withDefault[B1>:B](d:A=>B1):scala.collection.immutable.Map[A,B1]" target="_blank"><tt>withDefault</tt></a>, it may be tempting to think that <tt>withDefaultValue</tt> is a &quot;factory&quot; that somehow produces a fresh instance of the given default value on each invocation.
   </p>
   <p>
-    What <tt>withDefaultValue</tt> actually does is pretty much what it says: it <a href="https://github.com/scala/scala/blob/master/src/library/scala/collection/immutable/Map.scala#L58" target="_blank">returns the value it was given</a> every time.
+    What <tt>withDefaultValue</tt> actually does is pretty much what it says: it <a href="https://github.com/scala/scala/blob/2.12.x/src/library/scala/collection/immutable/Map.scala#L64" target="_blank">returns the value it was given</a> every time.
   </p>
   <p>
     Consequently, if the default value is <em>mutable</em>, any changes made to it will affect all future callers.
   </p>
   <p>
-    The <a target="_blank" href="https://groups.google.com/forum/#!topic/scala-language/DQ3DWSof6ls">mailing list thread</a> <a target="_blank" href="https://groups.google.com/d/msg/scala-language/DQ3DWSof6ls/g7P_OwUZJJkJ">mentions a solution</a> involving overriding the <a target="_blank" href="https://github.com/scala/scala/blob/master/src/library/scala/collection/Map.scala#L53"><tt>default</tt> method in <tt>collection.Map</tt></a>. It seems simpler to me to stick with <tt>withDefault</tt> whenever a fresh value - mutable or immutable - is desired, and to use <tt>withDefaultValue</tt> <em>only</em> when the <u>same instance</u> is required every time.
+    The <a target="_blank" href="https://groups.google.com/forum/#!topic/scala-language/DQ3DWSof6ls">mailing list thread</a> <a target="_blank" href="https://groups.google.com/d/msg/scala-language/DQ3DWSof6ls/g7P_OwUZJJkJ">mentions a solution</a> involving overriding the <a target="_blank" href="https://github.com/scala/scala/blob/2.12.x/src/library/scala/collection/Map.scala#L53"><tt>default</tt> method in <tt>collection.Map</tt></a>. It seems simpler to me to stick with <tt>withDefault</tt> whenever a fresh value - mutable or immutable - is desired, and to use <tt>withDefaultValue</tt> <em>only</em> when the <u>same instance</u> is required every time.
   </p>
 </div>

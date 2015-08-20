@@ -44,10 +44,10 @@ false3
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    The <a href="http://www.scala-lang.org/api/current/scala/collection/TraversableOnce.html" target="_blank"><tt>toSet</tt></a> method is parameterless. Adding parentheses means that we call the <tt>apply</tt> method of the returned object!
+    The <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.TraversableOnce@toSet[B>:A]:scala.collection.immutable.Set[B]" target="_blank"><tt>toSet</tt></a> method is parameterless. Adding parentheses means that we call the <tt>apply</tt> method of the returned object!
   </p>
   <p>
-    Luckily (or not), the returned <tt>Set</tt> <em>has</em> an <a href="http://www.scala-lang.org/api/current/scala/collection/Set.html" target="_blank"><tt>apply</tt></a> method, which is equivalent to <tt>contains</tt>. But it takes an argument! So what is going on?
+    Luckily (or not), the returned <tt>Set</tt> <em>has</em> an <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.Set@apply(elem:A):Boolean" target="_blank"><tt>apply</tt></a> method, which is equivalent to <tt>contains</tt>. But it takes an argument! So what is going on?
   </p>
   <p>
     The compiler tries to make sense of our code by interpreting it as:
