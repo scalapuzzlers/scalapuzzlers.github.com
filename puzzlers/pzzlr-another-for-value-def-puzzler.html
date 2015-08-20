@@ -95,29 +95,25 @@ and the second throws a runtime exception
     provided function to each element in the original iterable. In
     <tt>pingpongIterable</tt>, each element of the range <tt>numbers</tt> is
     retrieved, and <tt>&quot;Ping-i&quot;</tt> printed for it, before the
-    method <tt>foreach</tt> is called.
+    <tt>foreach</tt> block is reached.
   </p>
   <p>
     The trait <tt>TraversableOnce</tt>, on the other hand, does not define a
     <tt>map</tt> method, so <tt>Range</tt>'s implementation of <tt>map</tt>
-    (inherited from <tt>TraversableLike</tt>) is never invoked. The reason
-    <tt>map</tt> can be called on <tt>TraversableOnce</tt> is due to an
-    implicit conversion to <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.TraversableOnce$$MonadOps" target="_blank">
-    <tt>TraversableOnce.MonadOps</tt></a> &ndash; in
+    is never invoked. The reason <tt>map</tt> can be called on
+    <tt>TraversableOnce</tt> is due to an implicit conversion to <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.TraversableOnce$$MonadOps" target="_blank">
+    <tt>TraversableOnce.MonadOps</tt></a>. In
     <tt>pingpongTraversable</tt>, the invocation of <tt>numbers.map</tt> is
-    transformed into code equivalent to <tt>MonadOps(numbers) map ...</tt>.
+    transformed into code equivalent to <tt>MonadOps(numbers) map { ... }</tt>.
   </p>
   <p>
-    The method <tt>MonadOps.map</tt> is implemented by converting the
-    traversable to an <tt>Iterator</tt> and calling <tt>map</tt> on that.
-    As per <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.Iterator@map[B](f:A=>B):Iterator[B]" target="_blank">the documentation</a>, this returns
-    a new <strong>iterator</strong> which transforms every value produced by
-    the orginal iterator by applying the specified function <em>when the value
-    is requested</em>.
-  </p>
-  <p>
-    In the case of <tt>pingpongTraversable</tt>, therefore, the
-    <tt>&quot;Ping-t&quot;</tt> statements are printed only when successive
-    elements of the collection are retrieved in the <tt>foreach</tt> block.
+    <tt>MonadOps.map</tt> is implemented by converting the traversable to an
+    iterator and calling <tt>map</tt> on that. As per the <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.Iterator@map[B](f:A=>B):Iterator[B]" target="_blank">documentation for
+    <tt>Iterator.map</tt></a>, this returns a new iterator which transforms
+    every value produced by the orginal iterator by applying the specified
+    function <em>when a value is requested</em>. In the case of
+    <tt>pingpongTraversable</tt>, therefore, the <tt>&quot;Ping-t&quot;</tt>
+    statements are printed only when successive elements of the collection
+    are retrieved in the <tt>foreach</tt> block.
   </p>
 </div>
