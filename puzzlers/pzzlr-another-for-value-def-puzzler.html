@@ -108,7 +108,7 @@ and the second throws a runtime exception
   </p>
   <p>
     <tt>MonadOps.map</tt> is implemented by converting the traversable to an
-    iterator and calling <tt>map</tt> on that. As per the <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.Iterator@map[B](f:A=>B):Iterator[B]" target="_blank">documentation for
+    iterator and calling <tt>map</tt> on that. As per the <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.Iterator@map[B](f:A=>B):Iterator[B]" target="_blank">Scaladoc for
     <tt>Iterator.map</tt></a>, this returns a new iterator which transforms
     every value produced by the orginal iterator by applying the specified
     function <em>when a value is requested</em>. In the case of
