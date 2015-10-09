@@ -1,0 +1,83 @@
+<h1>Sequence match puzzler</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Scala Team @ Razorfish</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <!--
+        If no source (your puzzler is not mentioned anywhere on the web), just say N/A
+      --> 
+      N/A
+      <td><a target="_blank" href="PLACEHOLDER">PLACEHOLDER</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.7</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+def firstElement[T](seq: Seq[T]): Unit =
+  seq match {
+    case x :: xs => println(x)
+    case _ => println("Nothing")
+  }
+val seq1: Seq[Int] = Seq(1,2,3)
+firstElement(seq1)
+</pre>
+  <ol>
+    <!--
+      The correct answer should have id for corresponding li element equal to "correct-answer".
+      When placing code snippets wrap them with pre tag:
+      <pre class="prettyprint lang-scala">
+        ...
+      </pre>
+     -->
+    <li id="correct-answer">1</li>
+    <li>Nothing</li>
+    <li>2</li>
+    <li>3</li>
+  </ol>
+</div>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+import java.util.LinkedList
+import scala.collection.JavaConversions._
+
+val jList = new LinkedList()
+
+jList.add(1)
+jList.add(2)
+jList.add(3)
+
+val seq2 = jList.toSeq
+firstElement(seq2)
+</pre>
+  <ol>
+    <!--
+      The correct answer should have id for corresponding li element equal to "correct-answer".
+      When placing code snippets wrap them with pre tag:
+      <pre class="prettyprint lang-scala">
+        ...
+      </pre>
+     -->
+    <li id="correct-answer">1</li>
+    <li>Nothing</li>
+    <li>2</li>
+    <li>3</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    The frenquently used type Seq is an interface with an apply method that returns a List when called so seq1 is List(1,2,3) therfore matches the first case.
+    The java conversion method that's invoked when we call toSeq on a LinkedList retuns a Buffer which does not match the first case (only scala List have a :: defined on them). To catch all sequences we should have used the +: for the matching case.
+  </p>
+</div>
