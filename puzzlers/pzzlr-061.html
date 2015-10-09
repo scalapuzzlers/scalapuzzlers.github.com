@@ -10,8 +10,7 @@
       <!--
         If no source (your puzzler is not mentioned anywhere on the web), just say N/A
       --> 
-      N/A
-      <td><a target="_blank" href="PLACEHOLDER">PLACEHOLDER</a></td>
+      <td><a target="_blank" href="N/A">N/A</a></td>
     </tr>
     <tr>
       <td><strong>First tested with Scala version</strong></td>
@@ -22,13 +21,26 @@
 <div class="code-snippet">
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
-def firstElement[T](seq: Seq[T]): Unit =
-  seq match {
-    case x :: xs => println(x)
-    case _ => println("Nothing")
-  }
-val seq1: Seq[Int] = Seq(1,2,3)
-firstElement(seq1)
+  def firstElement[T](seq: Seq[T]): Unit =
+    seq match {
+      case x :: xs => println(x)
+      case _ => println("Nothing")
+    }
+  val seq1: Seq[Int] = Seq(1,2,3)
+
+  import java.util.LinkedList
+  import scala.collection.JavaConversions._
+
+  val jList = new LinkedList()
+
+  jList.add(1)
+  jList.add(2)
+  jList.add(3)
+
+  val seq2 = jList.toSeq
+
+  firstElement(seq1)
+  firstElement(seq2)
 </pre>
   <ol>
     <!--
@@ -38,39 +50,30 @@ firstElement(seq1)
         ...
       </pre>
      -->
-    <li id="correct-answer">1</li>
-    <li>Nothing</li>
-    <li>2</li>
-    <li>3</li>
-  </ol>
-</div>
-<div class="code-snippet">
-  <h3>What is the result of executing the following code?</h3>
-<pre class="prettyprint lang-scala">
-import java.util.LinkedList
-import scala.collection.JavaConversions._
-
-val jList = new LinkedList()
-
-jList.add(1)
-jList.add(2)
-jList.add(3)
-
-val seq2 = jList.toSeq
-firstElement(seq2)
-</pre>
-  <ol>
-    <!--
-      The correct answer should have id for corresponding li element equal to "correct-answer".
-      When placing code snippets wrap them with pre tag:
+    <li id="correct-answer">Prints
       <pre class="prettyprint lang-scala">
-        ...
+1
+Nothing
       </pre>
-     -->
-    <li id="correct-answer">1</li>
-    <li>Nothing</li>
-    <li>2</li>
-    <li>3</li>
+    </li>
+    <li>Prints
+      <pre class="prettyprint lang-scala">
+Nothing
+1
+      </pre>
+    </li>
+    <li>Prints
+      <pre class="prettyprint lang-scala">
+1
+1
+      </pre>
+    </li>
+    <li>Prints
+      <pre class="prettyprint lang-scala">
+Nothing
+Nothing
+      </pre>
+    </li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
