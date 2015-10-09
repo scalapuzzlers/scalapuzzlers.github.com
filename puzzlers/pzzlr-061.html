@@ -31,13 +31,13 @@
   import java.util.LinkedList
   import scala.collection.JavaConversions._
 
-  val jList = new LinkedList()
+  val jList = new LinkedList[Int]()
 
   jList.add(1)
   jList.add(2)
   jList.add(3)
 
-  val seq2 = jList.toSeq
+  val seq2: Seq[Int] = jList.toSeq
 
   firstElement(seq1)
   firstElement(seq2)
