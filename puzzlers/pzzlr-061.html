@@ -21,15 +21,14 @@
 <div class="code-snippet">
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
+  import java.util.LinkedList
+  import scala.collection.JavaConversions._
+  
   def firstElement[T](seq: Seq[T]): Unit =
     seq match {
       case x :: xs => println(x)
       case _ => println("Nothing")
     }
-  val seq1: Seq[Int] = Seq(1,2,3)
-
-  import java.util.LinkedList
-  import scala.collection.JavaConversions._
 
   val jList = new LinkedList[Int]()
 
@@ -37,6 +36,7 @@
   jList.add(2)
   jList.add(3)
 
+  val seq1: Seq[Int] = Seq(1,2,3)
   val seq2: Seq[Int] = jList.toSeq
 
   firstElement(seq1)
