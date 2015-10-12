@@ -21,26 +21,23 @@
 <div class="code-snippet">
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
-  import java.util.LinkedList
+  import java.util.{List => JList, LinkedList}
   import scala.collection.JavaConversions._
-  
-  def firstElement[T](seq: Seq[T]): Unit =
-    seq match {
-      case x :: xs => println(x)
-      case _ => println("Nothing")
-    }
 
-  val jList = new LinkedList[Int]()
+  def listFromJava: JList[Int] = {
+    val jlist = new LinkedList[Int]()
+    jlist.add(1)
+    jlist.add(2)
+    jlist
+  }
 
-  jList.add(1)
-  jList.add(2)
-  jList.add(3)
+  def printHeadOrEmpty(s: Seq[_]) = s match {
+     case hd :: _ => println(hd)
+     case _ => println("Empty :-(")
+  }
 
-  val seq1: Seq[Int] = Seq(1,2,3)
-  val seq2: Seq[Int] = jList.toSeq
-
-  firstElement(seq1)
-  firstElement(seq2)
+  printHeadOrEmpty(listFromJava.toSeq)
+  printHeadOrEmpty(Seq(listFromJava: _*)) 
 </pre>
   <ol>
     <!--
