@@ -1,0 +1,88 @@
+<h1>Sequence match puzzler</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Scala Team @ Razorfish</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <!--
+        If no source (your puzzler is not mentioned anywhere on the web), just say N/A
+      --> 
+      <td><a target="_blank" href="N/A">N/A</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.7</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+  import java.util.{List => JList, LinkedList}
+  import scala.collection.JavaConversions._
+
+  def listFromJava: JList[Int] = {
+    val jlist = new LinkedList[Int]()
+    jlist.add(1)
+    jlist.add(2)
+    jlist
+  }
+
+  def printHeadOrEmpty(s: Seq[_]) = s match {
+     case hd :: _ => println(hd)
+     case _ => println("Empty :-(")
+  }
+
+  printHeadOrEmpty(listFromJava)
+  printHeadOrEmpty(listFromJava.toSeq)
+  printHeadOrEmpty(Seq(listFromJava: _*)) 
+</pre>
+  <ol>
+    <!--
+      The correct answer should have id for corresponding li element equal to "correct-answer".
+      When placing code snippets wrap them with pre tag:
+      <pre class="prettyprint lang-scala">
+        ...
+      </pre>
+     -->
+    <li>Prints
+      <pre class="prettyprint lang-scala">
+1
+1
+Empty :-(
+      </pre>
+    </li>
+    <li id="correct-answer">Prints
+      <pre class="prettyprint lang-scala">
+Empty :-(
+Empty :-(
+1
+      </pre>
+    </li>
+    <li>Prints
+      <pre class="prettyprint lang-scala">
+Empty :-(
+1
+1
+      </pre>
+    </li>
+    <li>Prints
+      <pre class="prettyprint lang-scala">
+Empty :-(
+Empty :-(
+Empty :-(
+      </pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    The frenquently used constructor scala.collection.Seq is an interface with an apply method that returns a Scala list by default when called so, Seq(1,2) returns a List[Int] and matches the first case.
+    The java conversion method that's invoked when we call toSeq on a Java list, or when the LinkedList is passed directly, returns a Buffer because this is the only conversion supported for Java lists which doesn't match the first case (only a Scala list have :: defined on them). To catch all sequences we should used the +: for the matching case.
+  </p>
+</div>
