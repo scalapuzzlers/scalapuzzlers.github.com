@@ -36,6 +36,7 @@
      case _ => println("Empty :-(")
   }
 
+  printHeadOrEmpty(listFromJava)
   printHeadOrEmpty(listFromJava.toSeq)
   printHeadOrEmpty(Seq(listFromJava: _*)) 
 </pre>
@@ -50,23 +51,27 @@
     <li id="correct-answer">Prints
       <pre class="prettyprint lang-scala">
 1
+1
 Nothing
       </pre>
     </li>
     <li>Prints
       <pre class="prettyprint lang-scala">
 Nothing
+Nothing
 1
       </pre>
     </li>
     <li>Prints
       <pre class="prettyprint lang-scala">
+Nothing
 1
 1
       </pre>
     </li>
     <li>Prints
       <pre class="prettyprint lang-scala">
+Nothing
 Nothing
 Nothing
       </pre>
@@ -77,13 +82,7 @@ Nothing
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    The frenquently used type Seq is an interface with an apply method that returns a List when called so seq1 is List(1,2,3) therefore matches the first case.
-    The java conversion method that's invoked when we call toSeq on a LinkedList returns a Buffer which does not match the first case (only scala Lists have a :: defined on them). To catch all sequences we should have used the +: for the matching case.
-  </p>
-  <p><strong>More insight</strong></p>
-  <p>
-    Seq can't be instantiated, so Scala has to pick a subtype when you declare something as a Seq.  In the case of Seq(1, 2, 3), it chooses List, because that's the default.  But Scala apparently understands that LinkedList is a mutable collection, and JavaConversions defaults to a mutable class that is generic enough to cover any kind of mutable Java list, namely Buffer.
-
-    Now, you'd think that there would be a type error there because on the one hand seq1 is a scala.collection.Seq, and on the other hand seq2 is a scala.collection.mutable.Seq, but scala.collection.mutable.Seq mixes in the collection.Seq trait, so they both count as a collection.Seq.  So really what's happening is that we're equivocating between two distinct types that are both called Seq, and which are interchangeable based on their type signature.  So you can miss the fact that they are actually different, and that they default to different instantiated collections
+    The frenquently used constructor scala.collection.Seq is an interface with an apply method that returns a List[Int] instance by default when called so Seq(1,2) therefore matches the first case.
+    The java conversion method that's invoked when we call toSeq on a Java list, or when the LinkedList is passed directly, returns a Buffer because this is the only conversion supported for Java lists which doesn't match the first case (only a Scala list have :: defined on them). To catch all sequences we should used the +: for the matching case.
   </p>
 </div>
