@@ -82,7 +82,7 @@ Nothing
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    The frenquently used constructor scala.collection.Seq is an interface with an apply method that returns a List[Int] instance by default when called so Seq(1,2) therefore matches the first case.
+    The frenquently used constructor scala.collection.Seq is an interface with an apply method that returns a Scala list by default when called so, Seq(1,2) returns a List[Int] and matches the first case.
     The java conversion method that's invoked when we call toSeq on a Java list, or when the LinkedList is passed directly, returns a Buffer because this is the only conversion supported for Java lists which doesn't match the first case (only a Scala list have :: defined on them). To catch all sequences we should used the +: for the matching case.
   </p>
 </div>
