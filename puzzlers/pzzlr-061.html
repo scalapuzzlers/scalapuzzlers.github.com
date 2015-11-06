@@ -1,0 +1,92 @@
+<h1>Heads You Win...</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>The Razorfish Scala team</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.6</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+import java.util.{List => JList, LinkedList}
+import scala.collection.JavaConversions._
+
+def listFromJava: JList[Int] = {
+  val jlist = new LinkedList[Int]()
+  jlist.add(1)
+  jlist.add(2)
+  jlist
+}
+
+def printHeadOrEmpty(s: Seq[_]) = s match {
+   case hd :: _ => println(hd)
+   case _ => println("Empty :-(")
+}
+
+printHeadOrEmpty(listFromJava)
+printHeadOrEmpty(listFromJava.toSeq)
+printHeadOrEmpty(Seq(listFromJava: _*))
+</pre>
+  <ol>
+    <li>Prints
+<pre class="prettyprint lang-scala">
+1
+1
+1
+</pre>
+    </li>
+    <li>Prints
+<pre class="prettyprint lang-scala">
+Empty :-(
+1
+1
+</pre>
+    </li>
+    <li>Prints
+<pre class="prettyprint lang-scala">
+Empty :-(
+Empty :-(
+Empty :-(
+</pre>
+    </li>
+    <li id="correct-answer">Prints
+<pre class="prettyprint lang-scala">
+Empty :-(
+Empty :-(
+1
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    Scala's <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.JavaConversions%24" target="_blank">
+    <tt>JavaConversions</tt></a> turn Java lists into instances of
+    <tt>collection.mutable.Buffer</tt>, since Java lists are mutable. The
+    pattern match <tt>hd :: _</tt>, on the other hand, is a constructor
+    pattern using the case class <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.immutable.$colon$colon" target="_blank"><tt>::</tt></a>,
+    which is an <em>immutable</em> list.
+  </p>
+  <p>
+    Therefore, the first two matches fail. The third match, however, succeeds.
+    This is due to the fact that the expression <tt>Seq(listFromJava: _*)</tt>,
+    which invokes <tt>collection.Seq</tt>, returns an immutable sequence.
+  </p>
+  <p>
+    To match both immutable
+    <em>and</em> mutable sequences, use the extractor <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.$plus$colon$" target="_blank"><tt>+:</tt></a>
+    instead.
+  </p>
+</div>
