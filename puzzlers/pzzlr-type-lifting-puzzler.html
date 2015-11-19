@@ -1,4 +1,4 @@
-<h1>TODO</h1>
+<h1>Inference Hindrance</h1>
 <table class="table meta-table table-condensed">
   <tbody>
     <tr>
@@ -19,50 +19,46 @@
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
 import scala.language.implicitConversions
-
 object Completed
+
 implicit def any2Completed(a: Any): Completed.type = Completed
-def debugLog[T](t: T): T = { println("DEBUG: " + t); t }
+def log[T](t: T): T = { println("Log: " + t); t }
 
 def duplicate1(s: String): Completed.type = {
-  val res = debugLog(s + s)
+  if (s == null) throw new NullPointerException()
+  val res = log(s + s)
   res
 }
 def duplicate2(s: String): Completed.type = {
-  debugLog(s + s)
+  if (s == null) throw new NullPointerException()
+  log(s + s)
 }
 
-duplicate1("Hi")
-duplicate2("Hi")
+duplicate1("Hello")
+duplicate2("world")
 </pre>
   <ol>
     <li>Prints:
 <pre class="prettyprint lang-scala">
-1
-3
-1
-3
+Log: worldworld
 </pre>
+    </li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+Log: HelloHello
+Log: $line4.$read$$iw$$iw$Completed$@3305fed5
+</pre>
+    </li>
+    <li>The first statement prints:
+<pre class="prettyprint lang-scala">
+Log: HelloHello
+</pre>
+and the second throws a <tt>NullPointerException</tt>
     </li>
     <li>Prints:
 <pre class="prettyprint lang-scala">
-1
-2
-1
-3
-</pre>
-    </li>
-    <li id="correct-answer">The first statement prints:
-<pre class="prettyprint lang-scala">
-1
-3
-</pre>
-and the second throws a runtime exception
-    </li>
-    <li>The first statement throws a runtime exception and the second prints:
-<pre class="prettyprint lang-scala">
-1
-3
+Log: HelloHello
+Log: worldworld
 </pre>
     </li>
   </ol>
@@ -71,6 +67,50 @@ and the second throws a runtime exception
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    TODO
+    In the method <tt>duplicate1</tt>, the type of value <tt>res</tt> is
+    not specified, and is inferred to be <tt>String</tt>. This type does not
+    match the expected return type <tt>Completed.type</tt> of the method, so
+    the compiler searches for an applicable implicit conversion
+    (SLS &sect;7.3). It finds the implicit view <tt>any2Completed</tt>, and
+    turns the last statement of method <tt>duplicate1</tt> into
+    <tt>any2Completed(res)</tt>.
+  </p>
+  <p>
+    When invoked, the call from <tt>duplicate1</tt> to the method <tt>log</tt>
+    prints <tt>Log: HelloHello</tt>.
+  </p>
+  <p>
+    In the case of method <tt>duplicate2</tt>, the compiler first needs to
+    determine the type of the last statement <tt>log(s + s)</tt>. Since the
+    return type of method <tt>log</tt> is determined by its type parameter,
+    this means that the compiler needs to figure out the value of the type
+    parameter <tt>T</tt> for this particular call to method <tt>log</tt>.
+  </p>
+  <p>
+    To determine the value for a type parameter that is not explicitly
+    specified, the compiler performs local type inference (SLS &sect;6.26.4).
+    This procedure takes into account, amongst other things, the expected type
+    of the statement. In this case, the expected type is the return type of
+    the method <tt>duplicate2</tt>, i.e. <tt>Completed.type</tt>.
+  </p>
+  <p>
+    Having determined that the value of the type parameter <tt>T</tt> for this
+    invocation of method <tt>log</tt> should be <tt>Completed.type</tt>, the
+    compiler then needs to figure out how to deal with the argument
+    <tt>s + s</tt> passed to <tt>log</tt>. This is a <tt>String</tt>, but,
+    according to the type signature of <tt>log</tt>, also needs to be a
+    <tt>Completed.type</tt>.
+  </p>
+  <p>
+    The compiler again searches for an applicable implicit conversion and
+    once more finds the view <tt>any2Completed</tt>. This is inserted
+    around the argument passed to method <tt>log</tt>, so the last statement
+    of method <tt>duplicate2</tt> becomes
+    <tt>log[Completed.type](any2Completed(s + s))</tt>.
+  </p>
+  <p>
+    As a result, the call to <tt>log</tt> from method <tt>duplicate2</tt>
+    prints <tt>Log: $line4.$read$$iw$$iw$Completed$@3305fed5</tt>, or a similar
+    string representation of the <tt>Completed</tt> object.
   </p>
 </div>
