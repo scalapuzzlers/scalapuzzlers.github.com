@@ -19,7 +19,7 @@
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
 import scala.language.implicitConversions
-object Completed
+case object Completed
 
 implicit def any2Completed(a: Any): Completed.type = Completed
 def log[T](t: T): T = { println("Log: " + t); t }
@@ -46,7 +46,7 @@ Log: worldworld
     <li id="correct-answer">Prints:
 <pre class="prettyprint lang-scala">
 Log: HelloHello
-Log: $line4.$read$$iw$$iw$Completed$@3305fed5
+Log: Completed
 </pre>
     </li>
     <li>The first statement prints:
@@ -110,7 +110,7 @@ Log: worldworld
   </p>
   <p>
     As a result, the call to <tt>log</tt> from method <tt>duplicate2</tt>
-    prints <tt>Log: $line4.$read$$iw$$iw$Completed$@3305fed5</tt>, or a similar
-    string representation of the <tt>Completed</tt> object.
+    prints <tt>Log: Completed</tt>, the string representation of the 
+    <tt>Completed</tt> case object.
   </p>
 </div>
