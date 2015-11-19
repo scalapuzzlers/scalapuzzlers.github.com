@@ -18,69 +18,69 @@
 <div class="code-snippet">
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
-val numberNames = Map(1 -> "one", 2 -> "two")
+val responses = Map("forehand" -> "backhand", "slice" -> "drop shot")
 
-def pingpongIterable(numbers: Iterable[Int]) = numbers map {
-    num => println("Ping-i " + num); numberNames(num)
+def pingpongIterable(shots: Iterable[String]) = shots map {
+    shot => println("Ping-i " + shot); responses(shot)
   } foreach {
-    name => println("Pong-i " + name)
+    response => println("Pong-i " + response)
   }
 
-def pingpongTraversable(numbers: TraversableOnce[Int]) = numbers map {
-    num => println("Ping-t " + num); numberNames(num)
+def pingpongTraversable(shots: TraversableOnce[String]) = shots map {
+    shot => println("Ping-t " + shot); responses(shot)
   } foreach {
-    name => println("Pong-t " + name)
+    response => println("Pong-t " + response)
   }
 
-pingpongIterable(1 to 2)
-pingpongTraversable(1 to 2)
+pingpongIterable(Seq("forehand", "slice"))
+pingpongTraversable(Seq("forehand", "slice"))
 </pre>
   <ol>
     <li>Prints:
 <pre class="prettyprint lang-scala">
-Ping-i 1
-Pong-i one
-Ping-i 2
-Pong-i two
+Ping-i forehand
+Pong-i backhand
+Ping-i slice
+Pong-i drop shot
 
-Ping-t 1
-Pong-t one
-Ping-t 2
-Pong-t two
+Ping-t forehand
+Pong-t backhand
+Ping-t slice
+Pong-t drop shot
 </pre>
     </li>
     <li>Prints:
 <pre class="prettyprint lang-scala">
-Ping-i 1
-Ping-i 2
-Pong-i one
-Pong-i two
+Ping-i forehand
+Ping-i slice
+Pong-i backhand
+Pong-i drop shot
 
-Ping-t 1
-Ping-t 2
-Pong-t one
-Pong-t two
+Ping-t forehand
+Ping-t slice
+Pong-t backhand
+Pong-t drop shot
 </pre>
     </li>
     <li id="correct-answer">Prints:
 <pre class="prettyprint lang-scala">
-Ping-i 1
-Ping-i 2
-Pong-i one
-Pong-i two
+Ping-i forehand
+Ping-i slice
+Pong-i backhand
+Pong-i drop shot
 
-Ping-t 1
-Pong-t one
-Ping-t 2
-Pong-t two
+Ping-t forehand
+Pong-t backhand
+Ping-t slice
+Pong-t drop shot
 </pre>
     </li>
     <li>The first statement prints:
 <pre class="prettyprint lang-scala">
-Ping-i 1
-Pong-i one
-Ping-i 2
-Pong-i two
+Ping-i forehand
+Pong-i backhand
+Ping-i slice
+Pong-i drop shot
 </pre>
 and the second throws a runtime exception
     </li>
@@ -91,20 +91,20 @@ and the second throws a runtime exception
   <h3>Explanation</h3>
   <p>
     Method <tt>map</tt> on <tt>Iterable</tt>, which is inherited by the
-    <tt>Range</tt> class, returns a new collection created by applying the
+    <tt>Seq</tt> class, returns a new collection created by applying the
     provided function to each element in the original iterable. In
-    <tt>pingpongIterable</tt>, each element of the range <tt>numbers</tt> is
+    <tt>pingpongIterable</tt>, each element of the sequence <tt>shots</tt> is
     retrieved, and <tt>&quot;Ping-i&quot;</tt> printed for it, before the
     <tt>foreach</tt> block is reached.
   </p>
   <p>
     The trait <tt>TraversableOnce</tt>, on the other hand, does not define a
-    <tt>map</tt> method, so <tt>Range</tt>'s implementation of <tt>map</tt>
+    <tt>map</tt> method, so <tt>Seq</tt>'s implementation of <tt>map</tt>
     is never invoked. The reason <tt>map</tt> can be called on
     <tt>TraversableOnce</tt> is due to an implicit conversion to <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.TraversableOnce$$MonadOps" target="_blank">
     <tt>TraversableOnce.MonadOps</tt></a>. In
-    <tt>pingpongTraversable</tt>, the invocation of <tt>numbers.map</tt> is
-    transformed into code equivalent to <tt>MonadOps(numbers) map { ... }</tt>.
+    <tt>pingpongTraversable</tt>, the invocation of <tt>shots.map</tt> is
+    transformed into code equivalent to <tt>MonadOps(shots) map { ... }</tt>.
   </p>
   <p>
     <tt>MonadOps.map</tt> is implemented by converting the traversable to an
