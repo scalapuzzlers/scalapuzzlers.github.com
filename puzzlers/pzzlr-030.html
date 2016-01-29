@@ -56,8 +56,9 @@ NaN
   </p>
   <p>
     This violates the expectations of the implementation of <tt>max</tt> in
-    <tt>TraversableOnce</tt>. This assumes that it can keep track of the
-    greatest element so far by checking whether it is <a href="https://github.com/scala/scala/blob/2.12.x/src/library/scala/collection/TraversableOnce.scala#L230" target="_blank">larger than or equal to the next element</a>, and choosing the next element if the comparison fails.
+    <tt>TraversableOnce</tt>, which tries to keep track of the greatest
+    element so far by checking whether it is <a href="https://github.com/scala/scala/blob/2.12.x/src/library/scala/collection/TraversableOnce.scala#L230" target="_blank">larger than or equal to the next element</a>. If the comparison fails, the next element is assumed to be greater and
+    is carried forward.
   </p>
   <p>
     In the first case, this results in <tt>Double.NaN</tt> being chosen as
