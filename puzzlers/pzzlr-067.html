@@ -1,0 +1,58 @@
+<h1>Inconstant Constants</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Bill Venners</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.6</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+@SerialVersionUID(Foo.InternalVersion) object Foo {
+  final val InternalVersion = 1L
+}
+
+@SerialVersionUID(Bar.InternalVersion) object Bar {
+  final val InternalVersion: Long = 2L
+}
+</pre>
+  <ol>
+    <li id="correct-answer">The first object definition compiles successfully, and the second fails to compile</li>
+    <li>Both object definition compile successfully</li>
+    <li>Both object definitions fail to compile</li>
+    <li>The first object definition fails to compile, and the second compiles successfully</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    The argument provided to the <tt>@SerialVersionUID</tt> must be a constant
+    expression. As specified in SLS &sect;4.1, a constant value definition in
+    Scala begins with <tt>final val</tt> and <em>no type annotation may be
+    given</em>.
+  </p>
+  <p>
+    Therefore, <tt>Bar.InternalVersion</tt> is not actually a valid constant
+    value. So while object <tt>Foo</tt> compiles successfully, the definition
+    of object <tt>Bar</tt> fails to compile:
+<pre class="prettyprint lang-scala">
+scala> @SerialVersionUID(Bar.InternalVersion) object Bar {
+     |   final val InternalVersion: Long = 2L
+     | }
+<console>:7: error: annotation argument needs to be a constant; found: this.Bar.InternalVersion
+       @SerialVersionUID(Bar.InternalVersion) object Bar {
+                             ^
+</pre>
+  </p>
+</div>
