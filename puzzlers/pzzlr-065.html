@@ -1,0 +1,90 @@
+<h1>A Matter of Context</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Marconi Lanna</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.6</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+def tmpDir(uniqueSuffix: String) =
+  """\\builder\tmp-""" + uniqueSuffix
+def tmpDir2(uniqueSuffix: String) =
+  s"""\\builder\tmp-${uniqueSuffix}"""
+def tmpDir3(uniqueSuffix: String) =
+  s"\\builder\tmp-${uniqueSuffix}"
+
+println(tmpDir("42"))
+println(tmpDir2("42"))
+println(tmpDir3("42"))
+</pre>
+  <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+\\builder\tmp-42
+\\builder\tmp-42
+\builder        mp-42
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+\\builder\tmp-42
+\\builder\tmp-42
+\\builder\tmp-42
+</pre>
+    </li>
+    <li>The first and third statements print:
+<pre class="prettyprint lang-scala">
+\\builder\tmp-42
+\builder        mp-42
+</pre>
+and the second throws a runtime exception
+    </li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+\\builder\tmp-42
+\builder        mp-42
+\builder        mp-42
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    When using the string interpolator <tt>s</tt>, or any other
+    interpolation method, the treatment of escape sequences is not actually
+    determined by the &quot;string-like expression&quot; immediately
+    following the identifier.
+  </p>
+  <p>
+    Instead, as described in <a href="http://docs.scala-lang.org/overviews/core/string-interpolation.html" target="_blank">
+    the documentation</a>, the string-like expression following the identifier
+    is <em>always</em> treated as a multi-line string literal, i.e. as if it
+    were enclosed in triple-quotes. The expressions
+    <tt>s"""\\builder\tmp-${uniqueSuffix}"""</tt> and
+    <tt>s"\\builder\tmp-${uniqueSuffix}"</tt> are both rewritten to:
+<pre class="prettyprint lang-scala">
+    StringContext("""\\builder\tmp-""").s(uniqueSuffix)
+</pre>
+  </p>
+  <p>
+    How escape sequences are interpreted depends on the implementation of the
+    interpolator. In the case of the interpolation method <tt>s</tt>, escape
+    sequences are interpreted as they would be in a single-quoted string, so
+    both the second and third <tt>println</tt> statements print
+    <tt>\builder&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-42</tt>.
+  </p>
+</div>
