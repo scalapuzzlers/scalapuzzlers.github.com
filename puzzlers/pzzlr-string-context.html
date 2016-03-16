@@ -1,4 +1,4 @@
-<h1>TODO</h1>
+<h1>A Matter of Context</h1>
 <table class="table meta-table table-condensed">
   <tbody>
     <tr>
@@ -32,51 +32,31 @@ println(tmpDir3("42"))
   <ol>
     <li>Prints:
 <pre class="prettyprint lang-scala">
-Ping-i forehand
-Pong-i backhand
-Ping-i slice
-Pong-i drop shot
-
-Ping-t forehand
-Pong-t backhand
-Ping-t slice
-Pong-t drop shot
+\\builder\tmp-42
+\\builder\tmp-42
+\builder        mp-42
 </pre>
     </li>
     <li>Prints:
 <pre class="prettyprint lang-scala">
-Ping-i forehand
-Ping-i slice
-Pong-i backhand
-Pong-i drop shot
-
-Ping-t forehand
-Ping-t slice
-Pong-t backhand
-Pong-t drop shot
+\\builder\tmp-42
+\\builder\tmp-42
+\\builder\tmp-42
 </pre>
+    </li>
+    <li>The first and third statements print:
+<pre class="prettyprint lang-scala">
+\\builder\tmp-42
+\builder        mp-42
+</pre>
+and the second throws a runtime exception
     </li>
     <li id="correct-answer">Prints:
 <pre class="prettyprint lang-scala">
-Ping-i forehand
-Ping-i slice
-Pong-i backhand
-Pong-i drop shot
-
-Ping-t forehand
-Pong-t backhand
-Ping-t slice
-Pong-t drop shot
+\\builder\tmp-42
+\builder        mp-42
+\builder        mp-42
 </pre>
-    </li>
-    <li>The first statement prints:
-<pre class="prettyprint lang-scala">
-Ping-i forehand
-Pong-i backhand
-Ping-i slice
-Pong-i drop shot
-</pre>
-and the second throws a runtime exception
     </li>
   </ol>
 </div>
@@ -84,6 +64,29 @@ and the second throws a runtime exception
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-TODO
+    When using the string context <tt>s</tt>, or any other string context, the
+    treatment of escape sequences is not actually determined by the
+    &quot;string-like expression&quot; immediately following the string
+    context.
+  </p>
+  <p>
+    Instead, as described in <a href="" target="_blank">SIP-</a>, the
+    string-like expression following the context is <em>always</em> treated as
+    an &quot;unescaped&quot; string, i.e. as if it were enclosed in
+    triple-quotes. From the perspective of the treatment of escape
+    characters, the expressions
+    <tt>s"""\\builder\tmp-${uniqueSuffix}"""</tt> and
+    <tt>s"\\builder\tmp-${uniqueSuffix}"</tt> are, therefore, equivalent.
+    They are both rewritten to:
+<pre class="prettyprint lang-scala">
+    new StringContext("""\\builder\tmp-${uniqueSuffix}""").eval()
+</pre>
+  </p>
+  <p>
+    How escape sequences are interpreted depends on the implementation of the
+    <tt>eval</tt> method. In the case of the string context <tt>s</tt>, these
+    sequences are interpreted as they would be in a single-quoted string, so
+    both the second and third <tt>println</tt> statements print
+    <tt>\builder&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mp-42</tt>.
   </p>
 </div>
