@@ -1,13 +1,13 @@
-<h1>TODO</h1>
+<h1>Inconstant Constants</h1>
 <table class="table meta-table table-condensed">
   <tbody>
     <tr>
       <td class="header-column"><strong>Contributed by</strong></td>
-      <td>Bill Venners</td>
+      <td>Andrew Phillips</td>
     </tr>
     <tr>
       <td><strong>Source</strong></td>
-      <td>N/A</td>
+      <td>Bill Venners</td>
     </tr>
     <tr>
       <td><strong>First tested with Scala version</strong></td>
@@ -27,60 +27,32 @@
 }
 </pre>
   <ol>
-    <li>Prints:
-<pre class="prettyprint lang-scala">
-Ping-i forehand
-Pong-i backhand
-Ping-i slice
-Pong-i drop shot
-
-Ping-t forehand
-Pong-t backhand
-Ping-t slice
-Pong-t drop shot
-</pre>
-    </li>
-    <li>Prints:
-<pre class="prettyprint lang-scala">
-Ping-i forehand
-Ping-i slice
-Pong-i backhand
-Pong-i drop shot
-
-Ping-t forehand
-Ping-t slice
-Pong-t backhand
-Pong-t drop shot
-</pre>
-    </li>
-    <li id="correct-answer">Prints:
-<pre class="prettyprint lang-scala">
-Ping-i forehand
-Ping-i slice
-Pong-i backhand
-Pong-i drop shot
-
-Ping-t forehand
-Pong-t backhand
-Ping-t slice
-Pong-t drop shot
-</pre>
-    </li>
-    <li>The first statement prints:
-<pre class="prettyprint lang-scala">
-Ping-i forehand
-Pong-i backhand
-Ping-i slice
-Pong-i drop shot
-</pre>
-and the second throws a runtime exception
-    </li>
+    <li id="correct-answer">The first object definition compiles successfully, and the second fails to compile</li>
+    <li>Both object definition compile successfully</li>
+    <li>Both object definitions fail to compile</li>
+    <li>The first object definition fails to compile, and the second compiles successfully</li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-TODO
+    The argument provided to the <tt>@SerialVersionUID</tt> must be a constant
+    expression. As specified in SLS &sect;6.26.2, a constant definition in
+    Scala begins with <tt>final val</tt> and <em>must not include a type
+    annotation</em>.
+  </p>
+  <p>
+    Therefore, <tt>Bar.InternalVersion</tt> is not actually a constant. So
+    while object <tt>Foo</tt> compiles successfully, the definition of object
+    <tt>Bar</tt> fails to compile:
+<pre class="prettyprint lang-scala">
+scala> @SerialVersionUID(Bar.InternalVersion) object Bar {
+     |   final val InternalVersion: Long = 2L
+     | }
+<console>:7: error: annotation argument needs to be a constant; found: this.Bar.InternalVersion
+       @SerialVersionUID(Bar.InternalVersion) object Bar {
+                             ^
+</pre>
   </p>
 </div>
