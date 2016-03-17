@@ -38,14 +38,14 @@
   <h3>Explanation</h3>
   <p>
     The argument provided to the <tt>@SerialVersionUID</tt> must be a constant
-    expression. As specified in SLS &sect;6.26.2, a constant definition in
-    Scala begins with <tt>final val</tt> and <em>must not include a type
-    annotation</em>.
+    expression. As specified in SLS &sect;4.1, a constant value definition in
+    Scala begins with <tt>final val</tt> and <em>no type annotation may be
+    given</em>.
   </p>
   <p>
-    Therefore, <tt>Bar.InternalVersion</tt> is not actually a constant. So
-    while object <tt>Foo</tt> compiles successfully, the definition of object
-    <tt>Bar</tt> fails to compile:
+    Therefore, <tt>Bar.InternalVersion</tt> is not actually a valid constant
+    value. So while object <tt>Foo</tt> compiles successfully, the definition
+    of object <tt>Bar</tt> fails to compile:
 <pre class="prettyprint lang-scala">
 scala> @SerialVersionUID(Bar.InternalVersion) object Bar {
      |   final val InternalVersion: Long = 2L
