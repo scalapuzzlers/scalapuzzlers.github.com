@@ -1,0 +1,87 @@
+<h1>PLACEHOLDER for title</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Jason Ji</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.0</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+import scala.collection.mutable
+val queue = new mutable.Queue[Any]()
+val queue1 = new mutable.Queue[Any]()
+val optList = Some(List(1,2,3))
+
+optList foreach queue.enqueue
+optList.foreach{s => queue1.enqueue(s)}
+
+println(queue)
+println(queue1)
+
+
+enqueue signature is: def enqueue(elems : A*) : Unit
+
+</pre>
+  <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Queue(List(1, 2, 3))
+Queue(List(1, 2, 3))
+</pre>
+    </li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+Queue(1, 2, 3)
+Queue(List(1, 2, 3))
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Queue(List(1, 2, 3))
+Queue(List(1, 2, 3))
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Queue(List(1, 2, 3))
+Queue(1, 2, 3)
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>Sorry my english is not well, very appreciate if someone can help me correct, and give it a title if published </p>
+  <p>
+    The two lines that foreach an optList look similar, except first one is concise style, and they both apply function upon Option if is not None. but the functional semantics are different.
+  </p>
+  <p>
+    the line: optList foreach queue.enqueue, actually we can change to 
+    val enqueueFun = queue.enqueue _     // this is Currying
+    optList foreach enqueueFun
+    the enqueueFun type is (Seq[Any]) => Unit
+
+    and the line: optList.foreach{s => queue1.enqueue(s)}, we can change to
+    val enqueueFun1 = queue.enqueue(_)  // this is normal function, i.e. a => queue.enqueue(a)
+    optList foreach enqueueFun1
+    the enqueueFun1 type is (Any) => Unit
+
+    That's the different why the result is surprise.
+    scala currying turn method parameter vararg(A*) to Seq[A], so wen we apply list on enqueueFun it is treat parameter as Seq, and treat it as an Any for enqueueFun1.
+
+    Be careful for Currying method signature.
+    And Enjoy Scala.  
+  </p>
+</div>
