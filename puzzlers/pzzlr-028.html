@@ -31,49 +31,42 @@ println(map("key") == null)
 println(map("key") == 0)
 </pre>
   <ol>
-    <!--
-      The correct answer should have id for corresponding li element equal to "correct-answer".
-      When placing code snippets wrap them with pre tag:
-      <pre class="prettyprint lang-scala">
-        ...
-      </pre>
-     -->
     <li id="correct-answer">Prints:
 <pre class="prettyprint lang-scala">
 true
 true
-</pre></li>
+</pre>
+    </li>
     <li>Both statements throw a <tt>NullPointerException</tt></li>
     <li>Prints:
 <pre class="prettyprint lang-scala">
 true
 false
-</pre></li>
+</pre>
+    </li>
     <li>Prints:
 <pre class="prettyprint lang-scala">
 false
 true
-</pre></li>
+</pre>
+    </li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-The motivation for this puzzler comes from interactions with Java libraries, where you may be tempted to "convert" to more "natural" Scala types by casting. In this particular case - <tt>java.lang.Integer</tt> to <tt>Int</tt> - the types are not <em>quite</em> the same, unfortunately, and this is ultimately the source of the puzzler.
+    The motivation for this puzzler comes from interactions with Java libraries, where you may be tempted to "convert" to more "natural" Scala types by casting. In this particular case &ndash; <tt>java.lang.Integer</tt> to <tt>Int</tt> &ndash; the types are not <em>quite</em> the same, unfortunately, and this is ultimately the source of the puzzler.
   </p>
   <p>
-Scala automatically handles convertions such as <tt>java.lang.Integer</tt> to <tt>Int</tt> using autoboxing. If you decompile the resuting code with a Java decompiler (<tt>scalac -Xprint:jvm</tt> outputs something different!) we get
-  </p>
-  <p>
+    Scala automatically handles convertions such as <tt>java.lang.Integer</tt> to <tt>Int</tt> using autoboxing. If you decompile the resuting code with a Java decompiler (<tt>scalac -Xprint:jvm</tt> outputs something different!) we get:
 <pre class="prettyprint lang-java">
 Predef$.MODULE$.println(BoxesRunTime.boxToBoolean($outer.map().apply("key") == null));
 Predef$.MODULE$.println(BoxesRunTime.boxToBoolean(BoxesRunTime.unboxToInt($outer.map().apply("key")) == 0));
 </pre>
-  <p>
-The interesting part here is <a href="https://github.com/scala/scala/blob/v2.10.0-RC1/src/library/scala/runtime/BoxesRunTime.java" target="_new"><tt>BoxesRunTime.unboxToInt</tt></a> in the second call, which is defined as:
   </p>
   <p>
+    The interesting part here is <a href="https://github.com/scala/scala/blob/v2.10.0-RC1/src/library/scala/runtime/BoxesRunTime.java" target="_new"><tt>BoxesRunTime.unboxToInt</tt></a> in the second call, which is defined as:
 <pre class="prettyprint lang-java">
 public static int unboxToInt(Object i) {
   return i == null ? 0 : ((java.lang.Integer)i).intValue();
@@ -81,9 +74,9 @@ public static int unboxToInt(Object i) {
 </pre>
   </p>
   <p>
-This logic, which treats <tt>null</tt> as <tt>0</tt>, differs from both Java <tt>Integer</tt>-to-<tt>int</tt> unboxing and <a href="https://github.com/scala/scala/blob/v2.10.0-RC1/src/library/scala/Int.scala" target="_new"><tt>scala.Int.unbox</tt></a>, both of which throw a <tt>NullPointerException</tt> for <tt>null</tt>.
+    This logic, which treats <tt>null</tt> as <tt>0</tt>, differs from both Java <tt>Integer</tt>-to-<tt>int</tt> unboxing and <a href="https://github.com/scala/scala/blob/v2.10.0-RC1/src/library/scala/Int.scala" target="_new"><tt>scala.Int.unbox</tt></a>, both of which throw a <tt>NullPointerException</tt> for <tt>null</tt>.
   </p>
   <p>
-As Daniel Sobral commented: "Whenever you cast, you lie, and <em>anything</em> can come out of it." Strange things can happen when you "know better" than the compiler! ;-)
+    As Daniel Sobral commented: "Whenever you cast, you lie, and <em>anything</em> can come out of it." Strange things can happen when you "know better" than the compiler! ;-)
   </p>
 </div>

@@ -16,7 +16,7 @@
   </tbody>
 </table>
 <div class="code-snippet">
-<h3>What is the result of executing the following code?</h3>
+  <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
 var x = 0
 def counter = { x += 1; x }
@@ -30,9 +30,8 @@ println(adder2(10))
 println("x = " + x)
 </pre>
 
-<ol>
-
-<li id="correct-answer">Prints:
+  <ol>
+    <li id="correct-answer">Prints:
 <pre class="prettyprint lang-scala">
 x = 1
 12
@@ -40,9 +39,8 @@ x = 2
 11
 x = 2
 </pre>
-</li>
-
-<li>Prints:
+    </li>
+    <li>Prints:
 <pre class="prettyprint lang-scala">
 x = 1
 11
@@ -50,9 +48,8 @@ x = 1
 12
 x = 2
 </pre>
-</li>
-
-<li>Prints:
+    </li>
+    <li>Prints:
 <pre class="prettyprint lang-scala">
 x = 0
 11
@@ -60,9 +57,8 @@ x = 1
 12
 x = 2
 </pre>
-</li>
-
-<li>Prints:
+    </li>
+    <li>Prints:
 <pre class="prettyprint lang-scala">
 x = 2
 11
@@ -70,33 +66,33 @@ x = 2
 12
 x = 2
 </pre>
-</li>
-
-</ol>
-
+    </li>
+  </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
 <div id="explanation" class="explanation" style="display:none">
-<h3>Explanation</h3>
-<p>
-<tt>f(a) _</tt> and <tt>f(a)(_)</tt> have different meanings, governed by
-different sections of the Scala language specification.
-</p>
-<p>
-<tt>f(a)(_)</tt> is the placeholder syntax for anonymous functions,
-described in SLS &sect;6.23. Evaluation is deferred.
-</p>
-<p><tt>f(a) _</tt> is eta expansion, described in SLS &sect;6.26.5.
-Arguments given are evaluated eagerly; only the method call itself
-is deferred.
-</p>
-<p>In this example, the eta expansion in
+  <h3>Explanation</h3>
+  <p>
+    <tt>f(a) _</tt> and <tt>f(a)(_)</tt> have different meanings, governed by
+    different sections of the Scala language specification.
+  </p>
+  <p>
+    <tt>f(a)(_)</tt> is the placeholder syntax for anonymous functions,
+    described in SLS &sect;6.23. Evaluation is deferred.
+  </p>
+  <p>
+    <tt>f(a) _</tt> is eta expansion, described in SLS &sect;6.26.5.
+    Arguments given are evaluated eagerly; only the method call itself
+    is deferred.
+  </p>
+  <p>
+    In this example, the eta expansion in
 <pre class="prettyprint lang-scala">
 val adder2 = add(counter) _
 </pre>
-causes eager evaluation, as described: as soon as that line is run, Scala actually evaluates counter and binds <tt>1</tt>, the result, to the <tt>counter</tt> argument for <tt>adder2</tt>. Hence <tt>x</tt> is <tt>1</tt> when first printed.
-</p>
-<p>
-<tt>adder1</tt>, on the other hand, is an anonymous function, so its <tt>counter</tt> argument is only bound when <tt>adder1</tt> is evaluated. Since <tt>x</tt> is already <tt>1</tt> at this point, <tt>counter</tt> will be <tt>2</tt> and the evaluation of <tt>adder1</tt> prints <tt>12</tt>. The value of <tt>x</tt> is now <tt>2</tt>, as indicated by the program's output.
-</p>
+    causes eager evaluation, as described: as soon as that line is run, Scala actually evaluates counter and binds <tt>1</tt>, the result, to the <tt>counter</tt> argument for <tt>adder2</tt>. Hence <tt>x</tt> is <tt>1</tt> when first printed.
+  </p>
+  <p>
+    <tt>adder1</tt>, on the other hand, is an anonymous function, so its <tt>counter</tt> argument is only bound when <tt>adder1</tt> is evaluated. Since <tt>x</tt> is already <tt>1</tt> at this point, <tt>counter</tt> will be <tt>2</tt> and the evaluation of <tt>adder1</tt> prints <tt>12</tt>. The value of <tt>x</tt> is now <tt>2</tt>, as indicated by the program's output.
+  </p>
 </div>

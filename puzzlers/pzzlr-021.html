@@ -16,10 +16,10 @@
   </tbody>
 </table>
 <div class="code-snippet">
-<h3>What is the result of executing the following code?</h3>
+  <h3>What is the result of executing the following code?</h3>
 
-<em>Note: This example cannot be run from versions of the REPL <a href="https://issues.scala-lang.org/browse/SI-5299">prior to</a> 2.11.0-M7 (as it contains a package definition).
-Copy the sample into a file and compile with <tt>scalac</tt>.</em>
+  <em>Note: This example cannot be run from versions of the REPL <a href="https://issues.scala-lang.org/browse/SI-5299">prior to</a> 2.11.0-M7 (as it contains a package definition).
+  Copy the sample into a file and compile with <tt>scalac</tt>.</em>
 
 <pre class="prettyprint lang-scala">
 // use :paste -raw in a 2.11.0-M7 or newer REPL
@@ -38,36 +38,35 @@ object Main extends App {
 // ctrl-D to end :paste mode
 </pre>
 
-<ol>
-  <li>Fails to compile with:
+  <ol>
+    <li>Fails to compile with:
 <pre class="prettyprint lang-scala">
 error: base is already defined as object base
 package base {
         ^
 </pre>
-  </li>
-  <li>Fails to compile with:
+    </li>
+    <li>Fails to compile with:
 <pre class="prettyprint lang-scala">
 error: type X is not a member of package base
   println((new base.X).context)
                     ^
 </pre>
-  </li>
-  <li id="correct-answer">Fails to compile with:
+    </li>
+    <li id="correct-answer">Fails to compile with:
 <pre class="prettyprint lang-scala">
 error: type Y is not a member of object base
   println((new base.Y).context)
                     ^
 </pre>
-  </li>
-  <li>Prints:
+    </li>
+    <li>Prints:
 <pre class="prettyprint lang-scala">
 object base
 package base
 </pre>
-  </li>
-</ol>
-
+    </li>
+  </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
 <div id="explanation" class="explanation" style="display:none">

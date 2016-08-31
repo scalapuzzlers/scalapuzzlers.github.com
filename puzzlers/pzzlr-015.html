@@ -32,11 +32,12 @@ object Lives {
   }
 }
 </pre>
+
   <ol>
-    <li>Compiles without error.</li>
-    <li id="correct-answer">The compiler reports an error on the implementation of method <tt>foo1</tt>.</li>
-    <li>The compiler reports an error on the implementation of method <tt>foo2</tt>.</li>
-    <li>The compiler reports an error on the implementation of both methods <tt>foo1</tt> and <tt>foo2</tt>.</li>
+    <li>Compiles without error</li>
+    <li id="correct-answer">The compiler reports an error in the implementation of method <tt>foo1</tt></li>
+    <li>The compiler reports an error in the implementation of method <tt>foo2</tt></li>
+    <li>The compiler reports an error on the implementation of methods <tt>foo1</tt> and <tt>foo2</tt></li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
@@ -44,22 +45,23 @@ object Lives {
   <h3>Explanation</h3>
   <p>
     Object <tt>Private</tt> defines two classes <tt>C1</tt> and <tt>C2</tt>.
-	<tt>C2</tt> is a private class which is only accessible in object <tt>Private</tt> and its companion class, 
-	whereas <tt>C1</tt> is a public class with a private default constructor, so this class can only be 
-	instantiated within class <tt>C1</tt>.
-	</p><p>
-	As a consequence, method <tt>foo2</tt> just compiles fine (as the private class <tt>C2</tt> is visible in
-	class <tt>Private</tt>), whereas the implementation of method <tt>foo1</tt> reports the following compiler error:
+    <tt>C2</tt> is a private class which is only accessible in object <tt>Private</tt> and its companion class, 
+    whereas <tt>C1</tt> is a public class with a private default constructor, so this class can only be 
+    instantiated within class <tt>C1</tt>.
+	</p>
+	<p>
+    As a consequence, method <tt>foo2</tt> just compiles fine (as the private class <tt>C2</tt> is visible in
+    class <tt>Private</tt>), whereas the implementation of method <tt>foo1</tt> reports the following compiler error:
 <pre class="prettyprint lang-scala">
 error: constructor C1 in class C1 cannot be accessed in class Private
          def foo1: Any = new Private.C1
                          ^
 </pre>
-    </p><p>
-	Note, that the result type of method <tt>foo2</tt> has to be set to a base type of <tt>Private.C2</tt>, 
-	otherwise the result type of this method would be a type which is invisible by any caller outside of 
-	class/object <tt>Private</tt> (the compiler would report that the private class <tt>C2</tt> escapes its defining scope).
-	For method <tt>foo1</tt> this is not necessary.
+  </p>
+  <p>
+    Note, that the result type of method <tt>foo2</tt> has to be set to a base type of <tt>Private.C2</tt>, 
+    otherwise the result type of this method would be a type which is invisible by any caller outside of 
+    class/object <tt>Private</tt> (the compiler would report that the private class <tt>C2</tt> escapes its defining scope).
+    For method <tt>foo1</tt> this is not necessary.
   </p>
 </div>
-

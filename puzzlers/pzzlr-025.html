@@ -26,44 +26,41 @@ println(m.end)
 println(rx.findAllIn(t).end)
 </pre>
   <ol>
-    <!--
-      The correct answer should have id for corresponding li element equal to "correct-answer".
-      When placing code snippets wrap them with pre tag:
-      <pre class="prettyprint lang-scala">
-        ...
-      </pre>
-     -->
-     <li>
+    <li>
 <pre class="prettyprint lang-scala">
 non-empty iterator
 5
 5
-</pre></li>
-     <li>
+</pre>
+    </li>
+    <li>
 <pre class="prettyprint lang-scala">
 empty iterator
 java.lang.IllegalStateException: No match available
 java.lang.IllegalStateException: No match available
-</pre></li>
-     <li id="correct-answer">
+</pre>
+    </li>
+    <li id="correct-answer">
 <pre class="prettyprint lang-scala">
 non-empty iterator
 5
 java.lang.IllegalStateException: No match available
-</pre></li>
-     <li>
+</pre>
+    </li>
+    <li>
 <pre class="prettyprint lang-scala">
 non-empty iterator
 java.lang.IllegalStateException: No match available
 java.lang.IllegalStateException: No match available
-</pre></li>
+</pre>
+    </li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-  The result of <tt>findAllIn</tt> is an <tt>Iterator</tt>. Until you somehow ask for or check the first element, such as calling <tt>next</tt>, <tt>hasNext</tt> or causing them to be called through <tt>toString</tt>, no regex match will be tried, causing the <tt>end</tt> method - from <tt>MatchData</tt>, also extended by <tt>MatchIterator</tt> - to throw an exception.
+    The result of <tt>findAllIn</tt> is an <tt>Iterator</tt>. Until you somehow ask for or check the first element, such as calling <tt>next</tt>, <tt>hasNext</tt> or causing them to be called through <tt>toString</tt>, no regex match will be tried, causing the <tt>end</tt> method &ndash; from <tt>MatchData</tt>, also extended by <tt>MatchIterator</tt> &ndash; to throw an exception.
   </p>
 </div>
 

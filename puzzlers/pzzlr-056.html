@@ -18,9 +18,9 @@
 <div class="code-snippet">
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{Failure, Success}
+import concurrent.Future
+import concurrent.ExecutionContext.Implicits.global
+import util.{Failure, Success}
 
 val f = Future { throw new Error("fatal!") } recoverWith {
   case err: Error => Future.successful("Ignoring error: " + err.getMessage)

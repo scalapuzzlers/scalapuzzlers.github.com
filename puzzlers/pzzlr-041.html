@@ -59,18 +59,19 @@ scala.MatchError: -0.0 (of class java.lang.Double)
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
-  <p>The example fails to compile, with the error message:
+  <p>
+    The example fails to compile, with the error message:
 <pre class="prettyprint lang-scala">
 error: '=>' expected but double literal found.
 </pre>
   </p>
   <p>
-  A numeric literal can appear in the pattern of a case statement,
+    A numeric literal can appear in the pattern of a case statement,
   but while <tt>-1.0</tt> is a double literal, <tt>+1.0</tt> is <strong>not</strong>.
   It is an invocation of <tt>1.0.unary_+</tt>.
   </p>
   <p>
-  In this case, the <tt>+</tt> is taken as an identifier. Consider:
+    In this case, the <tt>+</tt> is taken as an identifier. Consider:
 <pre class="prettyprint lang-scala">
 scala> val + = 7
 +: Int = 7
@@ -86,7 +87,7 @@ scala> +7
 </pre>
   </p>
   <p>
-  The remainder of the example code is a pinkish to crimson herring.
+    The remainder of the example code is a pinkish to crimson herring.
   Recall that <tt>+0.0</tt> compares equal to <tt>-0.0</tt>,
   so that the match fails to distinguish them. Compare:
 <pre class="prettyprint lang-scala">
@@ -105,10 +106,10 @@ check0take2(-0.0)
 check0take2(0.0)
 </pre>
   <p>
-  This puzzler was inspired by <a target="_blank" href="https://issues.scala-lang.org/browse/SI-4950">this famous ticket</a>
+    This puzzler was inspired by <a target="_blank" href="https://issues.scala-lang.org/browse/SI-4950">this famous ticket</a>
   and related discussions on the mailing lists.
   </p>
   <p>
-  Don't take everything you read literally.
+    Don't take everything you read literally.
   </p>
 </div>

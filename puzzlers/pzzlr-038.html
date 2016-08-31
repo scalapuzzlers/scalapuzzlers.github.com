@@ -61,24 +61,24 @@ scala.MatchError: 2 (of class java.lang.Integer)
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-  The pattern matcher will use the available <tt>ClassTag[A]</tt> to assist the
+    The pattern matcher will use the available <tt>ClassTag[A]</tt> to assist the
   match in the function literal; otherwise the compiler would warn that the
   &quot;abstract type pattern A is unchecked since it is eliminated by erasure&quot;.
   </p>
   <p>
-  However, because the inferred type parameter is <tt>Int</tt> while the true value
+    However, because the inferred type parameter is <tt>Int</tt> while the true value
   of the future is a boxed <tt>java.lang.Integer</tt>, the case does not match.
   </p>
   <p>
-  Since <a href="http://www.scala-lang.org/api/current/index.html#scala.concurrent.Future@onSuccess[U](pf:PartialFunction[T,U])(implicitexecutor:scala.concurrent.ExecutionContext):Unit" target="_blank">
+    Since <a href="http://www.scala-lang.org/api/current/index.html#scala.concurrent.Future@onSuccess[U](pf:PartialFunction[T,U])(implicitexecutor:scala.concurrent.ExecutionContext):Unit" target="_blank">
   <tt>Future.onSuccess</tt></a> takes a partial function, there is no application
   and no <tt>MatchError</tt> is thrown.
   </p>
   <p>
-  In this case, the type pattern is superfluous and can be deleted.
+    In this case, the type pattern is superfluous and can be deleted.
   </p>
   <p>
-  Or, the correct boxed type can be spun:
+    Or, the correct boxed type can be spun:
 <pre class="prettyprint lang-scala">
 scala> new Expect("1 + 1 = %s", future[Integer](1 + 1)).announce()
 1 + 1 = 2
@@ -88,18 +88,17 @@ scala> new Expect("1 + 1 = %s", future(1 + 1: Integer)).announce()
 </pre>
   </p>
   <p>
-  If the ClassTag context bound is deleted, a warning is emitted but the code works
+    If the <tt>ClassTag</tt> context bound is deleted, a warning is emitted but the code works
   as you might want.
   </p>
   <p>
-  Note that in version 2.10.0, an exception thrown by the callback is not
+    Note that in version 2.10.0, an exception thrown by the callback is not
   printed to the screen in any case, but that is rectified in subsequent versions.
   </p>
   <p>
-  There are further ideas for coping with primitives in a <tt>ClassTag</tt>-assisted
+    There are further ideas for coping with primitives in a <tt>ClassTag</tt>-assisted
   pattern match at
   <a target="_blank" href="http://stackoverflow.com/questions/16825927/classtag-based-pattern-matching-fails-for-primitives">the Stack Overflow question</a>
   and on the mailing list.
   </p>
 </div>
-

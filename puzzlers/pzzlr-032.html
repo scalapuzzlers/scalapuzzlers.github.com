@@ -19,7 +19,7 @@
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
 // cap it at ... wait for it ... ten!
-val (x, y) = (List(1,3,5), List(2,4,6)).zipped find (_._1 > 10) getOrElse (10)
+val (x, y) = (List(1, 3, 5), List(2, 4, 6)).zipped find (_._1 > 10) getOrElse (10)
 Console println s"Found $x"
 </pre>
   <ol>
@@ -42,7 +42,7 @@ Found ()
   <h3>Explanation</h3>
   <blockquote>
   <p style="font-size: 1.0em;">
-    The bully who stole your milk money used to say: "Give it to me -- or else!"
+    The bully who stole your milk money used to say: "Give it to me &mdash; or else!"
   </p>
   <p style="font-size: 1.0em;">
     But he was never satisfied and would always take as much as he could get.
@@ -62,7 +62,7 @@ def getOrElse[B >: A](default: => B): B
   <p>
     In this case, <tt>Any</tt> is inferred for <tt>B</tt>, and there is no type error to show that an <tt>Int</tt> was used as an alternative for a pair of <tt>Ints</tt>. In the absence of a type on the pattern definition, the pattern match throws a MatchError at runtime:
 <pre class="prettyprint lang-scala">
-scala> val (x, y) = (List(1,3,5), List(2,4,6)).zipped find (_._1 > 10) getOrElse (10)
+scala> val (x, y) = (List(1, 3, 5), List(2, 4, 6)).zipped find (_._1 > 10) getOrElse (10)
 scala.MatchError: 10 (of class java.lang.Integer)
 </pre>
   </p>
