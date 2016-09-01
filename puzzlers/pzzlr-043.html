@@ -26,48 +26,41 @@ class TouristMarkup extends Markup {
 }
 def makeLabel(price: Int)(implicit m: Markup) = s"Price: ${m(price)}"
 
-object HipNTrendyMarket extends App { // now extends App!
-  implicit val normalMarkup = new Markup
-  Console println makeLabel(3)
-  implicit val touristMarkup = new TouristMarkup
-  Console println makeLabel(5)
-}
 object OldSkoolMarket {
   def main(args: Array[String]): Unit = {
-    implicit val normalMarkup = new Markup
+    implicit val normalMarkup: Markup = new Markup
     Console println makeLabel(3)
-    implicit val touristMarkup = new TouristMarkup
+    implicit val touristMarkup: TouristMarkup = new TouristMarkup
     Console println makeLabel(5)
   }
 }
+object HipNTrendyMarket extends App { // now extends App!
+  implicit val normalMarkup: Markup = new Markup
+  Console println makeLabel(3)
+  implicit val touristMarkup: TouristMarkup = new TouristMarkup
+  Console println makeLabel(5)
+}
 
-HipNTrendyMarket main null
 OldSkoolMarket main null
+HipNTrendyMarket main null
 </pre>
   <ol>
     <li>Prints:
 <pre class="prettyprint lang-scala">
-6
-100
-6
-100
-</pre>
-    </li>
-    <li id="correct-answer">The first statement throws a runtime exception and the second prints:
-<pre class="prettyprint lang-scala">
-6
-100
-</pre>
-    </li>
-    <li>Prints:
-<pre class="prettyprint lang-scala">
 60
 100
 60
 100
 </pre>
     </li>
-    <li>Both statements fail to compile</li>
+    <li id="correct-answer">The definition of <tt>OldSkoolMarket</tt> fails to compile and the invocation of <tt>HipNTrendyMarket</tt> throws a runtime exception</li>
+    <li>The definition of <tt>OldSkoolMarket</tt> fails to compile and the invocation of <tt>HipNTrendyMarket</tt> prints:
+<pre class="prettyprint lang-scala">
+6
+100
+</pre>
+    </li>
+    <li>Both object definitions fail to compile</li>
   </ol>
 </div>
 <button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
@@ -84,11 +77,9 @@ OldSkoolMarket main null
     The existential dual of every other type is the type itself.
   </p></blockquote>
   <p>
-    In the <tt>HipNTrendyMarket</tt> both implicits are in scope and <tt>touristMarkup</tt>
-    is more specific, but is not yet initialized when first used in <tt>makeLabel(3)</tt>.
+    In the block body of <tt>OldSkoolMarket</tt>'s <tt>main</tt> method, the implicit value <tt>touristMarkup</tt> is in scope when <tt>makeLabel(3)</tt> is first invoked. However, in accordance with the restrictions on forward references described in SLS &sect;4, it cannot be referenced as it is not yet defined. As a result, <tt>OldSkoolMarket</tt> fails to compile.
   </p>
   <p>
-    In the block body of <tt>OldSkoolMarket</tt>'s <tt>main</tt> method, the implicits 
-    become eligible at their point of definition, so the method executes as one might usually expect.
+    In the <tt>HipNTrendyMarket</tt>, the body of the object is not a block, even though it functions as <tt>HipNTrendyMarket</tt>'s <tt>main</tt> method. This means that both implicits are in scope and <em>can</em> be referenced. Again, <tt>touristMarkup</tt> is more specific and is chosen when <tt>makeLabel(3)</tt> is first invoked. However, at this point <tt>touristMarkup</tt> is not yet initialized, leading to a <tt>NullPointerException</tt> at runtime.
   </p>
 </div>
