@@ -76,13 +76,23 @@ I like your dots!
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    The single <tt>args</tt> parameter specified by method <tt>StringContext.s</tt> is a repeated parameter. As per SLS &sect;4.6.2, this turns into a parameter of type <tt>Seq[Any]</tt> when the method is eta-expanded (in the case of <tt>useS</tt>), and also when an anonymous
-    function is created through partial application (as in <tt>useSAgain</tt>).
+    The single <tt>args</tt> parameter specified by method
+    <tt>StringContext.s</tt> is a repeated parameter. As per SLS
+    &sect;4.6.2, this turns into a parameter of type <tt>Seq[Any]</tt>
+    when the method is eta-expanded (in the case of <tt>useS</tt>), and
+    also when an anonymous function is created through partial
+    application (as in <tt>useSAgain</tt>).
   </p>
   <p>
-    In the case of <tt>useS</tt>, this argument is &quot;re-expanded&quot; by the compiler when passed to <tt>StringContext.s</tt>, so the invocation behaves as expected.
+    In the case of <tt>useS</tt>, this argument is
+    &quot;re-expanded&quot; by the compiler when passed to
+    <tt>StringContext.s</tt>, so the invocation behaves as expected.
   </p>
-    For <tt>useSAgain</tt>, however, the argument is passed to <tt>StringContext.s</tt> as a <em>single</em> value of type <tt>Seq[Any]</tt>. This results in a runtime exception since the processed string literal contains two expressions and so expects two values to be passed.
+    For <tt>useSAgain</tt>, however, the argument is passed to
+    <tt>StringContext.s</tt> as a <em>single</em> value of type
+    <tt>Seq[Any]</tt>. This results in a runtime exception since the
+    processed string literal contains two expressions and so expects two
+    values to be passed.
   </p>
   <p>
     While the &quot;passing through&quot; of a repeated parameter during eta expansion is in line with most users' expectation, it is unclear whether this agrees with the specification of eta expansion in SLS &sect;6.26.5.
