@@ -85,7 +85,7 @@ What a nice day! :-)
 </pre>
     So far, so unremarkably according to the spec. What is puzzling here is that importing an implicit in an inner scope does not override the <tt>default</tt> declaration in the outer scope, even though implicits are often intended to be &quot;overridden&quot; in this way.
   <p>
-    Of course, if we choose the same <em>name</em> for the &quot;overridding&quot;</p> implicit (as is the case with <tt>ConsolePrinter</tt>), we achieve the intended result:
+    Of course, if we choose the same <em>name</em> for the &quot;overridding&quot; implicit (as is the case with <tt>ConsolePrinter</tt>), we achieve the intended result:
 <pre class="prettyprint lang-scala">
 ...
 object SunnyDay {
@@ -98,6 +98,7 @@ object SunnyDay {
 What a nice day! :-)
 </pre>
     This is because <em>name</em> resultion, unlike implicit resolution, means that <tt>ConsolePrinter</tt> declared in the inner scope has higher precedence than the default value in the outer scope.
+  </p>
   <p>
     Thus, if we happen to know the <em>name</em> of the implicit we are trying to &quot;override&quot;, we can achieve the intended result. But since implicits are essentially anonymous, having to know the <em>name</em> of one to be able to override it seems an odd requirement.
   </p>
