@@ -1,0 +1,87 @@
+<h1>Reductio Ad Absurdum</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>A. P. Marki</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a href="http://stackoverflow.com/a/18109794">Stack Overflow</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.6</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+println(Set(1, 2).reduce(math.max))
+println(Set(1.0, 2.0).reduce(math.max))
+</pre>
+  <ol>
+    <li>Both statements fail to compile</li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+2
+1.0
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+2
+2.0
+</pre>
+    </li>
+    <li id="correct-answer">The first statement prints:
+<pre class="prettyprint lang-scala">
+2
+</pre>
+and the second fails to compile
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    As per SLS &sect;6.26.4, the compiler first needs to type the arguments
+    passed to method <tt>Set.reduce</tt> before trying to determine the
+    value of the method's type parameter <tt>B</tt>. This involves eta-
+    expanding <tt>math.max</tt> to a function type.
+  </p>
+  <p>
+    At this point, the compiler has no information about the explicit
+    types of the arguments passed to <tt>math.max</tt>, or the explicit
+    type of the expected result. Accordingly, as specificed in SLS &sect;6.26.3,
+    it chooses the most specific of the overloaded versions of
+    <tt>math.max</tt>, i.e. the one with the &quot;narrowest&quot; type:
+    the <tt>(Int, Int) => Int</tt> version.
+  </p>
+  <p>
+    The compiler <em>then</em> determines the value of method
+    <tt>reduce</tt>'s type parameter. It finds that <tt>B == AnyVal</tt>
+    is the most specific solution that satisfies both the constraint
+    <tt>B >: Double</tt> and the requirement that <tt>B >: Int</tt>
+    (since the argument passed to <tt>reduce</tt> is of type
+    <tt>(Int, Int) => Int</tt>).
+  </p>
+  <p>
+    However, with <tt>B == AnyVal</tt> the required type for the argument
+    passed to <tt>reduce</tt> is <tt>(AnyVal, AnyVal) => AnyVal</tt>. The
+    compiler cannot make this work, so compilation fails in this case.
+  </p>
+  <p>
+    In the case of the first example, compilation succeeds simply because
+    we &quot;get lucky&quot;: the compiler follows the same process
+    as in the second case to pick the overloaded <tt>(Int, Int) => Int</tt>
+    variant of <tt>math.max</tt>. It just so happens that this is also the
+    overloaded version that is needed.
+  </p>
+  <p>
+    See <a href="https://issues.scala-lang.org/browse/SI-9738">SI-9738</a>
+    for more details.
+  </p>
+</div>
