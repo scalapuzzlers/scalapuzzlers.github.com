@@ -1,0 +1,88 @@
+<h1>Stream Oddity</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://groups.google.com/d/msg/scala-language/Ca1c8SLG-Vo/1VTViAoxHwAJ">scala-language mailing list</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.6</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+val nats: Stream[Int] = 1 #:: (nats map { _ + 1 })
+val odds: Stream[Int] = 1 #:: (odds map { _ + 1 } filter { _ % 2 != 0 })
+
+nats filter { _ % 2 != 0 } take 2 foreach println
+odds take 2 foreach println
+</pre>
+  <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+1
+3
+1
+3
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+1
+2
+1
+3
+</pre>
+    </li>
+    <li id="correct-answer">The first statement prints:
+<pre class="prettyprint lang-scala">
+1
+3
+</pre>
+and the second throws a runtime exception
+    </li>
+    <li>The first statement throws a runtime exception and the second prints:
+<pre class="prettyprint lang-scala">
+1
+3
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    The expression <tt>nats filter { _ % 2 != 0 }</tt> constructs a <em>new</em>
+    stream that pulls elements from <tt>nats</tt> and passes on only those that
+    match the filter. The second element of the filtered stream is thus the
+    third element of <tt>nats</tt>, namely the value 3.
+  </p>
+  <p>
+    Successive elements of <tt>nats</tt> can always be calculated because the
+    next element of <tt>nats</tt> is simply the current element, plus 1. In the
+    case of the stream <tt>odds</tt>, however, the filter is part of the
+    recursive definition of the stream. This means that only values that match
+    the filter can be returned as elements of <tt>odds</tt>.
+  </p>
+  <p>
+    This prevents the stream from calculating its second element, i.e. the
+    first element of the stream
+    <tt>odds map { _ + 1 } filter { _ % 2 != 0 }</tt>. The first attempt,
+    using 1, the first element of <tt>odds</tt>, does not match the filter.
+    The next attempt tries to use the second element of <tt>odds</tt> &ndash;
+    but that is the precisely the value we are trying to calculate.
+  </p>
+  <p>
+    The attempt to calculate the second element of <tt>odds</tt> thus ends up
+    calling itself recursively, leading to an endless loop and eventual
+    <tt>StackOverflowError</tt>.
+  </p>
+</div>
