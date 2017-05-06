@@ -1,0 +1,79 @@
+<h1>Identity Crisis</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>A. P. Marki</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="http://stackoverflow.com/a/29217414/1296806">Stack Overflow</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.6</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+val someNumbers = List(Some(42), None, Some(17))
+
+println(someNumbers flatMap { x => x })
+println(someNumbers flatMap { identity(_) })
+println(someNumbers flatMap { identity })
+</pre>
+  <ol>
+    <li>All three statements fail to compile</li>
+    <li id="correct-answer">The first two statements print:
+<pre class="prettyprint lang-scala">
+List(42, 17)
+List(42, 17)
+</pre>
+and the third fails to compile
+    </li>
+    <li>The first statement prints:
+<pre class="prettyprint lang-scala">
+List(42, 17)
+</pre>
+and the second and third fail to compile
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+List(42, 17)
+List(42, 17)
+List(42, 17)
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    Applying the <tt>identity</tt> function to an <tt>Option</tt> returns an
+    <tt>Option</tt>. According to the signature of <tt>List.flatMap</tt>, the
+    function passed to <tt>flatMap</tt> needs to return a <tt>List</tt>,
+    however. 
+  </p>
+  <p>
+    In order to resolve the type mismatch, the compiler tries to find an
+    implicit conversion that it can apply to some part of the expression to
+    produce the required type. In the first two cases, the compiler is able to
+    find a suitable implicit conversion, <a href="http://www.scala-lang.org/api/current/index.html#scala.Option$@option2Iterable[A](xo:Option[A]):Iterable[A]"
+    target="_blank" /><tt>Option.option2Iterable</tt></a>. It applies this
+    conversion to transform the statements to code equivalent to
+    <tt>someNumbers flatMap { x => option2Iterable(x) }</tt> and
+    <tt>someNumbers flatMap { x$1 => option2Iterable(identity(x$1)) }</tt>,
+    respectively.
+  </p>
+  <p>
+    In the case of third <tt>println</tt> statement, however, there is no
+    subexpression &ndash; &quot;nothing of type <tt>Option</tt>&quot; &ndash;
+    to which <tt>option2Iterable</tt> could be applied: the type of the only
+    available subexpression, <tt>identity</tt>, is
+    <tt>Option[Int] => Option[Int]</tt>. The compiler is unable to get the
+    types to match, so the statement fails to compile.
+  </p>
+</div>
