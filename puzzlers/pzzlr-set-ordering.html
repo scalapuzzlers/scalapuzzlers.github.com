@@ -1,0 +1,67 @@
+<h1>TODO</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://groups.google.com/d/msg/scala-language/Q5A1TTEZN4Q/qNn2dEWBAwAJ">scala-language mailing list</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.12.1</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+import collection.SortedSet
+
+val ints = SortedSet(-1, 1, 2)(implicitly[Ordering[Int]].reverse)
+
+println(ints.filter(_ > 0).head)
+println(ints.collect({ case n if n > 0 => n }).head)
+</pre>
+  <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+-1
+-1
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+2
+2
+</pre>
+    </li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+2
+1
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+1
+1
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    Both <a href="http://www.scala-lang.org/api/current/scala/collection/Set.html#filter(p:A=>Boolean):Repr" target="_blank"><tt>Set.filter</tt></a>
+    and <a href="http://www.scala-lang.org/api/current/scala/collection/Set.html#collect[B](pf:PartialFunction[A,B]):scala.collection.Set[B]" target="_blank"><tt>Set.collect</tt></a>
+    preserve the source collection's type and return new sorted sets.
+    However, in common with other methods that can return a different
+    element type, such as <tt>map</tt> and <tt>flatMap</tt>, the
+    <tt>collect</tt> method does not preserve the source collection's
+    <em>ordering</em>.
+  </p>
+</div>
