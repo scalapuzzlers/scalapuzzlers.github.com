@@ -1,0 +1,119 @@
+<h1>For Each Step...</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Marconi Lanna</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.6</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+val responses = Map("forehand" -> "backhand", "slice" -> "drop shot")
+
+def pingpongIterable(shots: Iterable[String]) = shots map {
+    shot => println("Ping-i " + shot); responses(shot)
+  } foreach {
+    response => println("Pong-i " + response)
+  }
+
+def pingpongTraversable(shots: TraversableOnce[String]) = shots map {
+    shot => println("Ping-t " + shot); responses(shot)
+  } foreach {
+    response => println("Pong-t " + response)
+  }
+
+pingpongIterable(Seq("forehand", "slice"))
+pingpongTraversable(Seq("forehand", "slice"))
+</pre>
+  <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Ping-i forehand
+Pong-i backhand
+Ping-i slice
+Pong-i drop shot
+
+Ping-t forehand
+Pong-t backhand
+Ping-t slice
+Pong-t drop shot
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Ping-i forehand
+Ping-i slice
+Pong-i backhand
+Pong-i drop shot
+
+Ping-t forehand
+Ping-t slice
+Pong-t backhand
+Pong-t drop shot
+</pre>
+    </li>
+    <li id="correct-answer">Prints:
+<pre class="prettyprint lang-scala">
+Ping-i forehand
+Ping-i slice
+Pong-i backhand
+Pong-i drop shot
+
+Ping-t forehand
+Pong-t backhand
+Ping-t slice
+Pong-t drop shot
+</pre>
+    </li>
+    <li>The first statement prints:
+<pre class="prettyprint lang-scala">
+Ping-i forehand
+Pong-i backhand
+Ping-i slice
+Pong-i drop shot
+</pre>
+and the second throws a runtime exception
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    Method <tt>map</tt> on <tt>Iterable</tt>, which is inherited by the
+    <tt>Seq</tt> class, returns a new collection created by applying the
+    provided function to each element in the original iterable. In
+    <tt>pingpongIterable</tt>, each element of the sequence <tt>shots</tt> is
+    retrieved, and <tt>&quot;Ping-i&quot;</tt> printed for it, before the
+    <tt>foreach</tt> block is reached.
+  </p>
+  <p>
+    The trait <tt>TraversableOnce</tt>, on the other hand, does not define a
+    <tt>map</tt> method, so <tt>Seq</tt>'s implementation of <tt>map</tt>
+    is never invoked. The reason <tt>map</tt> can be called on
+    <tt>TraversableOnce</tt> is due to an implicit conversion to <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.TraversableOnce$$MonadOps" target="_blank">
+    <tt>TraversableOnce.MonadOps</tt></a>. In
+    <tt>pingpongTraversable</tt>, the invocation of <tt>shots.map</tt> is
+    transformed into code equivalent to <tt>MonadOps(shots) map { ... }</tt>.
+  </p>
+  <p>
+    <tt>MonadOps.map</tt> is implemented by converting the traversable to an
+    iterator and calling <tt>map</tt> on that. As per the <a href="http://www.scala-lang.org/api/current/index.html#scala.collection.Iterator@map[B](f:A=>B):Iterator[B]" target="_blank">Scaladoc for
+    <tt>Iterator.map</tt></a>, this returns a new iterator which transforms
+    every value produced by the orginal iterator by applying the specified
+    function <em>when a value is requested</em>. In the case of
+    <tt>pingpongTraversable</tt>, therefore, the <tt>&quot;Ping-t&quot;</tt>
+    statements are printed only when successive elements of the collection
+    are retrieved in the <tt>foreach</tt> block.
+  </p>
+</div>
