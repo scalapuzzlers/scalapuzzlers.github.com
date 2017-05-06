@@ -1,0 +1,110 @@
+<h1>Oddly Enough</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>Andrew Phillips</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>Based on a suggestion by <a target="_blank" href="https://github.com/MasseGuillaume">Guillaume Mass&eacute;</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.1</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+val isEven = PartialFunction[Int, String] {
+  case n if n % 2 == 0 => "Even"
+}
+
+val isOdd = PartialFunction[Int, String] {
+  case n if n % 2 == 1 => "Odd"
+}
+
+println(Seq(0, 2) map (isEven orElse isOdd))
+println(Seq(0, 1, 2) map (isEven orElse isOdd))
+</pre>
+    <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+List(Even, Even)
+List(Even, Even, Even)
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+List(Even, Even)
+List(Even, Odd, Even)
+</pre>
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+List("0", "2")
+List("0", "1", "2")
+</pre>
+    </li>
+    <li id="correct-answer">The first statement prints:
+<pre class="prettyprint lang-scala">
+List(Even, Even)
+</pre>
+and the second throws a runtime exception
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    When initializing <tt>isEven</tt>, it may appear as though we are simply 
+    declaring the partial function <tt>{ case n if n % 2 == 0 => "Even" }</tt>,
+    but that is not the case.
+  </p>
+  <p>
+    What we are <em>actually</em> assigning to <tt>isEven</tt> (and <tt>isOdd</tt>,
+    for that matter) is the result the calling the <tt>apply</tt> method of
+    <tt>PartialFunction</tt>'s <a href="http://www.scala-lang.org/api/current/index.html#scala.PartialFunction$" target="_blank">
+    companion object</a> with the intended partial function as its argument.
+  </p>
+  <p>
+    <tt>PartialFunction.apply</tt> converts a regular function to a partial function <a href="https://github.com/scala/scala/blob/2.12.x/src/library/scala/PartialFunction.scala#L247" target="_blank">as follows</a>:
+<pre class="prettyprint lang-scala">
+def apply[A, B](f: A => B): PartialFunction[A, B] = { case x => f(x) }
+</pre>
+    As a result, <tt>isEven</tt> is actually the partial function:
+<pre class="prettyprint lang-scala">
+{ case x => x match { case n if n % 2 == 0 => "Even" } }
+</pre>
+  </p>
+  <p>
+    Unlike the intended version of <tt>isEven</tt>, this partial function is 
+    defined <em>everywhere</em>, i.e. also for uneven numbers. When mapping the
+    second sequence, the code thus attempts to apply <tt>isEven</tt> also to 1,
+    which results in a <tt>scala.MatchError: 1</tt>.
+  </p>
+  <p>
+    The correct way to declare the intended partial functions is:
+<pre class="prettyprint lang-scala">
+val isEven: PartialFunction[Int, String] = {
+  case n if n % 2 == 0 => "Even"
+}
+
+val isOdd: PartialFunction[Int, String] = {
+  case n if n % 2 == 1 => "Odd"
+}
+</pre>
+    as per the example in the <a href="http://www.scala-lang.org/api/current/index.html#scala.PartialFunction" target="_blank">
+    <tt>PartialFunction</tt> Scaladoc</a>. The code then prints
+    <tt>List(Even, Odd, Even)</tt> for the second sequence, as expected.
+  </p>
+  <p>
+    See <a href="http://www.codepills.net/" target="_blank">Gabriele
+    Petronella</a>'s <a href="http://stackoverflow.com/questions/25372561/how-does-orelse-work-on-partialfunctions/25373446#25373446" target="blank">
+    excellent explanation</a> in the original Stack Overflow post for more
+    details.
+  </p>
+</div>
