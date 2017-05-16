@@ -73,7 +73,7 @@ List(1, 2, 3)
     The latter is possible because <tt>a</tt>, as a <tt><a href="http://www.scala-lang.org/api/current/#scala.collection.immutable.List" target="_blank">List</a>[Dollar]</tt>, is <em>also</em> a function from <tt>Int</tt> (the indices into the list) to <tt>Dollar</tt> (the values in the list).
   </p>
   <p>
-    The first statement, therefore, maps every element in the list to the constant value 1. The second statment uses each value in the list <em>as an index into the same list</em>, i.e. we are trying to turn <tt>List(1, 2, 3)</tt> into <tt>List(a(1), a(2), a(3))</tt>. This works until we get the last value, <tt>a(3)</tt>, which throws an <tt>IndexOutOfBoundException</tt> because <tt>a</tt> only has three elements.
+    The first statement, therefore, maps every element in the list to the constant value 1. The second statement uses each value in the list <em>as an index into the same list</em>, i.e. we are trying to turn <tt>List(1, 2, 3)</tt> into <tt>List(a(1), a(2), a(3))</tt>. This works until we get the last value, <tt>a(3)</tt>, which throws an <tt>IndexOutOfBoundException</tt> because <tt>a</tt> only has three elements.
   </p>
   <p>
     To achieve the same result with parentheses as with curly braces, we need to write:
