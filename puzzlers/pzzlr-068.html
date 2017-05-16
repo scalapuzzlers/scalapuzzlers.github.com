@@ -117,7 +117,7 @@ expr1 map { a => (a, vexpr) } flatMap { case (a, v) => expr2 flatMap ... }
 </pre>
   </p>
   <p>
-    The the right-hand side expression of the value definition is executedq
+    The the right-hand side expression of the value definition is executed
     for each element of the first generator <em>before</em> the elements of
     the generator are passed through to the remainder of the for expression.
     In the second example, this means that the debugging statements are
