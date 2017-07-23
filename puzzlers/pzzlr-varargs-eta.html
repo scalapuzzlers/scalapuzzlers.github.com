@@ -1,0 +1,106 @@
+<h1>Repeat After Me</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>MingJiang Ji<br/>Updated based on suggestions by A. P. Marki</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.11.6</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+import language.implicitConversions
+trait RenderContext extends (StringContext => (Seq[Any] => String))
+
+implicit class MyCtxHelper(val sc: StringContext) extends AnyVal {
+  def my(args: Any*)(implicit rc: RenderContext) = rc(sc).apply(args)
+}
+
+val name = "Scala"
+val greeting = "I like your dots"
+
+{
+  implicit val useS =
+    new RenderContext { def apply(sc: StringContext) = sc.s _ }
+  println(my"Hello $name,\n$greeting!")
+}
+
+{
+  implicit val useSAgain =
+    new RenderContext { def apply(sc: StringContext) = sc.s(_) }
+  println(my"Hello $name,\n$greeting!")
+}
+</pre>
+  <ol>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Hello ,
+!
+Hello Scala,
+I like your dots!
+</pre>
+    </li>
+    <li>The first <tt>println</tt> invocation prints:
+<pre class="prettyprint lang-scala">
+Hello Scala,
+I like your dots!
+</pre>
+and the second fails to compile
+    <li id="correct-answer">The first <tt>println</tt> invocation prints:
+<pre class="prettyprint lang-scala">
+Hello Scala,
+I like your dots!
+</pre>
+and the second throws a runtime exception
+    </li>
+    <li>Prints:
+<pre class="prettyprint lang-scala">
+Hello Scala,
+I like your dots!
+Hello Scala,
+I like your dots!
+</pre>
+    </li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+    The single <tt>args</tt> parameter specified by method
+    <tt>StringContext.s</tt> is a repeated parameter. As per SLS
+    &sect;4.6.2, this turns into a parameter of type <tt>Seq[Any]</tt>
+    when the method is eta-expanded (in the case of <tt>useS</tt>), and
+    also when an anonymous function is created through partial
+    application (as in <tt>useSAgain</tt>).
+  </p>
+  <p>
+    In the case of <tt>useS</tt>, this argument is treated as a
+    sequence argument (SLS &sect;6.6) and is thus &quot;re-expanded&quot;
+    by the compiler when passed to <tt>StringContext.s</tt>. In other
+    words, the eta-expanded function is equivalent to <tt>(args:
+    Seq[Any]) => sc.s(args: _*)</tt>, and the invocation behaves
+    as expected.
+  </p>
+    For <tt>useSAgain</tt>, however, the argument is passed to
+    <tt>StringContext.s</tt> as a <em>single</em> value of type
+    <tt>Seq[Any]</tt>. This results in a runtime exception, since the
+    processed string literal contains two expressions and so expects two
+    values to be passed.
+  </p>
+  <p>
+    While the &quot;passing through&quot; of a repeated parameter
+    during eta expansion is in line with most users' expectations, it is
+    unclear whether this agrees with the specification of eta expansion
+    in SLS &sect;6.26.5.
+  </p>
+</div>
