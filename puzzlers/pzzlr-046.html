@@ -73,9 +73,31 @@
     The implicit view that enables the <tt>Any</tt> to <tt>String</tt> conversion, <a href="http://www.scala-lang.org/api/current/index.html#scala.Predef$@any2stringadd[A]extendsAnyVal" target="_blank"><tt>Predef.any2stringadd</tt></a>, is provided for interoperability with Java. Due to its ability to cause unexpected effects such as this one, it continues to provoke <a href="https://groups.google.com/d/topic/scala-user/Mbtp_Cq6zKI/discussion" target="_blank">lively</a> <a href="https://issues.scala-lang.org/browse/SI-194" target="_blank">debate</a>. For example, it is one of the default &quot;warts&quot; flagged by <a href="https://github.com/typelevel/wartremover" target="_blank">WartRemover</a>, a Scala code analysis tool.
   </p>
   <p>
-    In compiled classes, as well is in the REPL when using <tt>:paste -raw</tt>, you can disable this view &ndash; or any other implicit, for that matter &ndash; by adding the following import as the first (yes, it <a href="https://groups.google.com/d/msg/scala-user/VtkpIZAu18g/-QxY2JyQyUUJ" target="_blank">must be</a> <a href="http://stackoverflow.com/questions/7634015/scala-predef-unimport#comment34150585_7634858" target="_blank">the first</a>) line of your source file:
+    Imports from <tt>Predef</tt> can be disabled by using an import from <tt>Predef</tt> in a source file as a top-level statement or nested in a package definition. It doesn't matter where the import appears in the file, so long as it is not nested below the top-level package. That import will control what is available from <tt>Predef</tt> like any normal import. It's typical to disable the <tt>any2stringadd</tt> conversion but import everything else:
 <pre class="prettyprint lang-scala">
 import Predef.{any2stringadd => _, _}
 </pre>
+  </p>
+  <p>
+    In the REPL, introducing that import will insert it in front of subsequent expressions:
+<pre class="prettyprint lang-scala">
+scala> new Object() + "... I object!"
+res0: String = java.lang.Object@4784efd9... I object!
+
+scala> import Predef.{any2stringadd => _, _}
+import Predef.{any2stringadd=>_, _}
+
+scala> new Object() + "... I object!"
+<console>:13: error: value + is not a member of Object
+       new Object() + "... I object!"
+                    ^
+
+scala> import Predef._
+import Predef._
+
+scala> new Object() + "... I object!"
+res2: String = java.lang.Object@7857cb1d... I object!
+</pre>
+When pasting into the REPL, <tt>:paste -raw</tt> will preserve the behavior of the special import.
   </p>
 </div>
