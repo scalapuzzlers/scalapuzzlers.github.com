@@ -1,0 +1,60 @@
+<h1>Strung Along</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>A. P. Marki</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://gitter.im/scala/contributors?at=5b249065202c8f71f506067b">Gitter</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.12.6</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+val StringContext: String = s"hello, world"
+</pre>
+  <ol>
+    <li>It fails to compile with a type mismatch. It found a StringContext but requires a String.</li>
+    <li id="correct-answer">It fails to compile with a type mismatch. It found a String but requires an Int.</li>
+    <li>It compiles but at runtime it throws StringIndexOutOfBoundsException.</li>
+    <li>It fails to compile because method s is not a member of String.</li>
+    <li>It fails to compile by throwing scala.reflect.internal.MissingRequirementError: object scala.StringContext in compiler mirror not found.</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+  The interpolation desugars unsurprisingly to:
+<pre class="prettyprint lang-scala">
+StringContext("hello, world").s()
+</pre>
+  </p>
+  <p>
+  <tt>StringContext</tt>, in this context, does not mean <tt>scala.StringContext</tt> but instead means
+  the current recursive definition, which is of type <tt>String</tt>.
+  </p>
+  <p>
+  <tt>String.apply</tt> takes an <tt>Int</tt> and performs lookup at that index.
+  </p>
+  <p>
+  The <tt>s</tt> comes first in the source but second in the expansion, so there is no error to indicate
+  that there is no "s-interpolator" available. That error could be made visible, in a way:
+<pre class="prettyprint lang-scala">
+scala> implicit def f(s: String): Int = s.length
+f: (s: String)Int
+
+scala> val StringContext: String = s"hello, world"
+<console>:12: error: value s is not a member of Char
+       val StringContext: String = s"hello, world"
+                                   ^
+</pre>
+  </p>
+</div>
