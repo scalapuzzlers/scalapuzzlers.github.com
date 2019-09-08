@@ -45,7 +45,7 @@ Oops: fatal!
     </li>
     <li id="correct-answer">Prints:
 <pre class="prettyprint lang-scala">
-Oops: Boxed Error
+Oops: Boxed Exception
 </pre>
     </li>
   </ol>
@@ -61,7 +61,7 @@ Oops: Boxed Error
   <p>
     <tt>ExecutionException</tt> is <em>not</em> an <tt>Error</tt>, so the
     <tt>recoverWith</tt> expression does not match, and the result of the
-    <tt>Future</tt> is effectively <tt>Failure(new ExecutionException("Boxed Error",
+    <tt>Future</tt> is effectively <tt>Failure(new ExecutionException("Boxed Exception",
     new Error("fatal!")))</tt>.
   </p>
   <p>
