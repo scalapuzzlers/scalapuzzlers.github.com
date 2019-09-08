@@ -23,7 +23,7 @@ class Clock(val hour: Int) extends AnyVal {
   def unary_-() = new Clock((hour + 23) % 24)
 }
 
-def printHour(clockfun: () => Clock) { println(clockfun().hour) }
+def printHour(clockfun: () => Clock): Unit = { println(clockfun().hour) }
 val clock = new Clock(0)
 
 printHour(-clock)

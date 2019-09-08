@@ -19,13 +19,13 @@
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
 class Printer(prompter: =>Unit) {
-  def print(message: =>String, prompted: Boolean = false) {
+  def print(message: =>String, prompted: Boolean = false): Unit = {
     if (prompted) prompter
     Console println message
   }
 }
 
-def prompt() {
+def prompt(): Unit = {
   Console print "puzzler$ "
 }
 

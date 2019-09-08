@@ -19,8 +19,8 @@
   <h3>What is the result of executing the following code?</h3>
 <pre class="prettyprint lang-scala">
 val ints = Map(1 -> List(1, 2, 3, 4, 5))
-val bits = ints map { case (k, v) => (k, v.toIterator) }
-val nits = ints mapValues (_.toIterator)
+val bits = ints map { case (k, v) => (k, v.iterator) }
+val nits = ints mapValues (_.iterator)
 
 "%d%d".format(bits(1).next, bits(1).next)
 "%d%d".format(nits(1).next, nits(1).next)
