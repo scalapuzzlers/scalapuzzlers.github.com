@@ -69,7 +69,7 @@ List(1, 2, 3)
 <div id="explanation" class="explanation" style="display:none">
   <h3>Explanation</h3>
   <p>
-    Even though it's tempting to simply replace the &quot;longhand&quot; form of <tt>foldLeft</tt> and <tt>foldRight</tt> with their shorthand equivalents <tt>/:</tt> and <tt>:\</tt>, it's important to remember Scala's <a href="http://books.google.com/books?id=MFjNhTjeQKkC&lpg=PA90&ots=FLrl_NIOpw&dq=scala%20operator%20associativity&pg=PA43#v=onepage&q=scala%20operator%20associativity&f=false" target="_blank">operator associativity rule</a>, which states that operators ending in <tt>:</tt> (such as <tt>foldLeft</tt>'s shorthand form) are <em>right</em> associative.
+    Even though it's tempting to simply replace the &quot;longhand&quot; form of <tt>foldLeft</tt> and <tt>foldRight</tt> with their shorthand equivalents <tt>/:</tt> and <tt>:\</tt>, it's important to remember Scala's <a href="https://books.google.com/books?id=MFjNhTjeQKkC&lpg=PA90&ots=FLrl_NIOpw&dq=scala%20operator%20associativity&pg=PA43#v=onepage&q=scala%20operator%20associativity&f=false" target="_blank">operator associativity rule</a>, which states that operators ending in <tt>:</tt> (such as <tt>foldLeft</tt>'s shorthand form) are <em>right</em> associative.
   </p>
   <p>
     This means that <tt>(leftReversed /: accumulator) { ... }</tt> is actually equivalent to <tt>(accumulator foldLeft leftReversed) { ... }</tt>, not <tt>(leftReversed foldLeft accumulator) { ... }</tt> as intended.
