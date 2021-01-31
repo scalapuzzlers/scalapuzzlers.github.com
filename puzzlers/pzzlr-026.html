@@ -1,0 +1,69 @@
+<h1>A Sad Commentary</h1>
+<table class="table meta-table table-condensed">
+  <tbody>
+    <tr>
+      <td class="header-column"><strong>Contributed by</strong></td>
+      <td>A. P. Marki</td>
+    </tr>
+    <tr>
+      <td><strong>Source</strong></td>
+      <td><a target="_blank" href="https://github.com/scala/scala/pull/6501#issuecomment-385138500">Scala repository</a></td>
+    </tr>
+    <tr>
+      <td><strong>First tested with Scala version</strong></td>
+      <td>2.12.9</td>
+    </tr>
+  </tbody>
+</table>
+<div class="code-snippet">
+  <h3>What is the result of executing the following code?</h3>
+<pre class="prettyprint lang-scala">
+$ cat commentary.scala
+object Commentary extends App
+/* This is a long
+ * commentary.
+
+ */
+{
+  println("""This is a long
+commentary.
+
+""")
+}
+$ scalac commentary.scala
+$ scala commentary.scala
+$ cat commentary2.scala
+object Commentary extends App
+/* This is a long \u000acommentary.\u000a\u000a */
+{
+  println("This is a long \u000acommentary.\u000a\u000a")
+}
+$ scalac commentary2.scala
+$ scala commentary2.scala
+</pre>
+  <ol>
+    <li>Both compile and run, printing "This is a long commentary." with extra blank lines.</li>
+    <li>Both compile and run, but the second prints "This is a long acommentary."</li>
+    <li id="correct-answer">The second compiles and runs, but the first does not compile.</li>
+    <li>The first compiles and runs, but the second does not compile.</li>
+  </ol>
+</div>
+<button id="show-and-tell" class="btn btn-primary" href="#">Display the correct answer, explanation and comments</button>
+<div id="explanation" class="explanation" style="display:none">
+  <h3>Explanation</h3>
+  <p>
+  The first attempt does not compile because the comment introduces a blank line between
+  the beginning of the definition and the left brace on a subsequent line.
+  This is due to how "nl" tokens are inferred. Normally, one "nl" is inserted between
+  tokens on different lines. But if the tokens are separated by a blank line,
+  then two "nl" tokens are inserted, even if the blank line is embedded in a comment.
+  See the <a target="_blank" href="https://www.scala-lang.org/files/archive/spec/2.13/01-lexical-syntax.html#newline-characters">Scala specification</a>.
+  </p>
+  <p>
+  The compiler emits a different error message than the scala runner in this case.
+  The compiler error is: "expected class or object definition" at the left brace.
+  The scala runner compiles its source text for scripting but emits a warning:
+  "Script has a main object but statement is disallowed", and executes the "standalone"
+  statement instead of the App object.
+  </p>
+</div>
